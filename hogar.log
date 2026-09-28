@@ -1,0 +1,24 @@
+2026-09-28 14:41:45.047  INFO 28700 --- [main] com.huerto.hogar.HogarApplication        : Starting HogarApplication using Java 17.0.12 on Dany with PID 28700 (D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\target\classes started by danie in D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar)
+2026-09-28 14:41:45.051  INFO 28700 --- [main] com.huerto.hogar.HogarApplication        : No active profile set, falling back to 1 default profile: "default"
+2026-09-28 14:41:45.968  INFO 28700 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-28 14:41:46.059  INFO 28700 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 82 ms. Found 6 JPA repository interfaces.
+2026-09-28 14:41:46.979  INFO 28700 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2026-09-28 14:41:47.011  INFO 28700 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-28 14:41:47.011  INFO 28700 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.83]
+2026-09-28 14:41:47.198  INFO 28700 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-28 14:41:47.199  INFO 28700 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2106 ms
+2026-09-28 14:41:47.600  INFO 28700 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-28 14:41:47.651  INFO 28700 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2026-09-28 14:41:47.878  INFO 28700 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-09-28 14:41:48.005  INFO 28700 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-28 14:41:48.176  INFO 28700 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-28 14:41:48.188  INFO 28700 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2026-09-28 14:41:49.490  INFO 28700 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-09-28 14:41:49.499  INFO 28700 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-28 14:41:50.388  INFO 28700 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@549404e7, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@29c76d75, org.springframework.security.web.context.SecurityContextPersistenceFilter@49392256, org.springframework.security.web.header.HeaderWriterFilter@35b79b1f, org.springframework.web.filter.CorsFilter@346a2799, org.springframework.security.web.authentication.logout.LogoutFilter@16f2d883, com.huerto.hogar.security.filter.JwtAuthFilter@550de6b8, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3962b216, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3183a37c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@17344d7, org.springframework.security.web.session.SessionManagementFilter@311453ab, org.springframework.security.web.access.ExceptionTranslationFilter@37816ea6, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7c0035dd]
+2026-09-28 14:41:51.278  INFO 28700 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2026-09-28 14:41:51.289  INFO 28700 --- [main] com.huerto.hogar.HogarApplication        : Started HogarApplication in 6.619 seconds (JVM running for 6.966)
+2026-09-28 14:41:51.541  INFO 28700 --- [main] com.huerto.hogar.config.DataInitializer  : >>> Admin: admin@duoc.cl / admin123
+2026-09-28 14:41:51.631  INFO 28700 --- [main] com.huerto.hogar.config.DataInitializer  : >>> Vendedor: vendedor@duoc.cl / vend123
+2026-09-28 14:41:51.716  INFO 28700 --- [main] com.huerto.hogar.config.DataInitializer  : >>> Cliente: cliente@gmail.com / cli123
+2026-09-28 14:41:51.747  INFO 28700 --- [main] com.huerto.hogar.config.DataInitializer  : >>> 5 categorías creadas
