@@ -22,3 +22,23 @@
 2026-09-28 14:41:51.631  INFO 28700 --- [main] com.huerto.hogar.config.DataInitializer  : >>> Vendedor: vendedor@duoc.cl / vend123
 2026-09-28 14:41:51.716  INFO 28700 --- [main] com.huerto.hogar.config.DataInitializer  : >>> Cliente: cliente@gmail.com / cli123
 2026-09-28 14:41:51.747  INFO 28700 --- [main] com.huerto.hogar.config.DataInitializer  : >>> 5 categorías creadas
+2026-09-28 14:50:03.430  INFO 28764 --- [main] com.huerto.hogar.HogarApplication        : Starting HogarApplication using Java 17.0.12 on Dany with PID 28764 (D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\target\classes started by danie in D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar)
+2026-09-28 14:50:03.433  INFO 28764 --- [main] com.huerto.hogar.HogarApplication        : No active profile set, falling back to 1 default profile: "default"
+2026-09-28 14:50:04.318  INFO 28764 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-28 14:50:04.397  INFO 28764 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 71 ms. Found 6 JPA repository interfaces.
+2026-09-28 14:50:05.310  INFO 28764 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2026-09-28 14:50:05.346  INFO 28764 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-28 14:50:05.347  INFO 28764 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.83]
+2026-09-28 14:50:05.525  INFO 28764 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-28 14:50:05.526  INFO 28764 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2047 ms
+2026-09-28 14:50:05.926  INFO 28764 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-28 14:50:05.980  INFO 28764 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2026-09-28 14:50:06.201  INFO 28764 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-09-28 14:50:06.325  INFO 28764 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-28 14:50:06.495  INFO 28764 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-28 14:50:06.508  INFO 28764 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2026-09-28 14:50:09.480  INFO 28764 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-09-28 14:50:09.510  INFO 28764 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-28 14:50:14.691  INFO 28764 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@48ba37dc, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@322f84fd, org.springframework.security.web.context.SecurityContextPersistenceFilter@51eafec0, org.springframework.security.web.header.HeaderWriterFilter@37c45154, org.springframework.web.filter.CorsFilter@113cc14d, org.springframework.security.web.authentication.logout.LogoutFilter@17344d7, com.huerto.hogar.security.filter.JwtAuthFilter@2b7e8044, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@135a8808, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@57abe94d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@10bcbbed, org.springframework.security.web.session.SessionManagementFilter@64f49b3, org.springframework.security.web.access.ExceptionTranslationFilter@66e434e8, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@78805df3]
+2026-09-28 14:50:18.229  INFO 28764 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2026-09-28 14:50:18.295  INFO 28764 --- [main] com.huerto.hogar.HogarApplication        : Started HogarApplication in 15.272 seconds (JVM running for 15.594)

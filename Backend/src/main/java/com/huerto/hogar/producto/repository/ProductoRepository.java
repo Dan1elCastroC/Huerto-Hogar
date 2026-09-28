@@ -16,4 +16,8 @@ public interface ProductoRepository extends CrudRepository<ProductoEntity, Long>
     List<ProductoEntity> buscar(@Param("q") String q);
     @Query("SELECT p FROM ProductoEntity p WHERE p.activo=true AND p.stockCritico IS NOT NULL AND p.stock <= p.stockCritico")
     List<ProductoEntity> findStockCritico();
+    // Reportes: trae la categoría en la misma consulta (open-in-view=false)
+    @Query("SELECT p FROM ProductoEntity p JOIN FETCH p.categoria WHERE p.activo=true AND p.stockCritico IS NOT NULL AND p.stock <= p.stockCritico")
+    List<ProductoEntity> findStockCriticoConCategoria();
+    long countByActivoTrue();
 }

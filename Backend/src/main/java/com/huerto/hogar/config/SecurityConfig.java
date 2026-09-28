@@ -47,7 +47,10 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET,
                     "/api/v1/entities/productos/**",
                     "/api/v1/entities/categorias/**",
+                    "/api/v1/entities/blogs/**",
                     "/api/regiones/**").permitAll()
+                // Formulario de contacto: público
+                .antMatchers(HttpMethod.POST,"/api/v1/entities/contacto").permitAll()
                 // Validar cupón: público
                 .antMatchers(HttpMethod.GET,"/api/v1/entities/cupones/validar/**").permitAll()
                 // Perfil usuario
@@ -64,6 +67,14 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST,"/api/v1/entities/categorias/**").hasRole("ADMINISTRADOR")
                 .antMatchers(HttpMethod.PUT,"/api/v1/entities/categorias/**").hasRole("ADMINISTRADOR")
                 .antMatchers(HttpMethod.DELETE,"/api/v1/entities/categorias/**").hasRole("ADMINISTRADOR")
+                .antMatchers(HttpMethod.POST,"/api/v1/entities/blogs/**").hasRole("ADMINISTRADOR")
+                .antMatchers(HttpMethod.PUT,"/api/v1/entities/blogs/**").hasRole("ADMINISTRADOR")
+                .antMatchers(HttpMethod.DELETE,"/api/v1/entities/blogs/**").hasRole("ADMINISTRADOR")
+                .antMatchers(HttpMethod.GET,"/api/v1/entities/contacto/**").hasRole("ADMINISTRADOR")
+                .antMatchers(HttpMethod.GET,"/api/v1/entities/contacto").hasRole("ADMINISTRADOR")
+                .antMatchers(HttpMethod.PATCH,"/api/v1/entities/contacto/**").hasRole("ADMINISTRADOR")
+                // Reportes: admin y vendedor
+                .antMatchers("/api/v1/entities/reportes/**").hasAnyRole("ADMINISTRADOR","VENDEDOR")
                 // Admin y vendedor: ver pedidos
                 .antMatchers(HttpMethod.GET,"/api/v1/entities/pedidos/**")
                     .hasAnyRole("ADMINISTRADOR","VENDEDOR")
