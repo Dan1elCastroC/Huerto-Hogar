@@ -16,7 +16,8 @@
         <spring-boot.version>2.7.18</spring-boot.version>
         <java.version>17</java.version>
         <maven.compiler.release>17</maven.compiler.release>
-        <lombok.version>1.18.30</lombok.version>
+        <lombok.version>1.18.34</lombok.version>
+        <mysql.version>8.3.0</mysql.version>
         <jjwt.version>0.11.5</jjwt.version>
         <springdoc.version>1.7.0</springdoc.version>
         <start-class>com.huerto.hogar.HogarApplication</start-class>
@@ -51,7 +52,6 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>8.3.0</version>
         </dependency>
 
         <!-- H2 (solo para tests) -->
@@ -103,7 +103,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
             <optional>true</optional>
         </dependency>
 

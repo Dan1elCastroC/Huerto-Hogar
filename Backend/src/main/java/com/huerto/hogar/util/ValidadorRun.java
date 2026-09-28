@@ -1,4 +1,5 @@
 package com.huerto.hogar.util;
+
 public class ValidadorRun {
     private ValidadorRun() {}
     public static boolean esValido(String run) {
