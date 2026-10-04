@@ -127,7 +127,7 @@ public class UsuarioService implements IUsuarioService {
 
     private void validarNuevo(RegistroRequest req) {
         if (!ValidadorRun.esValido(req.getRun()))
-            throw new ReglaDeNegocioException("RUN inválido: " + req.getRun() + ". Ej: 19011022K");
+            throw new ReglaDeNegocioException("RUN inválido: " + req.getRun() + ". Ej: 190110222");
         validarDominio(req.getCorreo());
         if (repo.existsByRun(req.getRun().toUpperCase()))
             throw new ReglaDeNegocioException("El RUN ya está registrado");
