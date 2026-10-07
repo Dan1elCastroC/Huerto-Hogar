@@ -1,66 +1,117 @@
 package com.huerto.hogar.frontend.config;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class ApiClient {
-    private final RestTemplate restTemplate = new RestTemplate();
+
+    private final RestTemplate restTemplate;
     private final FrontendSession session;
     private final String backendUrl;
 
     public ApiClient(FrontendSession session, @Value("${backend.url}") String backendUrl) {
+        this.restTemplate = new RestTemplate();
         this.session = session;
-        this.backendUrl = backendUrl;
+        this.backendUrl = backendUrl.endsWith("/")
+                ? backendUrl.substring(0, backendUrl.length() - 1)
+                : backendUrl;
     }
 
     private HttpHeaders headers() {
-        HttpHeaders h = new HttpHeaders();
-        h.setContentType(MediaType.APPLICATION_JSON);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
         if (session.getToken() != null && !session.getToken().isBlank()) {
-            h.setBearerAuth(session.getToken());
+            headers.setBearerAuth(session.getToken());
         }
-        return h;
+
+        return headers;
+    }
+
+    private String url(String path) {
+        if (path == null || path.isBlank()) {
+            return backendUrl;
+        }
+        return path.startsWith("/") ? backendUrl + path : backendUrl + "/" + path;
     }
 
     public <T> T get(String path, Class<T> type) {
-        return restTemplate.exchange(backendUrl + path, HttpMethod.GET,
-                new HttpEntity<>(headers()), type).getBody();
+        return restTemplate.exchange(
+                url(path),
+                HttpMethod.GET,
+                new HttpEntity<>(headers()),
+                type
+        ).getBody();
     }
 
     public <T> T getList(String path, ParameterizedTypeReference<T> type) {
-        return restTemplate.exchange(backendUrl + path, HttpMethod.GET,
-                new HttpEntity<>(headers()), type).getBody();
+        return restTemplate.exchange(
+                url(path),
+                HttpMethod.GET,
+                new HttpEntity<>(headers()),
+                type
+        ).getBody();
     }
 
     public <T> T post(String path, Object body, Class<T> type) {
-        return restTemplate.exchange(backendUrl + path, HttpMethod.POST,
-                new HttpEntity<>(body, headers()), type).getBody();
+        return restTemplate.exchange(
+                url(path),
+                HttpMethod.POST,
+                new HttpEntity<>(body, headers()),
+                type
+        ).getBody();
     }
 
     public <T> T put(String path, Object body, Class<T> type) {
-        return restTemplate.exchange(backendUrl + path, HttpMethod.PUT,
-                new HttpEntity<>(body, headers()), type).getBody();
+        return restTemplate.exchange(
+                url(path),
+                HttpMethod.PUT,
+                new HttpEntity<>(body, headers()),
+                type
+        ).getBody();
     }
 
     public <T> T patch(String path, Class<T> type) {
-        return restTemplate.exchange(backendUrl + path, HttpMethod.PATCH,
-                new HttpEntity<>(headers()), type).getBody();
+        return restTemplate.exchange(
+                url(path),
+                HttpMethod.PATCH,
+                new HttpEntity<>(headers()),
+                type
+        ).getBody();
     }
 
-    public <T> T deleteObject(String path) {\n        return restTemplate.exchange(backendUrl + path, HttpMethod.DELETE,\n                new HttpEntity<>(headers()), (Class<T>) Object.class).getBody();\n    }\n\n    public void delete(String path) {
-        restTemplate.exchange(backendUrl + path, HttpMethod.DELETE,
-                new HttpEntity<>(headers()), Void.class);
+    public Object deleteObject(String path) {
+        return restTemplate.exchange(
+                url(path),
+                HttpMethod.DELETE,
+                new HttpEntity<>(headers()),
+                Object.class
+        ).getBody();
+    }
+
+    public void delete(String path) {
+        restTemplate.exchange(
+                url(path),
+                HttpMethod.DELETE,
+                new HttpEntity<>(headers()),
+                Void.class
+        );
     }
 
     public String errorMessage(Exception e) {
-        if (e.getMessage() == null) return "Error al comunicarse con el backend";
-        return e.getMessage().replace("400 Bad Request:", "").trim();
+        if (e == null || e.getMessage() == null || e.getMessage().isBlank()) {
+            return "Error al comunicarse con el backend";
+        }
+
+        return e.getMessage()
+                .replace("400 Bad Request:", "")
+                .trim();
     }
 }
