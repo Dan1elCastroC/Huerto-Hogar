@@ -1,0 +1,4 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments :: head}"></head>
+<body><nav th:replace="~{fragments :: nav}"></nav><main class="container py-5"><h1>Mi carrito</h1>
+<div class="card p-4"><pre class="mb-0" th:text="${carrito}">Carrito</pre></div>
+<div class="mt-4"><a href="/productos" class="btn btn-outline-success">Seguir comprando</a><a href="/carrito/checkout" class="btn btn-success ms-2">Ir al checkout</a><a href="/carrito/vaciar" class="btn btn-outline-danger ms-2">Vaciar carrito</a></div></main></body></html>

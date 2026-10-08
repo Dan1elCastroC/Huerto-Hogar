@@ -1,0 +1,2 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments :: head}"></head>
+<body><nav th:replace="~{fragments :: nav}"></nav><main class="container py-5"><article><h1 th:text="${blog.titulo}"></h1><img th:if="${blog.imagenUrl != null and !blog.imagenUrl.isBlank()}" th:src="${blog.imagenUrl}" class="img-fluid rounded mb-4"><p class="lead" th:text="${blog.descripcion}"></p></article></main></body></html>

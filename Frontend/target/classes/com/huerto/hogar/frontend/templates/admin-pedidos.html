@@ -1,0 +1,2 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments :: head}"></head>
+<body><nav th:replace="~{fragments :: nav}"></nav><main class="container py-5"><h1>Pedidos</h1><div class="list-group mt-4"><div class="list-group-item" th:each="p:${pedidos}"><pre th:text="${p}"></pre></div></div></main></body></html>

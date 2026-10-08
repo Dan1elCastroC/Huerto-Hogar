@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments :: head}"></head>
+<body><nav th:replace="~{fragments :: nav}"></nav><div class="container py-5">
+<h2>Crear cuenta</h2><div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+<form th:action="@{/registro}" th:object="${form}" method="post" class="row g-3">
+<div class="col-md-4"><label>RUN</label><input class="form-control" th:field="*{run}" required></div>
+<div class="col-md-4"><label>Nombre</label><input class="form-control" th:field="*{nombre}" required></div>
+<div class="col-md-4"><label>Apellidos</label><input class="form-control" th:field="*{apellidos}" required></div>
+<div class="col-md-6"><label>Correo</label><input type="email" class="form-control" th:field="*{correo}" required></div>
+<div class="col-md-3"><label>Contraseña</label><input type="password" class="form-control" th:field="*{contrasena}" required></div>
+<div class="col-md-3"><label>Confirmar</label><input type="password" class="form-control" th:field="*{confirmarContrasena}" required></div>
+<div class="col-md-4"><label>Teléfono</label><input class="form-control" th:field="*{telefono}"></div>
+<div class="col-md-4"><label>Fecha nacimiento</label><input type="date" class="form-control" th:field="*{fechaNacimiento}"></div>
+<div class="col-md-4"><label>Región</label><input class="form-control" th:field="*{region}" required></div>
+<div class="col-md-4"><label>Comuna</label><input class="form-control" th:field="*{comuna}" required></div>
+<div class="col-md-8"><label>Dirección</label><input class="form-control" th:field="*{direccion}" required></div>
+<div class="col-12"><button class="btn btn-success">Crear cuenta</button></div></form></div></body></html>
