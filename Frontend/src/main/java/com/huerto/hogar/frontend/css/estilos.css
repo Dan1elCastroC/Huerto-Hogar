@@ -1,8 +1,0 @@
-body { background:#f7faf7; }
-.hero { background:linear-gradient(135deg,#e8f5e9,#ffffff); }
-.product-card { transition:.2s; }
-.product-card:hover { transform:translateY(-4px); box-shadow:0 .5rem 1rem rgba(0,0,0,.10); }
-.product-img { height:210px; width:100%; object-fit:cover; }
-.placeholder-img { height:210px; display:flex; align-items:center; justify-content:center; font-size:5rem; background:#e8f5e9; }
-.placeholder-large { height:400px; display:flex; align-items:center; justify-content:center; font-size:9rem; background:#e8f5e9; border-radius:1rem; }
-pre { white-space:pre-wrap; word-break:break-word; }

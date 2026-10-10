@@ -1,75 +1,16 @@
-# Huerto-Hogar - Frontend
+# React + Vite
 
-Frontend realizado siguiendo la estructura del ejemplo entregado por el profesor.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Tecnologías
-- Spring Boot
-- Thymeleaf
-- Bootstrap
-- RestTemplate
-- Java 17
+Currently, two official plugins are available:
 
-## Arquitectura
-Controller -> Service -> ApiClient -> Backend REST
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-El Backend original NO está incluido ni modificado.
+## React Compiler
 
-## Ejecutar
-1. Levantar primero el Backend en `http://localhost:8080`.
-2. Desde esta carpeta ejecutar:
-   `mvn spring-boot:run`
-3. Abrir:
-   `http://localhost:7777`
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Módulos
-- Productos
-- Categorías
-- Login / Registro
-- Carrito
-- Checkout
-- Pedidos
-- Perfil
-- Blog
-- Contacto
-- Administración
-- Reportes/resumen
+## Expanding the ESLint configuration
 
-## Nota
-El Frontend se está planteando siguiendo la misma estructura del ejemplo que dejó el profesor: un proyecto Spring Boot separado del Backend, utilizando Thymeleaf para las vistas y RestTemplate para comunicarse con las APIs del Backend.
-
-La idea de la estructura es:
-
-Controller → Service → RestTemplate → Backend REST
-
-En el README.md dejé explicada la estructura general, las tecnologías utilizadas, cómo levantar el proyecto y los módulos que debería manejar el Frontend.
-
-El pom.xml contiene las dependencias necesarias para trabajar con:
-
-Spring Boot
-Thymeleaf
-Spring Web MVC
-Testing
-Java 17
-
-Importante: esto corresponde solamente al Frontend. No se modificó el Backend.
-
-El Frontend debería ejecutarse en el puerto 7777 y consumir el Backend desde http://localhost:8080.
-
-Los módulos que se están considerando son:
-
-Productos
-Categorías
-Login y Registro
-Carrito
-Checkout
-Pedidos
-Perfil de usuario
-Blog
-Contacto
-Administración
-Usuarios
-Reportes
-
-Por ahora subí principalmente la base del proyecto (pom.xml) y la documentación (README.md) para que quede establecido cómo vamos a trabajar y podamos seguir desarrollando sobre la misma estructura.
-
-Cuando continúes, sería bueno mantener esta arquitectura y no modificar el Backend, ya que la idea es que el Frontend simplemente consuma las rutas REST que ya existen.
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

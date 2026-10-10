@@ -1,9 +1,0 @@
-<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments :: head}"></head>
-<body><nav th:replace="~{fragments :: nav}"></nav><main class="container py-5"><div class="card p-4"><h2 th:text="${id == null ? 'Nuevo producto' : 'Editar producto'}"></h2><div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
-<form th:action="${id == null ? '/productos/admin/guardar' : '/productos/admin/'+id+'/actualizar'}" th:object="${form}" method="post" class="row g-3">
-<div class="col-md-4"><label>Código</label><input class="form-control" th:field="*{codigo}" required></div><div class="col-md-8"><label>Nombre</label><input class="form-control" th:field="*{nombre}" required></div>
-<div class="col-12"><label>Descripción</label><textarea class="form-control" th:field="*{descripcion}"></textarea></div>
-<div class="col-md-3"><label>Precio</label><input class="form-control" th:field="*{precio}" type="number" step="0.01" required></div><div class="col-md-3"><label>Stock</label><input class="form-control" th:field="*{stock}" type="number" required></div><div class="col-md-3"><label>Stock crítico</label><input class="form-control" th:field="*{stockCritico}" type="number"></div>
-<div class="col-md-3"><label>Categoría</label><select class="form-select" th:field="*{categoriaId}" required><option th:each="c:${categorias}" th:value="${c.id}" th:text="${c.nombre}"></option></select></div>
-<div class="col-12"><label>URL imagen</label><input class="form-control" th:field="*{imagenUrl}"></div><div class="col-12"><button class="btn btn-success">Guardar</button><a href="/productos/admin" class="btn btn-secondary ms-2">Cancelar</a></div>
-</form></div></main></body></html>
