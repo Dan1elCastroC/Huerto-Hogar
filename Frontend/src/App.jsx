@@ -41,7 +41,7 @@ export default function App() {
   const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
 
   return (
-    <div className="bg-light min-vh-100 d-flex flex-column">
+    <div className="min-vh-100 d-flex flex-column">
       <Navbar 
         vista={vista} 
         cambiarVista={setVista} 
@@ -51,12 +51,18 @@ export default function App() {
       />
 
       <div className="flex-grow-1">
-        {vista === 'landing' && <LandingPage cambiarVista={setVista} />}
+        {vista === 'landing' && <LandingPage cambiarVista={setVista} productos={productos} agregarAlCarrito={agregarAlCarrito} />}
         {vista === 'login' && <Login onLoginSuccess={(userData) => setUser(userData)} cambiarVista={setVista} />}
         {vista === 'catalogo' && <ProductList productos={productos} agregarAlCarrito={agregarAlCarrito} loading={loading} />}
         {vista === 'carrito' && <Carrito carrito={carrito} vaciarCarrito={() => setCarrito([])} token={user?.token} />}
         {vista === 'main' && <MainPage productos={productos} setProductos={setProductos} user={user} token={user?.token} />}
       </div>
+
+      <footer className="footer">
+        <div className="container">
+          <p>&copy; 2026 HUERTO HOGAR. Todos los derechos reservados.</p>
+        </div>
+      </footer>
     </div>
   );
 }

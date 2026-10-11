@@ -1,61 +1,70 @@
 // src/components/Navbar.jsx
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function Navbar({ vista, cambiarVista, carritoCount, user, onLogout }) {
+  const [abierto, setAbierto] = useState(false);
+
+  const ir = (e, destino) => {
+    e.preventDefault();
+    cambiarVista(destino);
+    setAbierto(false);
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-success shadow-sm sticky-top">
-      <div className="container">
-        <a className="navbar-brand fw-bold" href="#home" onClick={() => cambiarVista('landing')}>
-          🌱 Huerto Hogar
-        </a>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul className="navbar-nav align-items-center gap-2">
-            <li className="nav-item">
-              <button className={`btn nav-link text-white ${vista === 'landing' ? 'fw-bold border-bottom' : ''}`} onClick={() => cambiarVista('landing')}>
-                Inicio
-              </button>
-            </li>
-            <li className="nav-item">
-              <button className={`btn nav-link text-white ${vista === 'catalogo' ? 'fw-bold border-bottom' : ''}`} onClick={() => cambiarVista('catalogo')}>
-                Catálogo
-              </button>
-            </li>
-            <li className="nav-item">
-              <button className={`btn nav-link text-white position-relative ${vista === 'carrito' ? 'fw-bold border-bottom' : ''}`} onClick={() => cambiarVista('carrito')}>
-                🛒 Carrito
-                {carritoCount > 0 && (
-                  <span className="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-danger">
-                    {carritoCount}
-                  </span>
-                )}
-              </button>
-            </li>
-            {user ? (
-              <>
-                <li className="nav-item">
-                  <button className={`btn nav-link text-white ${vista === 'main' ? 'fw-bold border-bottom' : ''}`} onClick={() => cambiarVista('main')}>
-                    📊 Panel Principal
-                  </button>
-                </li>
-                <li className="nav-item ms-2">
-                  <button className="btn btn-outline-light btn-sm" onClick={onLogout}>
-                    Cerrar Sesión ({user.username || 'Usuario'})
-                  </button>
-                </li>
-              </>
-            ) : (
-              <li className="nav-item ms-2">
-                <button className="btn btn-light text-success fw-bold btn-sm px-3" onClick={() => cambiarVista('login')}>
-                  Iniciar Sesión
-                </button>
+    <header className="header">
+      <nav className="navbar navbar-expand-lg">
+        <div className="container">
+          <a className="navbar-brand" href="#inicio" onClick={(e) => ir(e, 'landing')}>
+            <img src="/img/huerto-hogar.png" alt="Logo Huerto Hogar" />
+            HUERTO HOGAR
+          </a>
+          <button
+            className="navbar-toggler"
+            type="button"
+            aria-label="Abrir menú"
+            onClick={() => setAbierto(!abierto)}
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+          <div className={`collapse navbar-collapse ${abierto ? 'show' : ''}`} id="navbarNav">
+            <ul className="navbar-nav mx-auto">
+              <li className="nav-item">
+                <a className={`nav-link ${vista === 'landing' ? 'active' : ''}`} href="#inicio" onClick={(e) => ir(e, 'landing')}>
+                  Home
+                </a>
               </li>
-            )}
-          </ul>
+              <li className="nav-item">
+                <a className={`nav-link ${vista === 'catalogo' ? 'active' : ''}`} href="#productos" onClick={(e) => ir(e, 'catalogo')}>
+                  Productos
+                </a>
+              </li>
+              {user && (
+                <li className="nav-item">
+                  <a className={`nav-link ${vista === 'main' ? 'active' : ''}`} href="#panel" onClick={(e) => ir(e, 'main')}>
+                    Panel principal
+                  </a>
+                </li>
+              )}
+            </ul>
+
+            <div className="d-flex align-items-center flex-wrap">
+              <div className="nav-auth-links">
+                {user ? (
+                  <a href="#salir" onClick={(e) => { e.preventDefault(); setAbierto(false); onLogout(); }}>
+                    Cerrar sesión ({user.username || user.correo || 'Usuario'})
+                  </a>
+                ) : (
+                  <a href="#login" onClick={(e) => ir(e, 'login')}>Iniciar sesión</a>
+                )}
+              </div>
+              <a href="#carrito" className="nav-carrito ms-3" onClick={(e) => ir(e, 'carrito')}>
+                🛒 Carrito <span className="badge rounded-pill">{carritoCount}</span>
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }

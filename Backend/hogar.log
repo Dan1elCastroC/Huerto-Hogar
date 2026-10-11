@@ -1,20 +1,58 @@
-2026-10-08 15:06:38.670  INFO 33632 --- [main] com.huerto.hogar.HogarApplication        : Starting HogarApplication using Java 17.0.12 on Dany with PID 33632 (D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\target\classes started by danie in D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend)
-2026-10-08 15:06:38.676  INFO 33632 --- [main] com.huerto.hogar.HogarApplication        : No active profile set, falling back to 1 default profile: "default"
-2026-10-08 15:06:39.340  INFO 33632 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-10-08 15:06:39.407  INFO 33632 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 62 ms. Found 9 JPA repository interfaces.
-2026-10-08 15:06:40.066  INFO 33632 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2026-10-08 15:06:40.084  INFO 33632 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-10-08 15:06:40.084  INFO 33632 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.83]
-2026-10-08 15:06:40.224  INFO 33632 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-10-08 15:06:40.224  INFO 33632 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1507 ms
-2026-10-08 15:06:40.476  INFO 33632 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-10-08 15:06:40.512  INFO 33632 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
-2026-10-08 15:06:40.636  INFO 33632 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2026-10-08 15:06:40.712  INFO 33632 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-10-08 15:06:40.837  INFO 33632 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-10-08 15:06:40.846  INFO 33632 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
-2026-10-08 15:06:41.433  INFO 33632 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2026-10-08 15:06:41.438  INFO 33632 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-10-08 15:06:42.163  INFO 33632 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1d4c6e32, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3a5ffea, org.springframework.security.web.context.SecurityContextPersistenceFilter@2af31aba, org.springframework.security.web.header.HeaderWriterFilter@12051d38, org.springframework.web.filter.CorsFilter@1d126f07, org.springframework.security.web.authentication.logout.LogoutFilter@116efe65, com.huerto.hogar.security.filter.JwtAuthFilter@5dbb50f3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1aebe759, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6fd37997, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@71689ee2, org.springframework.security.web.session.SessionManagementFilter@37aea657, org.springframework.security.web.access.ExceptionTranslationFilter@6265a548, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@445b4594]
-2026-10-08 15:06:42.797  INFO 33632 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2026-10-08 15:06:42.808  INFO 33632 --- [main] com.huerto.hogar.HogarApplication        : Started HogarApplication in 4.443 seconds (JVM running for 4.7)
+2026-10-10 00:22:05.435  INFO 9488 --- [main] com.huerto.hogar.HogarApplicationTests   : Starting HogarApplicationTests using Java 21.0.12.1 on benjamin with PID 9488 (started by bmell in C:\Users\bmell\OneDrive\Documentos\Informatica\Huerto-Hogar\Backend)
+2026-10-10 00:22:05.441  INFO 9488 --- [main] com.huerto.hogar.HogarApplicationTests   : The following 1 profile is active: "test"
+2026-10-10 00:22:06.993  INFO 9488 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-10 00:22:07.081  INFO 9488 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 79 ms. Found 9 JPA repository interfaces.
+2026-10-10 00:22:07.851  INFO 9488 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-10-10 00:22:07.919  INFO 9488 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2026-10-10 00:22:07.957  INFO 9488 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-10-10 00:22:08.068  INFO 9488 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-10 00:22:08.272  INFO 9488 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-10 00:22:08.290  INFO 9488 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2026-10-10 00:22:08.901  INFO 9488 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-10-10 00:22:08.911  INFO 9488 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-10 00:22:10.064  INFO 9488 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2086f336, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@19a799cb, org.springframework.security.web.context.SecurityContextPersistenceFilter@170937fe, org.springframework.security.web.header.HeaderWriterFilter@b97f195, org.springframework.web.filter.CorsFilter@4d50f682, org.springframework.security.web.authentication.logout.LogoutFilter@153c69bc, com.huerto.hogar.security.filter.JwtAuthFilter@63218586, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1df83569, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@439047ef, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3445341, org.springframework.security.web.session.SessionManagementFilter@7da59f6e, org.springframework.security.web.access.ExceptionTranslationFilter@12a8d03b, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1737834]
+2026-10-10 00:22:11.158  INFO 9488 --- [main] com.huerto.hogar.HogarApplicationTests   : Started HogarApplicationTests in 6.092 seconds (JVM running for 8.355)
+2026-10-10 00:22:11.300  INFO 9488 --- [main] com.huerto.hogar.config.DataInitializer  : >>> Admin: admin@duoc.cl / admin123
+2026-10-10 00:22:11.358  INFO 9488 --- [main] com.huerto.hogar.config.DataInitializer  : >>> Vendedor: vendedor@duoc.cl / vend123
+2026-10-10 00:22:11.414  INFO 9488 --- [main] com.huerto.hogar.config.DataInitializer  : >>> Cliente: cliente@gmail.com / cli123
+2026-10-10 00:22:11.426  INFO 9488 --- [main] com.huerto.hogar.config.DataInitializer  : >>> 5 categorías creadas
+2026-10-10 00:22:11.580  INFO 9488 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-10 00:22:11.581  INFO 9488 --- [SpringApplicationShutdownHook] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2026-10-10 00:22:11.583  WARN 9488 --- [SpringApplicationShutdownHook] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 90121, SQLState: 90121
+2026-10-10 00:22:11.584 ERROR 9488 --- [SpringApplicationShutdownHook] o.h.engine.jdbc.spi.SqlExceptionHelper   : La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-214]
+2026-10-10 00:22:11.584  WARN 9488 --- [SpringApplicationShutdownHook] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 90121, SQLState: 90121
+2026-10-10 00:22:11.585 ERROR 9488 --- [SpringApplicationShutdownHook] o.h.engine.jdbc.spi.SqlExceptionHelper   : La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-214]
+2026-10-10 00:22:11.585  WARN 9488 --- [SpringApplicationShutdownHook] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'entityManagerFactory': org.hibernate.exception.JDBCConnectionException: Unable to release JDBC Connection used for DDL execution
+2026-10-10 00:22:11.586  INFO 9488 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-10 00:22:11.587  INFO 9488 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-10-10 00:26:03.906  INFO 18236 --- [main] com.huerto.hogar.HogarApplicationTests   : Starting HogarApplicationTests using Java 21.0.12.1 on benjamin with PID 18236 (started by bmell in C:\Users\bmell\OneDrive\Documentos\Informatica\Huerto-Hogar\Backend)
+2026-10-10 00:26:03.908  INFO 18236 --- [main] com.huerto.hogar.HogarApplicationTests   : The following 1 profile is active: "test"
+2026-10-10 00:26:05.146  INFO 18236 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-10 00:26:05.284  INFO 18236 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 130 ms. Found 9 JPA repository interfaces.
+2026-10-10 00:26:06.252  INFO 18236 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-10-10 00:26:06.326  INFO 18236 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2026-10-10 00:26:06.359  INFO 18236 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-10-10 00:26:06.468  INFO 18236 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-10 00:26:06.653  INFO 18236 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-10 00:26:06.670  INFO 18236 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2026-10-10 00:26:07.246  INFO 18236 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-10-10 00:26:07.254  INFO 18236 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-10 00:26:08.418  INFO 18236 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@25502b1c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5dabe7c8, org.springframework.security.web.context.SecurityContextPersistenceFilter@45fa7fb7, org.springframework.security.web.header.HeaderWriterFilter@4bca2a09, org.springframework.web.filter.CorsFilter@6c427386, org.springframework.security.web.authentication.logout.LogoutFilter@525c0f74, com.huerto.hogar.security.filter.JwtAuthFilter@4cb59398, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@46cb800b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@505a48a2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@301c622d, org.springframework.security.web.session.SessionManagementFilter@b97f195, org.springframework.security.web.access.ExceptionTranslationFilter@66c91224, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6ce1cc03]
+2026-10-10 00:26:09.525  INFO 18236 --- [main] com.huerto.hogar.HogarApplicationTests   : Started HogarApplicationTests in 5.995 seconds (JVM running for 8.167)
+2026-10-10 00:26:09.705  INFO 18236 --- [main] com.huerto.hogar.config.DataInitializer  : >>> Admin: admin@duoc.cl / admin123
+2026-10-10 00:26:09.760  INFO 18236 --- [main] com.huerto.hogar.config.DataInitializer  : >>> Vendedor: vendedor@duoc.cl / vend123
+2026-10-10 00:26:09.821  INFO 18236 --- [main] com.huerto.hogar.config.DataInitializer  : >>> Cliente: cliente@gmail.com / cli123
+2026-10-10 00:26:09.834  INFO 18236 --- [main] com.huerto.hogar.config.DataInitializer  : >>> 5 categorías creadas
+2026-10-10 00:26:10.047  INFO 18236 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-10 00:26:10.049  INFO 18236 --- [SpringApplicationShutdownHook] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2026-10-10 00:26:10.054  WARN 18236 --- [SpringApplicationShutdownHook] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 90121, SQLState: 90121
+2026-10-10 00:26:10.054 ERROR 18236 --- [SpringApplicationShutdownHook] o.h.engine.jdbc.spi.SqlExceptionHelper   : La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-214]
+2026-10-10 00:26:10.055  WARN 18236 --- [SpringApplicationShutdownHook] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 90121, SQLState: 90121
+2026-10-10 00:26:10.055 ERROR 18236 --- [SpringApplicationShutdownHook] o.h.engine.jdbc.spi.SqlExceptionHelper   : La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-214]
+2026-10-10 00:26:10.055  WARN 18236 --- [SpringApplicationShutdownHook] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'entityManagerFactory': org.hibernate.exception.JDBCConnectionException: Unable to release JDBC Connection used for DDL execution
+2026-10-10 00:26:10.056  INFO 18236 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-10 00:26:10.058  INFO 18236 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
