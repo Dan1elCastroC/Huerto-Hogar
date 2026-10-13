@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { authService } from '../services/api';
 
 export default function Login({ onLoginSuccess, cambiarVista }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [correo, setCorreo] = useState('');
+  const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -15,10 +15,16 @@ export default function Login({ onLoginSuccess, cambiarVista }) {
 
     try {
       // Conexión real con el backend
-      const data = await authService.login({ username, password });
-      onLoginSuccess(data); // Guarda token y datos de usuario
+      const data = await authService.login({ correo, contrasena });
+      let profile = {};
+      try {
+        profile = await authService.getPerfil(data.token);
+      } catch {
+        // El inicio de sesión sigue siendo válido aunque el perfil no esté disponible.
+      }
+      onLoginSuccess({ ...data, ...profile }); // Guarda token y datos de usuario
       cambiarVista('main');
-    } catch (err) {
+    } catch {
       setError("Usuario o contraseña incorrectos. Intente nuevamente.");
     } finally {
       setLoading(false);
@@ -35,22 +41,26 @@ export default function Login({ onLoginSuccess, cambiarVista }) {
             
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className="form-label fw-bold">Usuario o Correo</label>
+                <label htmlFor="login-correo" className="form-label fw-bold">Correo electrónico</label>
                 <input 
+                  id="login-correo"
                   type="text" 
                   className="form-control" 
-                  value={username} 
-                  onChange={(e) => setUsername(e.target.value)} 
+                  value={correo} 
+                  onChange={(e) => setCorreo(e.target.value)} 
+                  autoComplete="email"
                   required 
                 />
               </div>
               <div className="mb-4">
-                <label className="form-label fw-bold">Contraseña</label>
+                <label htmlFor="login-contrasena" className="form-label fw-bold">Contraseña</label>
                 <input 
+                  id="login-contrasena"
                   type="password" 
                   className="form-control" 
-                  value={password} 
-                  onChange={(e) => setPassword(e.target.value)} 
+                  value={contrasena} 
+                  onChange={(e) => setContrasena(e.target.value)} 
+                  autoComplete="current-password"
                   required 
                 />
               </div>
@@ -58,6 +68,12 @@ export default function Login({ onLoginSuccess, cambiarVista }) {
                 {loading ? "Conectando..." : "Ingresar"}
               </button>
             </form>
+            <p className="text-center text-muted mt-3 mb-0">
+              ¿Aún no tienes cuenta?{' '}
+              <button type="button" className="btn btn-link p-0 align-baseline" onClick={() => cambiarVista('registro')}>
+                Regístrate aquí
+              </button>
+            </p>
             <div className="text-center mt-3">
               <button className="btn btn-link text-muted text-decoration-none" onClick={() => cambiarVista('landing')}>
                 ← Volver al inicio

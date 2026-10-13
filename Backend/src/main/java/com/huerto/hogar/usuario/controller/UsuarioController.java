@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.Map;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-@CrossOrigin(origins = "http://localhost:5273")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000", "http://localhost:5273"})
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Usuarios")

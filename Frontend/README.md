@@ -1,16 +1,42 @@
-# React + Vite
+# Huerto Hogar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend de la tienda online Huerto Hogar construido con React, Vite y Bootstrap.
 
-Currently, two official plugins are available:
+## Ejecutar el proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Inicia MySQL y configura la base de datos según `Backend/src/main/resources/application.properties`.
+2. Ejecuta el backend Spring Boot en `http://localhost:8080`.
+3. En esta carpeta instala las dependencias y levanta React:
 
-## React Compiler
+```bash
+npm install
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Si el backend no está disponible, el catálogo utiliza datos de respaldo para que la interfaz pueda revisarse de todas formas. Para confirmar una compra se requiere iniciar sesión con el backend activo.
 
-## Expanding the ESLint configuration
+## Funcionalidades
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Catálogo responsive con búsqueda y filtro por categoría.
+- Carrito persistente en el navegador con incremento, disminución, eliminación y vaciado.
+- Registro e inicio de sesión con JWT.
+- Checkout conectado a `POST /api/v1/entities/pedidos/checkout`, con dirección, fecha opcional y cupón.
+- Pantallas de compra exitosa y error de pago.
+- Panel de administración protegido por rol para crear y eliminar productos.
+
+## Calidad
+
+```bash
+npm run lint
+npm run build
+```
+
+El frontend se valida con ESLint y una compilación de producción de Vite.
+
+## Usuarios de demostración
+
+El `DataInitializer` del backend crea usuarios de prueba al iniciar por primera vez:
+
+- Administrador: `admin@duoc.cl` / `admin123`
+- Cliente: `cliente@gmail.com` / `cli123`
+- Vendedor: `vendedor@duoc.cl` / `vend123`

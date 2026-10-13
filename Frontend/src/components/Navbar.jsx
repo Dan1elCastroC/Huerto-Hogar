@@ -39,7 +39,7 @@ export default function Navbar({ vista, cambiarVista, carritoCount, user, onLogo
                   Productos
                 </a>
               </li>
-              {user && (
+              {user?.rol === 'ADMINISTRADOR' && (
                 <li className="nav-item">
                   <a className={`nav-link ${vista === 'main' ? 'active' : ''}`} href="#panel" onClick={(e) => ir(e, 'main')}>
                     Panel principal
@@ -55,7 +55,10 @@ export default function Navbar({ vista, cambiarVista, carritoCount, user, onLogo
                     Cerrar sesión ({user.username || user.correo || 'Usuario'})
                   </a>
                 ) : (
-                  <a href="#login" onClick={(e) => ir(e, 'login')}>Iniciar sesión</a>
+                  <>
+                    <a href="#login" onClick={(e) => ir(e, 'login')}>Iniciar sesión</a>
+                    <a href="#registro" onClick={(e) => ir(e, 'registro')}>Registrarse</a>
+                  </>
                 )}
               </div>
               <a href="#carrito" className="nav-carrito ms-3" onClick={(e) => ir(e, 'carrito')}>

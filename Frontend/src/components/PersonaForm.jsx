@@ -8,6 +8,8 @@ function PersonaForm({ onSave, personaEditando }) {
   // Si se selecciona editar
   useEffect(() => {
     if (personaEditando) {
+      // Este componente legacy recibe una entidad externa y debe hidratar el formulario al editar.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setId(personaEditando.id);
       setNombre(personaEditando.nombre);
     }
