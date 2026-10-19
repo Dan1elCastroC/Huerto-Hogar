@@ -4,13 +4,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
 import Navbar from './components/Navbar';
-import LandingPage from './components/LandingPage';
-import Login from './components/Login';
-import Registro from './components/Registro';
-import ProductList from './components/ProductList';
-import Carrito from './components/Carrito';
-import MainPage from './components/MainPage';
-import { carritoService, categoriaService, pedidoService, productoService } from './services/api';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import CatalogPage from './pages/CatalogPage';
+import CartPage from './pages/CartPage';
+import AdminPage from './pages/AdminPage';
+import BlogPage from './pages/BlogPage';
+import ContactPage from './pages/ContactPage';
+import ProfilePage from './pages/ProfilePage';
+import OrderHistoryPage from './pages/OrderHistoryPage';
+import { carritoService } from './services/carritoService';
+import { categoriaService } from './services/categoriaService';
+import { pedidoService } from './services/pedidoService';
+import { productoService } from './services/productoService';
 import { addItemToCart, removeCartItem, updateCartItem } from './services/cartUtils';
 
 const USER_STORAGE_KEY = 'huerto-hogar-user';
@@ -103,6 +110,11 @@ export default function App() {
     setVista('landing');
   };
 
+  const actualizarUsuario = (updatedUser) => {
+    setUser(updatedUser);
+    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(updatedUser));
+  };
+
   const finalizarCompra = async (pedidoData) => {
     if (!user?.token) {
       throw new Error('Debes iniciar sesión para confirmar la compra.');
@@ -130,12 +142,16 @@ export default function App() {
       />
 
       <div className="flex-grow-1">
-        {vista === 'landing' && <LandingPage cambiarVista={setVista} productos={productos} agregarAlCarrito={agregarAlCarrito} />}
-        {vista === 'login' && <Login onLoginSuccess={iniciarSesion} cambiarVista={setVista} />}
-        {vista === 'registro' && <Registro cambiarVista={setVista} />}
-        {vista === 'catalogo' && <ProductList productos={productos} categorias={categorias} agregarAlCarrito={agregarAlCarrito} loading={loading} />}
+        {vista === 'landing' && <HomePage cambiarVista={setVista} productos={productos} agregarAlCarrito={agregarAlCarrito} />}
+        {vista === 'login' && <LoginPage onLoginSuccess={iniciarSesion} cambiarVista={setVista} />}
+        {vista === 'registro' && <RegisterPage cambiarVista={setVista} />}
+        {vista === 'catalogo' && <CatalogPage productos={productos} categorias={categorias} agregarAlCarrito={agregarAlCarrito} loading={loading} />}
+        {vista === 'blog' && <BlogPage />}
+        {vista === 'contacto' && <ContactPage user={user} />}
+        {vista === 'perfil' && user ? <ProfilePage user={user} onUserUpdated={actualizarUsuario} /> : null}
+        {vista === 'pedidos' && user ? <OrderHistoryPage user={user} /> : null}
         {vista === 'carrito' && (
-          <Carrito
+          <CartPage
             carrito={carrito}
             user={user}
             cambiarVista={setVista}
@@ -147,7 +163,7 @@ export default function App() {
           />
         )}
         {vista === 'main' && user?.rol === 'ADMINISTRADOR' && (
-          <MainPage productos={productos} setProductos={setProductos} categorias={categorias} user={user} token={user.token} />
+          <AdminPage productos={productos} setProductos={setProductos} categorias={categorias} user={user} token={user.token} />
         )}
       </div>
 

@@ -28,7 +28,12 @@ describe('productoService', () => {
       imagen: '/macetero.png',
       imagenUrl: '/macetero.png',
     });
-    expect(fetchMock).toHaveBeenCalledWith('http://localhost:8080/api/v1/entities/productos');
+    expect(fetchMock).toHaveBeenCalledWith(
+      'http://localhost:8080/api/v1/entities/productos',
+      expect.objectContaining({
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    );
   });
 
   it('returns local products when the backend request fails', async () => {

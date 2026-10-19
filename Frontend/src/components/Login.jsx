@@ -1,6 +1,6 @@
 // src/components/Login.jsx
 import React, { useState } from 'react';
-import { authService } from '../services/api';
+import { authService } from '../services/authService';
 
 export default function Login({ onLoginSuccess, cambiarVista }) {
   const [correo, setCorreo] = useState('');
@@ -23,7 +23,6 @@ export default function Login({ onLoginSuccess, cambiarVista }) {
         // El inicio de sesión sigue siendo válido aunque el perfil no esté disponible.
       }
       onLoginSuccess({ ...data, ...profile }); // Guarda token y datos de usuario
-      cambiarVista('main');
     } catch {
       setError("Usuario o contraseña incorrectos. Intente nuevamente.");
     } finally {

@@ -39,6 +39,16 @@ export default function Navbar({ vista, cambiarVista, carritoCount, user, onLogo
                   Productos
                 </a>
               </li>
+              <li className="nav-item">
+                <a className={`nav-link ${vista === 'blog' ? 'active' : ''}`} href="#blog" onClick={(e) => ir(e, 'blog')}>
+                  Noticias
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className={`nav-link ${vista === 'contacto' ? 'active' : ''}`} href="#contacto" onClick={(e) => ir(e, 'contacto')}>
+                  Contacto
+                </a>
+              </li>
               {user?.rol === 'ADMINISTRADOR' && (
                 <li className="nav-item">
                   <a className={`nav-link ${vista === 'main' ? 'active' : ''}`} href="#panel" onClick={(e) => ir(e, 'main')}>
@@ -51,9 +61,11 @@ export default function Navbar({ vista, cambiarVista, carritoCount, user, onLogo
             <div className="d-flex align-items-center flex-wrap">
               <div className="nav-auth-links">
                 {user ? (
-                  <a href="#salir" onClick={(e) => { e.preventDefault(); setAbierto(false); onLogout(); }}>
-                    Cerrar sesión ({user.username || user.correo || 'Usuario'})
-                  </a>
+                  <>
+                    <a href="#perfil" onClick={(e) => ir(e, 'perfil')}>Mi perfil</a>
+                    <a href="#pedidos" onClick={(e) => ir(e, 'pedidos')}>Mis pedidos</a>
+                    <a href="#salir" onClick={(e) => { e.preventDefault(); setAbierto(false); onLogout(); }}>Cerrar sesión</a>
+                  </>
                 ) : (
                   <>
                     <a href="#login" onClick={(e) => ir(e, 'login')}>Iniciar sesión</a>
