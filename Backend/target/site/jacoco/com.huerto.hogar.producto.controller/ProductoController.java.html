@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hogar</a> &gt; <a href="index.source.html" class="el_package">com.huerto.hogar.producto.controller</a> &gt; <span class="el_source">ProductoController.java</span></div><h1>ProductoController.java</h1><pre class="source lang-java linenums">package com.huerto.hogar.producto.controller;
+import com.huerto.hogar.producto.dto.*;
+import com.huerto.hogar.producto.interfaces.IProductoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@CrossOrigin(origins = {&quot;http://localhost:5173&quot;, &quot;http://localhost:3000&quot;, &quot;http://localhost:5273&quot;})
+@RestController
+@RequestMapping(&quot;/api/v1/entities/productos&quot;)
+@RequiredArgsConstructor
+@Tag(name = &quot;Productos&quot;)
+public class ProductoController {
+    private final IProductoService service;
+    @GetMapping
+    public ResponseEntity&lt;?&gt; findAll() {
+<span class="nc" id="L21">        try { return ResponseEntity.ok(service.findAll()); }</span>
+<span class="nc" id="L22">        catch (Exception e) { return ResponseEntity.status(404).body(e.getMessage()); }</span>
+    }
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; findById(@PathVariable Long id) {
+<span class="nc" id="L26">        try { return ResponseEntity.ok(service.findById(id)); }</span>
+<span class="nc" id="L27">        catch (Exception e) { return ResponseEntity.status(404).body(e.getMessage()); }</span>
+    }
+    @GetMapping(&quot;/buscar&quot;)
+    public ResponseEntity&lt;?&gt; buscar(@RequestParam String q) {
+<span class="nc" id="L31">        try { return ResponseEntity.ok(service.buscar(q)); }</span>
+<span class="nc" id="L32">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+    @GetMapping(&quot;/categoria/{categoriaId}&quot;)
+    public ResponseEntity&lt;?&gt; findByCategoria(@PathVariable Long categoriaId) {
+<span class="nc" id="L36">        try { return ResponseEntity.ok(service.findByCategoria(categoriaId)); }</span>
+<span class="nc" id="L37">        catch (Exception e) { return ResponseEntity.status(404).body(e.getMessage()); }</span>
+    }
+    @GetMapping(&quot;/stock-critico&quot;)
+    @PreAuthorize(&quot;hasAnyRole('ADMINISTRADOR','VENDEDOR')&quot;)
+    public ResponseEntity&lt;?&gt; findStockCritico() {
+<span class="nc" id="L42">        try { return ResponseEntity.ok(service.findStockCritico()); }</span>
+<span class="nc" id="L43">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+    @PostMapping
+    @PreAuthorize(&quot;hasRole('ADMINISTRADOR')&quot;)
+    public ResponseEntity&lt;?&gt; save(@Valid @RequestBody ProductoDto dto) {
+<span class="nc" id="L48">        try { return ResponseEntity.status(201).body(service.save(dto)); }</span>
+<span class="nc" id="L49">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+    @PutMapping(&quot;/{id}&quot;)
+    @PreAuthorize(&quot;hasRole('ADMINISTRADOR')&quot;)
+    public ResponseEntity&lt;?&gt; update(@PathVariable Long id, @Valid @RequestBody ProductoDto dto) {
+<span class="nc" id="L54">        try { return ResponseEntity.ok(service.update(id, dto)); }</span>
+<span class="nc" id="L55">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+    @DeleteMapping(&quot;/{id}&quot;)
+    @PreAuthorize(&quot;hasRole('ADMINISTRADOR')&quot;)
+    public ResponseEntity&lt;?&gt; delete(@PathVariable Long id) {
+<span class="nc" id="L60">        try { service.deleteById(id); return ResponseEntity.ok(&quot;Producto eliminado&quot;); }</span>
+<span class="nc" id="L61">        catch (Exception e) { return ResponseEntity.status(404).body(e.getMessage()); }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

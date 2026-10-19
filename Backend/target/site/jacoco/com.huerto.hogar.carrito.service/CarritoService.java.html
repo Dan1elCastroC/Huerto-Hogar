@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CarritoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hogar</a> &gt; <a href="index.source.html" class="el_package">com.huerto.hogar.carrito.service</a> &gt; <span class="el_source">CarritoService.java</span></div><h1>CarritoService.java</h1><pre class="source lang-java linenums">package com.huerto.hogar.carrito.service;
+
+import com.huerto.hogar.carrito.dto.CarritoItemDto;
+import com.huerto.hogar.carrito.dto.CarritoResponse;
+import com.huerto.hogar.carrito.entity.CarritoItemEntity;
+import com.huerto.hogar.carrito.interfaces.ICarritoService;
+import com.huerto.hogar.carrito.repository.CarritoRepository;
+import com.huerto.hogar.cupon.entity.CuponEntity;
+import com.huerto.hogar.cupon.interfaces.ICuponService;
+import com.huerto.hogar.exception.*;
+import com.huerto.hogar.producto.entity.ProductoEntity;
+import com.huerto.hogar.producto.repository.ProductoRepository;
+import com.huerto.hogar.usuario.entity.UsuarioEntity;
+import com.huerto.hogar.usuario.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class CarritoService implements ICarritoService {
+
+    private final CarritoRepository carritoRepo;
+    private final ProductoRepository productoRepo;
+    private final UsuarioRepository usuarioRepo;
+    private final ICuponService cuponService;
+
+    @Override
+    public CarritoResponse getCarrito(String correo, String codigoCupon) {
+<span class="nc" id="L35">        UsuarioEntity usuario = getUsuario(correo);</span>
+<span class="nc" id="L36">        List&lt;CarritoItemEntity&gt; items = carritoRepo.findByUsuarioId(usuario.getId());</span>
+<span class="nc" id="L37">        return buildResponse(items, codigoCupon);</span>
+    }
+
+    @Override
+    @Transactional
+    public CarritoResponse agregar(String correo, CarritoItemDto dto) {
+<span class="fc" id="L43">        UsuarioEntity usuario = getUsuario(correo);</span>
+<span class="fc" id="L44">        ProductoEntity producto = productoRepo.findById(dto.getProductoId())</span>
+<span class="pc" id="L45">            .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Producto no encontrado&quot;));</span>
+
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (!producto.isActivo())</span>
+<span class="fc" id="L48">            throw new ReglaDeNegocioException(&quot;El producto no está disponible&quot;);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (producto.getStock() &lt; dto.getCantidad())</span>
+<span class="fc" id="L50">            throw new ReglaDeNegocioException(&quot;Stock insuficiente. Disponible: &quot; + producto.getStock());</span>
+
+<span class="fc" id="L52">        Optional&lt;CarritoItemEntity&gt; existente =</span>
+<span class="fc" id="L53">            carritoRepo.findByUsuarioIdAndProductoId(usuario.getId(), producto.getId());</span>
+
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (existente.isPresent()) {</span>
+            // Actualizar cantidad sumando
+<span class="nc" id="L57">            CarritoItemEntity item = existente.get();</span>
+<span class="nc" id="L58">            int nuevaCantidad = item.getCantidad() + dto.getCantidad();</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">            if (producto.getStock() &lt; nuevaCantidad)</span>
+<span class="nc" id="L60">                throw new ReglaDeNegocioException(&quot;Stock insuficiente para esa cantidad&quot;);</span>
+<span class="nc" id="L61">            item.setCantidad(nuevaCantidad);</span>
+<span class="nc" id="L62">            carritoRepo.save(item);</span>
+<span class="nc" id="L63">        } else {</span>
+<span class="fc" id="L64">            carritoRepo.save(CarritoItemEntity.builder()</span>
+<span class="fc" id="L65">                .usuario(usuario)</span>
+<span class="fc" id="L66">                .producto(producto)</span>
+<span class="fc" id="L67">                .cantidad(dto.getCantidad())</span>
+<span class="fc" id="L68">                .precioUnitario(producto.getPrecio())</span>
+<span class="fc" id="L69">                .build());</span>
+        }
+<span class="fc" id="L71">        return buildResponse(carritoRepo.findByUsuarioId(usuario.getId()), null);</span>
+    }
+
+    @Override
+    @Transactional
+    public CarritoResponse actualizar(String correo, Long productoId, Integer cantidad) {
+<span class="fc" id="L77">        UsuarioEntity usuario = getUsuario(correo);</span>
+<span class="fc" id="L78">        CarritoItemEntity item = carritoRepo</span>
+<span class="fc" id="L79">            .findByUsuarioIdAndProductoId(usuario.getId(), productoId)</span>
+<span class="pc" id="L80">            .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Item no encontrado en el carrito&quot;));</span>
+
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (cantidad &lt;= 0) {</span>
+<span class="fc" id="L83">            carritoRepo.delete(item);</span>
+        } else {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (item.getProducto().getStock() &lt; cantidad)</span>
+<span class="nc" id="L86">                throw new ReglaDeNegocioException(&quot;Stock insuficiente. Disponible: &quot; + item.getProducto().getStock());</span>
+<span class="nc" id="L87">            item.setCantidad(cantidad);</span>
+<span class="nc" id="L88">            carritoRepo.save(item);</span>
+        }
+<span class="fc" id="L90">        return buildResponse(carritoRepo.findByUsuarioId(usuario.getId()), null);</span>
+    }
+
+    @Override
+    @Transactional
+    public CarritoResponse eliminarItem(String correo, Long productoId) {
+<span class="nc" id="L96">        UsuarioEntity usuario = getUsuario(correo);</span>
+<span class="nc" id="L97">        carritoRepo.findByUsuarioIdAndProductoId(usuario.getId(), productoId)</span>
+<span class="nc" id="L98">            .ifPresent(carritoRepo::delete);</span>
+<span class="nc" id="L99">        return buildResponse(carritoRepo.findByUsuarioId(usuario.getId()), null);</span>
+    }
+
+    @Override
+    @Transactional
+    public void vaciar(String correo) {
+<span class="nc" id="L105">        UsuarioEntity usuario = getUsuario(correo);</span>
+<span class="nc" id="L106">        carritoRepo.deleteByUsuarioId(usuario.getId());</span>
+<span class="nc" id="L107">    }</span>
+
+    // ── helpers ──────────────────────────────────────────────────────
+
+    private UsuarioEntity getUsuario(String correo) {
+<span class="fc" id="L112">        return usuarioRepo.findByCorreo(correo)</span>
+<span class="fc" id="L113">            .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Usuario no encontrado&quot;));</span>
+    }
+
+    private CarritoResponse buildResponse(List&lt;CarritoItemEntity&gt; items, String codigoCupon) {
+<span class="fc" id="L117">        List&lt;CarritoResponse.ItemResponse&gt; itemResponses = items.stream()</span>
+<span class="fc" id="L118">            .map(i -&gt; CarritoResponse.ItemResponse.builder()</span>
+<span class="fc" id="L119">                .id(i.getId())</span>
+<span class="fc" id="L120">                .productoId(i.getProducto().getId())</span>
+<span class="fc" id="L121">                .productoNombre(i.getProducto().getNombre())</span>
+<span class="fc" id="L122">                .productoImagenUrl(i.getProducto().getImagenUrl())</span>
+<span class="fc" id="L123">                .cantidad(i.getCantidad())</span>
+<span class="fc" id="L124">                .precioUnitario(i.getPrecioUnitario())</span>
+<span class="fc" id="L125">                .subtotal(i.getSubtotal())</span>
+<span class="fc" id="L126">                .build())</span>
+<span class="fc" id="L127">            .toList();</span>
+
+<span class="fc" id="L129">        BigDecimal subtotal = items.stream()</span>
+<span class="fc" id="L130">            .map(CarritoItemEntity::getSubtotal)</span>
+<span class="fc" id="L131">            .reduce(BigDecimal.ZERO, BigDecimal::add);</span>
+
+<span class="fc" id="L133">        BigDecimal descuento = BigDecimal.ZERO;</span>
+<span class="fc" id="L134">        String cuponAplicado = null;</span>
+
+<span class="pc bpc" id="L136" title="3 of 4 branches missed.">        if (codigoCupon != null &amp;&amp; !codigoCupon.isBlank()) {</span>
+            try {
+<span class="nc" id="L138">                CuponEntity cupon = cuponService.findByCodigo(codigoCupon);</span>
+<span class="nc" id="L139">                descuento = subtotal</span>
+<span class="nc" id="L140">                    .multiply(cupon.getPorcentaje())</span>
+<span class="nc" id="L141">                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);</span>
+<span class="nc" id="L142">                cuponAplicado = cupon.getCodigo();</span>
+<span class="nc" id="L143">            } catch (Exception ignored) {</span>
+                // cupón inválido: se ignora silenciosamente
+<span class="nc" id="L145">            }</span>
+        }
+
+<span class="fc" id="L148">        return CarritoResponse.builder()</span>
+<span class="fc" id="L149">            .items(itemResponses)</span>
+<span class="fc" id="L150">            .totalItems(items.stream().mapToInt(CarritoItemEntity::getCantidad).sum())</span>
+<span class="fc" id="L151">            .subtotal(subtotal)</span>
+<span class="fc" id="L152">            .descuento(descuento)</span>
+<span class="fc" id="L153">            .total(subtotal.subtract(descuento))</span>
+<span class="fc" id="L154">            .cuponAplicado(cuponAplicado)</span>
+<span class="fc" id="L155">            .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

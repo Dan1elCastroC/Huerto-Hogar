@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PedidoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hogar</a> &gt; <a href="index.source.html" class="el_package">com.huerto.hogar.pedido.controller</a> &gt; <span class="el_source">PedidoController.java</span></div><h1>PedidoController.java</h1><pre class="source lang-java linenums">package com.huerto.hogar.pedido.controller;
+
+import com.huerto.hogar.pedido.dto.CheckoutRequest;
+import com.huerto.hogar.pedido.interfaces.IPedidoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@CrossOrigin(origins = {&quot;http://localhost:5173&quot;, &quot;http://localhost:3000&quot;, &quot;http://localhost:5273&quot;})
+@RestController
+@RequestMapping(&quot;/api/v1/entities/pedidos&quot;)
+@RequiredArgsConstructor
+@Tag(name = &quot;Pedidos&quot;)
+public class PedidoController {
+
+    private final IPedidoService service;
+
+    // ── CLIENTE ──────────────────────────────────────────────────────
+
+    @PostMapping(&quot;/checkout&quot;)
+    @Operation(summary = &quot;Confirmar compra (genera pedido desde el carrito)&quot;)
+    public ResponseEntity&lt;?&gt; checkout(Authentication auth,
+            @Valid @RequestBody CheckoutRequest req) {
+<span class="nc" id="L30">        try { return ResponseEntity.status(201).body(service.checkout(auth.getName(), req)); }</span>
+<span class="nc" id="L31">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+
+    @GetMapping(&quot;/mis-pedidos&quot;)
+    @Operation(summary = &quot;Historial de pedidos del usuario autenticado&quot;)
+    public ResponseEntity&lt;?&gt; historial(Authentication auth) {
+<span class="nc" id="L37">        try { return ResponseEntity.ok(service.historial(auth.getName())); }</span>
+<span class="nc" id="L38">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+
+    @GetMapping(&quot;/mis-pedidos/{id}&quot;)
+    @Operation(summary = &quot;Ver detalle de un pedido propio&quot;)
+    public ResponseEntity&lt;?&gt; findById(Authentication auth, @PathVariable Long id) {
+<span class="nc" id="L44">        try { return ResponseEntity.ok(service.findById(id, auth.getName())); }</span>
+<span class="nc" id="L45">        catch (Exception e) { return ResponseEntity.status(404).body(e.getMessage()); }</span>
+    }
+
+    // ── ADMIN / VENDEDOR ─────────────────────────────────────────────
+
+    @GetMapping
+    @PreAuthorize(&quot;hasAnyRole('ADMINISTRADOR','VENDEDOR')&quot;)
+    @Operation(summary = &quot;Listar todos los pedidos (admin/vendedor)&quot;)
+    public ResponseEntity&lt;?&gt; findAll() {
+<span class="nc" id="L54">        try { return ResponseEntity.ok(service.findAll()); }</span>
+<span class="nc" id="L55">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+
+    @GetMapping(&quot;/estado/{estado}&quot;)
+    @PreAuthorize(&quot;hasAnyRole('ADMINISTRADOR','VENDEDOR')&quot;)
+    @Operation(summary = &quot;Filtrar pedidos por estado&quot;)
+    public ResponseEntity&lt;?&gt; findByEstado(@PathVariable String estado) {
+<span class="nc" id="L62">        try { return ResponseEntity.ok(service.findByEstado(estado)); }</span>
+<span class="nc" id="L63">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+
+    @PatchMapping(&quot;/{id}/estado&quot;)
+    @PreAuthorize(&quot;hasRole('ADMINISTRADOR')&quot;)
+    @Operation(summary = &quot;Cambiar estado de un pedido (admin)&quot;)
+    public ResponseEntity&lt;?&gt; cambiarEstado(@PathVariable Long id,
+            @RequestParam String estado) {
+<span class="nc" id="L71">        try { return ResponseEntity.ok(service.cambiarEstado(id, estado)); }</span>
+<span class="nc" id="L72">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

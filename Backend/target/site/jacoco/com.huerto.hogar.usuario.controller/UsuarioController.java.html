@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsuarioController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hogar</a> &gt; <a href="index.source.html" class="el_package">com.huerto.hogar.usuario.controller</a> &gt; <span class="el_source">UsuarioController.java</span></div><h1>UsuarioController.java</h1><pre class="source lang-java linenums">package com.huerto.hogar.usuario.controller;
+
+import com.huerto.hogar.usuario.dto.*;
+import com.huerto.hogar.usuario.interfaces.IUsuarioService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+
+import javax.validation.Valid;
+import java.util.Map;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@CrossOrigin(origins = {&quot;http://localhost:5173&quot;, &quot;http://localhost:3000&quot;, &quot;http://localhost:5273&quot;})
+@RestController
+@RequiredArgsConstructor
+@Tag(name = &quot;Usuarios&quot;)
+public class UsuarioController {
+
+    private final IUsuarioService service;
+
+    // ── REGISTRO PÚBLICO ─────────────────────────────────────────────
+    @PostMapping(&quot;/api/auth/registro&quot;)
+    public ResponseEntity&lt;?&gt; registrar(@Valid @RequestBody RegistroRequest req) {
+<span class="nc" id="L28">        try { return ResponseEntity.status(201).body(service.registrar(req)); }</span>
+<span class="nc" id="L29">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+
+    // ── PERFIL PROPIO ────────────────────────────────────────────────
+    @GetMapping(&quot;/api/usuarios/perfil&quot;)
+    public ResponseEntity&lt;?&gt; perfil(Authentication auth) {
+<span class="nc" id="L35">        try { return ResponseEntity.ok(service.findByCorreo(auth.getName())); }</span>
+<span class="nc" id="L36">        catch (Exception e) { return ResponseEntity.status(404).body(e.getMessage()); }</span>
+    }
+
+    @PutMapping(&quot;/api/usuarios/perfil&quot;)
+    public ResponseEntity&lt;?&gt; actualizarPerfil(Authentication auth,
+            @Valid @RequestBody ActualizarUsuarioRequest req) {
+<span class="nc" id="L42">        try { return ResponseEntity.ok(service.actualizarPerfil(auth.getName(), req)); }</span>
+<span class="nc" id="L43">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+
+    @PutMapping(&quot;/api/usuarios/perfil/contrasena&quot;)
+    public ResponseEntity&lt;?&gt; cambiarContrasena(Authentication auth,
+            @Valid @RequestBody CambioContrasenaRequest req) {
+        try {
+<span class="nc" id="L50">            service.cambiarContrasena(auth.getName(), req);</span>
+<span class="nc" id="L51">            return ResponseEntity.ok(Map.of(&quot;mensaje&quot;, &quot;Contraseña actualizada correctamente&quot;));</span>
+<span class="nc" id="L52">        } catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+
+    // ── ADMIN ────────────────────────────────────────────────────────
+    @GetMapping(&quot;/api/admin/usuarios&quot;)
+    @PreAuthorize(&quot;hasRole('ADMINISTRADOR')&quot;)
+    public ResponseEntity&lt;?&gt; findAll() {
+<span class="nc" id="L59">        try { return ResponseEntity.ok(service.findAll()); }</span>
+<span class="nc" id="L60">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+
+    @GetMapping(&quot;/api/admin/usuarios/{id}&quot;)
+    @PreAuthorize(&quot;hasRole('ADMINISTRADOR')&quot;)
+    public ResponseEntity&lt;?&gt; findById(@PathVariable Long id) {
+<span class="nc" id="L66">        try { return ResponseEntity.ok(service.findById(id)); }</span>
+<span class="nc" id="L67">        catch (Exception e) { return ResponseEntity.status(404).body(e.getMessage()); }</span>
+    }
+
+    @PostMapping(&quot;/api/admin/usuarios&quot;)
+    @PreAuthorize(&quot;hasRole('ADMINISTRADOR')&quot;)
+    public ResponseEntity&lt;?&gt; crearDesdeAdmin(@Valid @RequestBody RegistroRequest req) {
+<span class="nc" id="L73">        try { return ResponseEntity.status(201).body(service.crearDesdeAdmin(req)); }</span>
+<span class="nc" id="L74">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+
+    @PutMapping(&quot;/api/admin/usuarios/{id}&quot;)
+    @PreAuthorize(&quot;hasRole('ADMINISTRADOR')&quot;)
+    public ResponseEntity&lt;?&gt; actualizarDesdeAdmin(@PathVariable Long id,
+            @Valid @RequestBody RegistroRequest req) {
+<span class="nc" id="L81">        try { return ResponseEntity.ok(service.actualizarDesdeAdmin(id, req)); }</span>
+<span class="nc" id="L82">        catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }</span>
+    }
+
+    @PatchMapping(&quot;/api/admin/usuarios/{id}/toggle-activo&quot;)
+    @PreAuthorize(&quot;hasRole('ADMINISTRADOR')&quot;)
+    public ResponseEntity&lt;?&gt; toggleActivo(@PathVariable Long id) {
+<span class="nc" id="L88">        try { return ResponseEntity.ok(service.toggleActivo(id)); }</span>
+<span class="nc" id="L89">        catch (Exception e) { return ResponseEntity.status(404).body(e.getMessage()); }</span>
+    }
+
+    @DeleteMapping(&quot;/api/admin/usuarios/{id}&quot;)
+    @PreAuthorize(&quot;hasRole('ADMINISTRADOR')&quot;)
+    public ResponseEntity&lt;?&gt; delete(@PathVariable Long id) {
+<span class="nc" id="L95">        try { service.deleteById(id); return ResponseEntity.ok(&quot;Usuario eliminado&quot;); }</span>
+<span class="nc" id="L96">        catch (Exception e) { return ResponseEntity.status(404).body(e.getMessage()); }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>
