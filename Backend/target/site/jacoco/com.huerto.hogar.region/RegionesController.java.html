@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegionesController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hogar</a> &gt; <a href="index.source.html" class="el_package">com.huerto.hogar.region</a> &gt; <span class="el_source">RegionesController.java</span></div><h1>RegionesController.java</h1><pre class="source lang-java linenums">package com.huerto.hogar.region;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@CrossOrigin(origins = {&quot;http://localhost:5173&quot;, &quot;http://localhost:3000&quot;, &quot;http://localhost:5273&quot;})
+@RestController
+@RequestMapping(&quot;/api/regiones&quot;)
+@Tag(name = &quot;Regiones y Comunas&quot;)
+<span class="fc" id="L14">public class RegionesController {</span>
+
+<span class="fc" id="L16">    private static final Map&lt;String, List&lt;String&gt;&gt; DATOS = new LinkedHashMap&lt;&gt;();</span>
+    static {
+<span class="fc" id="L18">        DATOS.put(&quot;Arica y Parinacota&quot;,          List.of(&quot;Arica&quot;,&quot;Camarones&quot;,&quot;Putre&quot;,&quot;General Lagos&quot;));</span>
+<span class="fc" id="L19">        DATOS.put(&quot;Tarapacá&quot;,                    List.of(&quot;Iquique&quot;,&quot;Alto Hospicio&quot;,&quot;Pozo Almonte&quot;,&quot;Camiña&quot;,&quot;Colchane&quot;,&quot;Huara&quot;,&quot;Pica&quot;));</span>
+<span class="fc" id="L20">        DATOS.put(&quot;Antofagasta&quot;,                 List.of(&quot;Antofagasta&quot;,&quot;Mejillones&quot;,&quot;Sierra Gorda&quot;,&quot;Taltal&quot;,&quot;Calama&quot;,&quot;Ollagüe&quot;,&quot;San Pedro de Atacama&quot;,&quot;Tocopilla&quot;,&quot;María Elena&quot;));</span>
+<span class="fc" id="L21">        DATOS.put(&quot;Atacama&quot;,                     List.of(&quot;Copiapó&quot;,&quot;Caldera&quot;,&quot;Tierra Amarilla&quot;,&quot;Chañaral&quot;,&quot;Diego de Almagro&quot;,&quot;Vallenar&quot;,&quot;Alto del Carmen&quot;,&quot;Freirina&quot;,&quot;Huasco&quot;));</span>
+<span class="fc" id="L22">        DATOS.put(&quot;Coquimbo&quot;,                    List.of(&quot;La Serena&quot;,&quot;Coquimbo&quot;,&quot;Andacollo&quot;,&quot;La Higuera&quot;,&quot;Paihuano&quot;,&quot;Vicuña&quot;,&quot;Illapel&quot;,&quot;Los Vilos&quot;,&quot;Salamanca&quot;,&quot;Ovalle&quot;,&quot;Monte Patria&quot;));</span>
+<span class="fc" id="L23">        DATOS.put(&quot;Valparaíso&quot;,                  List.of(&quot;Valparaíso&quot;,&quot;Viña del Mar&quot;,&quot;Quilpué&quot;,&quot;Villa Alemana&quot;,&quot;Concón&quot;,&quot;Casablanca&quot;,&quot;Quillota&quot;,&quot;San Antonio&quot;,&quot;San Felipe&quot;,&quot;Los Andes&quot;));</span>
+<span class="fc" id="L24">        DATOS.put(&quot;Metropolitana de Santiago&quot;,   List.of(&quot;Santiago&quot;,&quot;Providencia&quot;,&quot;Las Condes&quot;,&quot;Maipú&quot;,&quot;La Florida&quot;,&quot;Puente Alto&quot;,&quot;San Bernardo&quot;,&quot;Ñuñoa&quot;,&quot;Vitacura&quot;,&quot;Lo Barnechea&quot;,&quot;Peñalolén&quot;,&quot;Estación Central&quot;));</span>
+<span class="fc" id="L25">        DATOS.put(&quot;O'Higgins&quot;,                   List.of(&quot;Rancagua&quot;,&quot;San Fernando&quot;,&quot;Pichilemu&quot;,&quot;Machalí&quot;,&quot;Rengo&quot;,&quot;Graneros&quot;,&quot;Requínoa&quot;));</span>
+<span class="fc" id="L26">        DATOS.put(&quot;Maule&quot;,                       List.of(&quot;Talca&quot;,&quot;Curicó&quot;,&quot;Linares&quot;,&quot;Constitución&quot;,&quot;Cauquenes&quot;,&quot;Molina&quot;,&quot;Parral&quot;,&quot;San Javier&quot;));</span>
+<span class="fc" id="L27">        DATOS.put(&quot;Ñuble&quot;,                       List.of(&quot;Chillán&quot;,&quot;Chillán Viejo&quot;,&quot;Bulnes&quot;,&quot;San Carlos&quot;,&quot;Coihueco&quot;,&quot;Quirihue&quot;,&quot;Yungay&quot;));</span>
+<span class="fc" id="L28">        DATOS.put(&quot;Biobío&quot;,                      List.of(&quot;Concepción&quot;,&quot;Talcahuano&quot;,&quot;Los Ángeles&quot;,&quot;Chiguayante&quot;,&quot;Coronel&quot;,&quot;San Pedro de la Paz&quot;,&quot;Hualpén&quot;,&quot;Tomé&quot;,&quot;Lota&quot;,&quot;Penco&quot;,&quot;Lebu&quot;,&quot;Los Álamos&quot;));</span>
+<span class="fc" id="L29">        DATOS.put(&quot;La Araucanía&quot;,                List.of(&quot;Temuco&quot;,&quot;Padre Las Casas&quot;,&quot;Villarrica&quot;,&quot;Pucón&quot;,&quot;Angol&quot;,&quot;Lautaro&quot;,&quot;Freire&quot;,&quot;Nueva Imperial&quot;,&quot;Curacautín&quot;));</span>
+<span class="fc" id="L30">        DATOS.put(&quot;Los Ríos&quot;,                    List.of(&quot;Valdivia&quot;,&quot;La Unión&quot;,&quot;Río Bueno&quot;,&quot;Futrono&quot;,&quot;Lago Ranco&quot;,&quot;Panguipulli&quot;,&quot;Lanco&quot;));</span>
+<span class="fc" id="L31">        DATOS.put(&quot;Los Lagos&quot;,                   List.of(&quot;Puerto Montt&quot;,&quot;Puerto Varas&quot;,&quot;Osorno&quot;,&quot;Castro&quot;,&quot;Ancud&quot;,&quot;Frutillar&quot;,&quot;Calbuco&quot;,&quot;Llanquihue&quot;));</span>
+<span class="fc" id="L32">        DATOS.put(&quot;Aysén&quot;,                       List.of(&quot;Coyhaique&quot;,&quot;Aysén&quot;,&quot;Chile Chico&quot;,&quot;Cochrane&quot;,&quot;Río Ibáñez&quot;));</span>
+<span class="fc" id="L33">        DATOS.put(&quot;Magallanes&quot;,                  List.of(&quot;Punta Arenas&quot;,&quot;Natales&quot;,&quot;Torres del Paine&quot;,&quot;Porvenir&quot;));</span>
+<span class="fc" id="L34">    }</span>
+
+    @GetMapping
+    public ResponseEntity&lt;List&lt;String&gt;&gt; listarRegiones() {
+<span class="nc" id="L38">        return ResponseEntity.ok(new ArrayList&lt;&gt;(DATOS.keySet()));</span>
+    }
+
+    @GetMapping(&quot;/{region}/comunas&quot;)
+    public ResponseEntity&lt;List&lt;String&gt;&gt; comunas(@PathVariable String region) {
+<span class="nc" id="L43">        List&lt;String&gt; comunas = DATOS.entrySet().stream()</span>
+<span class="nc" id="L44">            .filter(e -&gt; e.getKey().equalsIgnoreCase(region))</span>
+<span class="nc" id="L45">            .map(Map.Entry::getValue).findFirst().orElse(List.of());</span>
+<span class="nc" id="L46">        return ResponseEntity.ok(comunas);</span>
+    }
+
+    @GetMapping(&quot;/todas&quot;)
+    public ResponseEntity&lt;Map&lt;String, List&lt;String&gt;&gt;&gt; todas() {
+<span class="nc" id="L51">        return ResponseEntity.ok(DATOS);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

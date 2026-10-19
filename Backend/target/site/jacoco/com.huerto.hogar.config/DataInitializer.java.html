@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataInitializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hogar</a> &gt; <a href="index.source.html" class="el_package">com.huerto.hogar.config</a> &gt; <span class="el_source">DataInitializer.java</span></div><h1>DataInitializer.java</h1><pre class="source lang-java linenums">package com.huerto.hogar.config;
+
+import com.huerto.hogar.categoria.entity.CategoriaEntity;
+import com.huerto.hogar.categoria.repository.CategoriaRepository;
+import com.huerto.hogar.usuario.entity.Rol;
+import com.huerto.hogar.usuario.entity.UsuarioEntity;
+import com.huerto.hogar.usuario.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+@RequiredArgsConstructor
+<span class="fc" id="L18">@Slf4j</span>
+public class DataInitializer implements CommandLineRunner {
+
+    private final UsuarioRepository usuarioRepo;
+    private final CategoriaRepository categoriaRepo;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public void run(String... args) {
+<span class="fc" id="L27">        seedUsuarios();</span>
+<span class="fc" id="L28">        seedCategorias();</span>
+<span class="fc" id="L29">    }</span>
+
+    private void seedUsuarios() {
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (!usuarioRepo.existsByCorreo(&quot;admin@duoc.cl&quot;)) {</span>
+<span class="fc" id="L33">            usuarioRepo.save(UsuarioEntity.builder()</span>
+<span class="fc" id="L34">                .run(&quot;11111111K&quot;).nombre(&quot;Admin&quot;).apellidos(&quot;Huerto Hogar&quot;)</span>
+<span class="fc" id="L35">                .correo(&quot;admin@duoc.cl&quot;)</span>
+<span class="fc" id="L36">                .contrasena(passwordEncoder.encode(&quot;admin123&quot;))</span>
+<span class="fc" id="L37">                .direccion(&quot;Sede Central&quot;).region(&quot;Biobío&quot;).comuna(&quot;Concepción&quot;)</span>
+<span class="fc" id="L38">                .rol(Rol.ADMINISTRADOR).build());</span>
+<span class="fc" id="L39">            log.info(&quot;&gt;&gt;&gt; Admin: admin@duoc.cl / admin123&quot;);</span>
+        }
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (!usuarioRepo.existsByCorreo(&quot;vendedor@duoc.cl&quot;)) {</span>
+<span class="fc" id="L42">            usuarioRepo.save(UsuarioEntity.builder()</span>
+<span class="fc" id="L43">                .run(&quot;22222222K&quot;).nombre(&quot;Vendedor&quot;).apellidos(&quot;Demo&quot;)</span>
+<span class="fc" id="L44">                .correo(&quot;vendedor@duoc.cl&quot;)</span>
+<span class="fc" id="L45">                .contrasena(passwordEncoder.encode(&quot;vend123&quot;))</span>
+<span class="fc" id="L46">                .direccion(&quot;Tienda Central&quot;).region(&quot;Biobío&quot;).comuna(&quot;Concepción&quot;)</span>
+<span class="fc" id="L47">                .rol(Rol.VENDEDOR).build());</span>
+<span class="fc" id="L48">            log.info(&quot;&gt;&gt;&gt; Vendedor: vendedor@duoc.cl / vend123&quot;);</span>
+        }
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (!usuarioRepo.existsByCorreo(&quot;cliente@gmail.com&quot;)) {</span>
+<span class="fc" id="L51">            usuarioRepo.save(UsuarioEntity.builder()</span>
+<span class="fc" id="L52">                .run(&quot;33333333K&quot;).nombre(&quot;Cliente&quot;).apellidos(&quot;Demo&quot;)</span>
+<span class="fc" id="L53">                .correo(&quot;cliente@gmail.com&quot;)</span>
+<span class="fc" id="L54">                .contrasena(passwordEncoder.encode(&quot;cli123&quot;))</span>
+<span class="fc" id="L55">                .direccion(&quot;Av. Siempre Viva 123&quot;).region(&quot;Biobío&quot;).comuna(&quot;San Pedro de la Paz&quot;)</span>
+<span class="fc" id="L56">                .rol(Rol.CLIENTE).build());</span>
+<span class="fc" id="L57">            log.info(&quot;&gt;&gt;&gt; Cliente: cliente@gmail.com / cli123&quot;);</span>
+        }
+<span class="fc" id="L59">    }</span>
+
+    private void seedCategorias() {
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (((List&lt;CategoriaEntity&gt;) categoriaRepo.findAll()).isEmpty()) {</span>
+<span class="fc" id="L63">            List.of(&quot;Frutas&quot;,&quot;Verduras&quot;,&quot;Hierbas&quot;,&quot;Orgánicos&quot;,&quot;Semillas&quot;)</span>
+<span class="fc" id="L64">                .forEach(nombre -&gt; categoriaRepo.save(</span>
+<span class="fc" id="L65">                    CategoriaEntity.builder().nombre(nombre)</span>
+<span class="fc" id="L66">                        .descripcion(&quot;Categoría &quot; + nombre).build()));</span>
+<span class="fc" id="L67">            log.info(&quot;&gt;&gt;&gt; 5 categorías creadas&quot;);</span>
+        }
+<span class="fc" id="L69">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

@@ -288,6 +288,15 @@ body, .body {
     background-color: #198754;
     color: #ffffff;
 }
+.admin-sidebar button {
+    color: #ced4da;
+    border: 0;
+    padding: 12px 25px;
+}
+.admin-sidebar button:hover, .admin-sidebar button.active {
+    background-color: #198754;
+    color: #ffffff;
+}
 .admin-content {
     flex-grow: 1;
     padding: 30px;

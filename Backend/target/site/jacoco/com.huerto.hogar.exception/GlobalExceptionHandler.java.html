@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hogar</a> &gt; <a href="index.source.html" class="el_package">com.huerto.hogar.exception</a> &gt; <span class="el_source">GlobalExceptionHandler.java</span></div><h1>GlobalExceptionHandler.java</h1><pre class="source lang-java linenums">package com.huerto.hogar.exception;
+import org.springframework.http.*;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+@RestControllerAdvice
+<span class="fc" id="L9">public class GlobalExceptionHandler {</span>
+    @ExceptionHandler(RecursoNoEncontradoException.class)
+    public ResponseEntity&lt;ApiError&gt; notFound(RecursoNoEncontradoException ex) {
+<span class="nc" id="L12">        return ResponseEntity.status(404).body(ApiError.builder().status(404).error(&quot;Not Found&quot;).mensaje(ex.getMessage()).build());</span>
+    }
+    @ExceptionHandler(ReglaDeNegocioException.class)
+    public ResponseEntity&lt;ApiError&gt; badRequest(ReglaDeNegocioException ex) {
+<span class="nc" id="L16">        return ResponseEntity.status(400).body(ApiError.builder().status(400).error(&quot;Bad Request&quot;).mensaje(ex.getMessage()).build());</span>
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ApiError&gt; validacion(MethodArgumentNotValidException ex) {
+<span class="nc" id="L20">        List&lt;String&gt; d = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();</span>
+<span class="nc" id="L21">        return ResponseEntity.status(400).body(ApiError.builder().status(400).error(&quot;Validacion&quot;).mensaje(&quot;Datos invalidos&quot;).detalles(d).build());</span>
+    }
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity&lt;ApiError&gt; forbidden(AccessDeniedException ex) {
+<span class="nc" id="L25">        return ResponseEntity.status(403).body(ApiError.builder().status(403).error(&quot;Forbidden&quot;).mensaje(&quot;Sin permiso&quot;).build());</span>
+    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;ApiError&gt; general(Exception ex) {
+<span class="nc" id="L29">        return ResponseEntity.status(500).body(ApiError.builder().status(500).error(&quot;Error&quot;).mensaje(ex.getMessage()).build());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

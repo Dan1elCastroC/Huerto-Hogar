@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hogar</a> &gt; <a href="index.source.html" class="el_package">com.huerto.hogar.producto.service</a> &gt; <span class="el_source">ProductoService.java</span></div><h1>ProductoService.java</h1><pre class="source lang-java linenums">package com.huerto.hogar.producto.service;
+import com.huerto.hogar.categoria.entity.CategoriaEntity;
+import com.huerto.hogar.categoria.repository.CategoriaRepository;
+import com.huerto.hogar.exception.*;
+import com.huerto.hogar.producto.dto.*;
+import com.huerto.hogar.producto.entity.ProductoEntity;
+import com.huerto.hogar.producto.interfaces.IProductoService;
+import com.huerto.hogar.producto.repository.ProductoRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import java.util.List;
+@Service
+@RequiredArgsConstructor
+public class ProductoService implements IProductoService {
+    private final ProductoRepository productoRepo;
+    private final CategoriaRepository categoriaRepo;
+    @Override public List&lt;ProductoResponse&gt; findAll() {
+<span class="nc" id="L18">        return productoRepo.findByActivoTrue().stream().map(this::toResponse).toList();</span>
+    }
+<span class="fc" id="L20">    @Override public ProductoResponse findById(Long id) { return toResponse(getOrThrow(id)); }</span>
+    @Override public List&lt;ProductoResponse&gt; buscar(String q) {
+<span class="nc" id="L22">        return productoRepo.buscar(q).stream().map(this::toResponse).toList();</span>
+    }
+    @Override public List&lt;ProductoResponse&gt; findByCategoria(Long catId) {
+<span class="nc" id="L25">        return productoRepo.findByCategoriaIdAndActivoTrue(catId).stream().map(this::toResponse).toList();</span>
+    }
+    @Override public List&lt;ProductoResponse&gt; findStockCritico() {
+<span class="nc" id="L28">        return productoRepo.findStockCritico().stream().map(this::toResponse).toList();</span>
+    }
+    @Override public ProductoResponse save(ProductoDto dto) {
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (productoRepo.existsByCodigo(dto.getCodigo()))</span>
+<span class="fc" id="L32">            throw new ReglaDeNegocioException(&quot;Ya existe un producto con código: &quot; + dto.getCodigo());</span>
+<span class="fc" id="L33">        CategoriaEntity cat = categoriaRepo.findById(dto.getCategoriaId())</span>
+<span class="fc" id="L34">            .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Categoría no encontrada&quot;));</span>
+<span class="fc" id="L35">        return toResponse(productoRepo.save(ProductoEntity.builder()</span>
+<span class="fc" id="L36">            .codigo(dto.getCodigo()).nombre(dto.getNombre()).descripcion(dto.getDescripcion())</span>
+<span class="fc" id="L37">            .precio(dto.getPrecio()).stock(dto.getStock()).stockCritico(dto.getStockCritico())</span>
+<span class="fc" id="L38">            .imagenUrl(dto.getImagenUrl()).categoria(cat).build()));</span>
+    }
+    @Override public ProductoResponse update(Long id, ProductoDto dto) {
+<span class="nc" id="L41">        ProductoEntity p = getOrThrow(id);</span>
+<span class="nc bnc" id="L42" title="All 4 branches missed.">        if (!p.getCodigo().equals(dto.getCodigo()) &amp;&amp; productoRepo.existsByCodigo(dto.getCodigo()))</span>
+<span class="nc" id="L43">            throw new ReglaDeNegocioException(&quot;Código ya en uso por otro producto&quot;);</span>
+<span class="nc" id="L44">        CategoriaEntity cat = categoriaRepo.findById(dto.getCategoriaId())</span>
+<span class="nc" id="L45">            .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Categoría no encontrada&quot;));</span>
+<span class="nc" id="L46">        p.setCodigo(dto.getCodigo()); p.setNombre(dto.getNombre()); p.setDescripcion(dto.getDescripcion());</span>
+<span class="nc" id="L47">        p.setPrecio(dto.getPrecio()); p.setStock(dto.getStock()); p.setStockCritico(dto.getStockCritico());</span>
+<span class="nc" id="L48">        p.setImagenUrl(dto.getImagenUrl()); p.setCategoria(cat);</span>
+<span class="nc" id="L49">        return toResponse(productoRepo.save(p));</span>
+    }
+    @Override public void deleteById(Long id) {
+<span class="fc" id="L52">        ProductoEntity p = getOrThrow(id); p.setActivo(false); productoRepo.save(p);</span>
+<span class="fc" id="L53">    }</span>
+    private ProductoEntity getOrThrow(Long id) {
+<span class="fc" id="L55">        return productoRepo.findById(id).orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Producto no encontrado: &quot; + id));</span>
+    }
+    private ProductoResponse toResponse(ProductoEntity p) {
+<span class="fc" id="L58">        return ProductoResponse.builder().id(p.getId()).codigo(p.getCodigo()).nombre(p.getNombre())</span>
+<span class="fc" id="L59">            .descripcion(p.getDescripcion()).precio(p.getPrecio()).stock(p.getStock())</span>
+<span class="fc" id="L60">            .stockCritico(p.getStockCritico()).stockCriticoAlerta(p.tieneStockCritico())</span>
+<span class="fc" id="L61">            .imagenUrl(p.getImagenUrl()).categoriaId(p.getCategoria().getId())</span>
+<span class="fc" id="L62">            .categoriaNombre(p.getCategoria().getNombre()).activo(p.isActivo()).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

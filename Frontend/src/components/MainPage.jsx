@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { productoService } from '../services/api';
+import { productoService } from '../services/productoService';
 
 const initialProduct = {
   codigo: '',
