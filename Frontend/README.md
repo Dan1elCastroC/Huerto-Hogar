@@ -29,9 +29,10 @@ Si el backend no está disponible, el catálogo utiliza datos de respaldo para q
 ```bash
 npm run lint
 npm run build
+npm test
 ```
 
-El frontend se valida con ESLint y una compilación de producción de Vite.
+El frontend se valida con ESLint, una compilación de producción de Vite y pruebas unitarias con Vitest.
 
 ## Usuarios de demostración
 
