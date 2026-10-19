@@ -20,6 +20,7 @@
         <mysql.version>8.3.0</mysql.version>
         <jjwt.version>0.11.5</jjwt.version>
         <springdoc.version>1.7.0</springdoc.version>
+        <jacoco.version>0.8.15</jacoco.version>
         <start-class>com.huerto.hogar.HogarApplication</start-class>
     </properties>
 
@@ -153,6 +154,25 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
