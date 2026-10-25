@@ -101,6 +101,7 @@ public class PedidoService implements IPedidoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PedidoResponse> historial(String correo) {
         UsuarioEntity usuario = getUsuario(correo);
         return pedidoRepo.findByUsuarioIdOrderByCreadoEnDesc(usuario.getId())
@@ -108,6 +109,7 @@ public class PedidoService implements IPedidoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PedidoResponse findById(Long id, String correo) {
         PedidoEntity pedido = pedidoRepo.findById(id)
             .orElseThrow(() -> new RecursoNoEncontradoException("Pedido no encontrado: " + id));
@@ -118,11 +120,13 @@ public class PedidoService implements IPedidoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PedidoResponse> findAll() {
         return pedidoRepo.findAllByOrderByCreadoEnDesc().stream().map(this::toResponse).toList();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PedidoResponse> findByEstado(String estado) {
         try {
             EstadoPedido ep = EstadoPedido.valueOf(estado.toUpperCase());
@@ -146,7 +150,6 @@ public class PedidoService implements IPedidoService {
         return toResponse(pedidoRepo.save(pedido));
     }
 
-    // ── helpers ──────────────────────────────────────────────────────
 
     private UsuarioEntity getUsuario(String correo) {
         return usuarioRepo.findByCorreo(correo)

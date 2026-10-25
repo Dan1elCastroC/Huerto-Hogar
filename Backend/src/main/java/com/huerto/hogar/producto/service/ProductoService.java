@@ -8,9 +8,12 @@ import com.huerto.hogar.producto.interfaces.IProductoService;
 import com.huerto.hogar.producto.repository.ProductoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
+
+@Transactional(readOnly = true)
 public class ProductoService implements IProductoService {
     private final ProductoRepository productoRepo;
     private final CategoriaRepository categoriaRepo;
@@ -27,7 +30,7 @@ public class ProductoService implements IProductoService {
     @Override public List<ProductoResponse> findStockCritico() {
         return productoRepo.findStockCritico().stream().map(this::toResponse).toList();
     }
-    @Override public ProductoResponse save(ProductoDto dto) {
+    @Override @Transactional public ProductoResponse save(ProductoDto dto) {
         if (productoRepo.existsByCodigo(dto.getCodigo()))
             throw new ReglaDeNegocioException("Ya existe un producto con código: " + dto.getCodigo());
         CategoriaEntity cat = categoriaRepo.findById(dto.getCategoriaId())
@@ -37,7 +40,7 @@ public class ProductoService implements IProductoService {
             .precio(dto.getPrecio()).stock(dto.getStock()).stockCritico(dto.getStockCritico())
             .imagenUrl(dto.getImagenUrl()).categoria(cat).build()));
     }
-    @Override public ProductoResponse update(Long id, ProductoDto dto) {
+    @Override @Transactional public ProductoResponse update(Long id, ProductoDto dto) {
         ProductoEntity p = getOrThrow(id);
         if (!p.getCodigo().equals(dto.getCodigo()) && productoRepo.existsByCodigo(dto.getCodigo()))
             throw new ReglaDeNegocioException("Código ya en uso por otro producto");
@@ -48,7 +51,7 @@ public class ProductoService implements IProductoService {
         p.setImagenUrl(dto.getImagenUrl()); p.setCategoria(cat);
         return toResponse(productoRepo.save(p));
     }
-    @Override public void deleteById(Long id) {
+    @Override @Transactional public void deleteById(Long id) {
         ProductoEntity p = getOrThrow(id); p.setActivo(false); productoRepo.save(p);
     }
     private ProductoEntity getOrThrow(Long id) {

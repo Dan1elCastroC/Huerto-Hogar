@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8087';
 
 export const API_PATH = `${API_BASE_URL}/api`;
 
@@ -15,7 +15,19 @@ export const parseResponse = async (response) => {
     : await response.text();
 
   if (!response.ok) {
-    const message = typeof data === 'string' ? data : data?.message;
+    let message;
+    if (typeof data === 'string') {
+      message = data;
+    } else if (data?.mensaje || data?.message) {
+      // GlobalExceptionHandler devuelve { mensaje, detalles[] }
+      const detalles = Array.isArray(data.detalles) && data.detalles.length
+        ? `: ${data.detalles.join('. ')}`
+        : '';
+      message = `${data.mensaje || data.message}${detalles}`;
+    }
+    if (!message && (response.status === 401 || response.status === 403)) {
+      message = 'No tienes permiso o tu sesión expiró. Inicia sesión nuevamente.';
+    }
     throw new Error(message || 'La solicitud no pudo completarse');
   }
 
