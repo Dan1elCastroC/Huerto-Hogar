@@ -35,6 +35,7 @@ export default function App() {
     }
   });
   const [loading, setLoading] = useState(true);
+  const [errorCarga, setErrorCarga] = useState('');
   const [sincronizandoCarrito, setSincronizandoCarrito] = useState(false);
   const [user, setUser] = useState(() => {
     try {
@@ -48,7 +49,15 @@ export default function App() {
   useEffect(() => {
     Promise.allSettled([productoService.getAll(), categoriaService.getAll()])
       .then(([productsResult, categoriesResult]) => {
-        if (productsResult.status === 'fulfilled') setProductos(productsResult.value);
+        if (productsResult.status === 'fulfilled') {
+          setProductos(productsResult.value);
+          setErrorCarga('');
+        } else {
+          console.error('No se pudieron cargar los productos:', productsResult.reason);
+          setErrorCarga(
+            'No se pudo conectar con el servidor. Verifica que MySQL y el backend (puerto 8087) estén encendidos.'
+          );
+        }
         if (categoriesResult.status === 'fulfilled') setCategorias(categoriesResult.value);
       })
       .finally(() => setLoading(false));
@@ -122,6 +131,8 @@ export default function App() {
 
     const pedido = await pedidoService.crearPedido(pedidoData, user.token);
     setCarrito([]);
+    // El backend descontó stock: se recarga el catálogo para no mostrar cantidades viejas.
+    productoService.getAll().then(setProductos).catch(() => {});
     return pedido;
   };
 
@@ -145,7 +156,7 @@ export default function App() {
         {vista === 'landing' && <HomePage cambiarVista={setVista} productos={productos} agregarAlCarrito={agregarAlCarrito} />}
         {vista === 'login' && <LoginPage onLoginSuccess={iniciarSesion} cambiarVista={setVista} />}
         {vista === 'registro' && <RegisterPage cambiarVista={setVista} />}
-        {vista === 'catalogo' && <CatalogPage productos={productos} categorias={categorias} agregarAlCarrito={agregarAlCarrito} loading={loading} />}
+        {vista === 'catalogo' && <CatalogPage productos={productos} categorias={categorias} agregarAlCarrito={agregarAlCarrito} loading={loading} error={errorCarga} />}
         {vista === 'blog' && <BlogPage />}
         {vista === 'contacto' && <ContactPage user={user} />}
         {vista === 'perfil' && user ? <ProfilePage user={user} onUserUpdated={actualizarUsuario} /> : null}

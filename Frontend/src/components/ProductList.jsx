@@ -1,7 +1,7 @@
 // src/components/ProductList.jsx
 import React, { useMemo, useState } from 'react';
 
-export default function ProductList({ productos, categorias = [], agregarAlCarrito, loading }) {
+export default function ProductList({ productos, categorias = [], agregarAlCarrito, loading, error = '' }) {
   const [busqueda, setBusqueda] = useState('');
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('todas');
 
@@ -54,7 +54,9 @@ export default function ProductList({ productos, categorias = [], agregarAlCarri
         </div>
       </div>
       <div className="row">
-        {productosFiltrados.length === 0 ? (
+        {error && productos.length === 0 ? (
+          <div className="alert alert-danger text-center" role="alert">{error}</div>
+        ) : productosFiltrados.length === 0 ? (
           <div className="alert alert-warning text-center">No hay productos disponibles en este momento.</div>
         ) : (
           productosFiltrados.map((producto) => (

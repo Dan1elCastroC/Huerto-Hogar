@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { pedidoService } from '../../services/pedidoService';
 
-const statuses = ['PENDIENTE', 'CONFIRMADO', 'EN_PREPARACION', 'ENVIADO', 'ENTREGADO', 'CANCELADO'];
+// Debe coincidir con el enum EstadoPedido del backend.
+const statuses = ['PENDIENTE', 'EN_PREPARACION', 'ENVIADO', 'ENTREGADO', 'CANCELADO'];
 
 export default function OrderManager({ token }) {
   const [pedidos, setPedidos] = useState([]);
