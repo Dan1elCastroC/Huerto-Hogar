@@ -27,7 +27,7 @@ describe('Carrito', () => {
     render(<Carrito {...props} />);
 
     expect(screen.getByText('Kit de Huerto')).toBeInTheDocument();
-    expect(screen.getAllByText('$5.000')).toHaveLength(3);
+    expect(screen.getAllByText(`$${(5000).toLocaleString()}`)).toHaveLength(3);
     fireEvent.click(screen.getByRole('button', { name: 'Aumentar cantidad de Kit de Huerto' }));
     fireEvent.click(screen.getByRole('button', { name: 'Eliminar Kit de Huerto' }));
 

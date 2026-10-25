@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { productoService } from './productoService';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8087';
 

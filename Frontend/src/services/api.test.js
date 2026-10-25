@@ -29,21 +29,17 @@ describe('productoService', () => {
       imagenUrl: '/macetero.png',
     });
     expect(fetchMock).toHaveBeenCalledWith(
-      'http://localhost:8080/api/v1/entities/productos',
+      'http://localhost:8087/api/v1/entities/productos',
       expect.objectContaining({
         headers: { 'Content-Type': 'application/json' },
       }),
     );
   });
 
-  it('returns local products when the backend request fails', async () => {
+  it('propagates the error when the backend request fails (no fake data)', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse({}, false)));
-    vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-    const products = await productoService.getAll();
-
-    expect(products).toHaveLength(4);
-    expect(products[0]).toMatchObject({ id: 1, nombre: 'Kit de Huerto Urbano' });
+    await expect(productoService.getAll()).rejects.toThrow();
   });
 
   it('sends a token when creating a product and normalizes the response', async () => {
@@ -59,7 +55,7 @@ describe('productoService', () => {
 
     expect(product).toMatchObject({ categoriaNombre: 'Jardín', imagenUrl: '/regadera.png' });
     expect(fetchMock).toHaveBeenCalledWith(
-      'http://localhost:8080/api/v1/entities/productos',
+      'http://localhost:8087/api/v1/entities/productos',
       expect.objectContaining({
         method: 'POST',
         headers: {
