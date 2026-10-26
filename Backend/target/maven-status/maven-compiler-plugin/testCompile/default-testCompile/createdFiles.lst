@@ -1,1 +1,13 @@
+com\huerto\hogar\UsuarioServiceTest.class
+com\huerto\hogar\ProductoServiceTest.class
+com\huerto\hogar\PedidoServiceTest.class
+com\huerto\hogar\CuponServiceTest.class
+com\huerto\hogar\AdminUsuariosIntegrationTest.class
+com\huerto\hogar\BlogServiceTest.class
+com\huerto\hogar\HogarApplicationTests.class
+com\huerto\hogar\CarritoServiceTest.class
+com\huerto\hogar\PersistenciaIntegrationTest.class
+com\huerto\hogar\CategoriaServiceTest.class
+com\huerto\hogar\CuponControllerTest.class
 com\huerto\hogar\SwaggerOpenApiTest.class
+com\huerto\hogar\ContactoServiceTest.class

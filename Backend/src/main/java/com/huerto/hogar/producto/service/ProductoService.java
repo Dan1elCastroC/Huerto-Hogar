@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
-
 @Transactional(readOnly = true)
 public class ProductoService implements IProductoService {
     private final ProductoRepository productoRepo;

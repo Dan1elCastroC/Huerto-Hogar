@@ -8,7 +8,7 @@ public interface IUsuarioService {
     UsuarioResponse findById(Long id);
     UsuarioResponse findByCorreo(String correo);
     UsuarioResponse actualizarPerfil(String correo, ActualizarUsuarioRequest req);
-    UsuarioResponse actualizarDesdeAdmin(Long id, RegistroRequest req);
+    UsuarioResponse actualizarDesdeAdmin(Long id, ActualizarUsuarioAdminRequest req);
     void cambiarContrasena(String correo, CambioContrasenaRequest req);
     UsuarioResponse toggleActivo(Long id);
     void deleteById(Long id);

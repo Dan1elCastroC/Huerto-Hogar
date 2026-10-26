@@ -38,4 +38,11 @@ describe('ProductList', () => {
     expect(screen.getByRole('status')).toBeInTheDocument();
     expect(screen.getByText('Cargando productos desde el servidor...')).toBeInTheDocument();
   });
+
+  it('muestra el error de conexión sin ofrecer productos', () => {
+    render(<ProductList productos={[]} agregarAlCarrito={vi.fn()} loading={false} errorProductos="No se pudieron cargar los productos desde el backend." />);
+
+    expect(screen.getByRole('alert')).toHaveTextContent('No se pudieron cargar los productos desde el backend.');
+    expect(screen.queryByText('No hay productos disponibles en este momento.')).not.toBeInTheDocument();
+  });
 });

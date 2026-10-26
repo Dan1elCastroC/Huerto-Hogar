@@ -44,6 +44,7 @@ com\huerto\hogar\config\DataInitializer.class
 com\huerto\hogar\usuario\dto\ActualizarUsuarioRequest.class
 com\huerto\hogar\blog\service\BlogService.class
 com\huerto\hogar\carrito\dto\CarritoResponse$ItemResponse.class
+com\huerto\hogar\config\DatosIniciales.class
 com\huerto\hogar\pedido\repository\PedidoRepository.class
 com\huerto\hogar\contacto\dto\ContactoDto.class
 com\huerto\hogar\categoria\repository\CategoriaRepository.class
@@ -85,6 +86,7 @@ com\huerto\hogar\usuario\repository\UsuarioRepository.class
 com\huerto\hogar\util\ValidadorRun.class
 com\huerto\hogar\carrito\entity\CarritoItemEntity.class
 com\huerto\hogar\blog\interfaces\IBlogService.class
+com\huerto\hogar\usuario\dto\ActualizarUsuarioAdminRequest.class
 com\huerto\hogar\carrito\repository\CarritoRepository.class
 com\huerto\hogar\pedido\controller\PedidoController.class
 com\huerto\hogar\pedido\entity\DetallePedidoEntity.class

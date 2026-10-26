@@ -55,4 +55,47 @@ class CuponServiceTest {
         assertThrows(ReglaDeNegocioException.class, () -> service.save(c));
         verify(repo, never()).save(any());
     }
+
+    @Test void findByCodigoAceptaFechaDeHoy() {
+        CuponEntity c = CuponEntity.builder().codigo("HOY").porcentaje(BigDecimal.TEN)
+            .fechaExpiracion(LocalDate.now()).build();
+        when(repo.findByCodigoAndActivoTrue("HOY")).thenReturn(Optional.of(c));
+        assertSame(c, service.findByCodigo("hoy"));
+    }
+
+    @Test void findByCodigoAceptaSinVencimiento() {
+        CuponEntity c = CuponEntity.builder().codigo("SIEMPRE").porcentaje(BigDecimal.TEN).build();
+        when(repo.findByCodigoAndActivoTrue("SIEMPRE")).thenReturn(Optional.of(c));
+        assertSame(c, service.findByCodigo("siempre"));
+    }
+
+    @Test void findByCodigoRechazaInexistenteOInactivo() {
+        when(repo.findByCodigoAndActivoTrue("INACTIVO")).thenReturn(Optional.empty());
+        when(repo.findByCodigoAndActivoTrue("NOEXISTE")).thenReturn(Optional.empty());
+        assertAll(
+            () -> assertThrows(ReglaDeNegocioException.class, () -> service.findByCodigo("INACTIVO")),
+            () -> assertThrows(ReglaDeNegocioException.class, () -> service.findByCodigo("NOEXISTE"))
+        );
+    }
+
+    @Test void findByCodigoIgnoraEspaciosExteriores() {
+        CuponEntity c = CuponEntity.builder().codigo("DESC10").porcentaje(BigDecimal.TEN).build();
+        when(repo.findByCodigoAndActivoTrue(anyString())).thenAnswer(inv ->
+            "DESC10".equals(inv.getArgument(0)) ? Optional.of(c) : Optional.empty());
+        assertSame(c, service.findByCodigo("  desc10  "));
+    }
+
+    @Test void saveNormalizaEspaciosYMayusculas() {
+        CuponEntity c = CuponEntity.builder().codigo("  desc10  ").porcentaje(BigDecimal.TEN).build();
+        when(repo.save(c)).thenReturn(c);
+        service.save(c);
+        assertEquals("DESC10", c.getCodigo());
+    }
+
+    @Test void saveNoDuplicaCodigoConEspacios() {
+        CuponEntity c = CuponEntity.builder().codigo("  desc10  ").porcentaje(BigDecimal.TEN).build();
+        when(repo.existsByCodigo(anyString())).thenAnswer(inv -> "DESC10".equals(inv.getArgument(0)));
+        assertThrows(ReglaDeNegocioException.class, () -> service.save(c));
+        verify(repo, never()).save(any());
+    }
 }

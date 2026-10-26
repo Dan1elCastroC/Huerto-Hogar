@@ -1,77 +1,13 @@
 
 import { request } from './httpClient';
 
-// Se conservan las URL originales de las imágenes de los productos.
-const fallbackProducts = [
-  {
-    id: 1,
-    codigo: 'KIT-001',
-    nombre: 'Kit de Huerto Urbano',
-    precio: 15990,
-    categoria: 'Huerto',
-    stock: 12,
-    imagen:
-      'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400',
-  },
-  {
-    id: 2,
-    codigo: 'COM-001',
-    nombre: 'Compostera Doméstica',
-    precio: 28990,
-    categoria: 'Hogar',
-    stock: 5,
-    imagen:
-      'https://images.unsplash.com/photo-1592417817098-8f3d691a4bf5?w=400',
-  },
-  {
-    id: 3,
-    codigo: 'HER-001',
-    nombre: 'Set de Herramientas de Jardín',
-    precio: 12490,
-    categoria: 'Huerto',
-    stock: 20,
-    imagen:
-      'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400',
-  },
-  {
-    id: 4,
-    codigo: 'SUS-001',
-    nombre: 'Sustrato Premium 25L',
-    precio: 6990,
-    categoria: 'Hogar',
-    stock: 15,
-    imagen:
-      'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400',
-  },
-];
-
-export const normalizeProduct = (product) => {
-  const original = fallbackProducts.find(
-    (item) =>
-      item.codigo === product.codigo ||
-      String(item.id) === String(product.id)
-  );
-
-  const imagen =
-    product.imagen ||
-    product.imagenUrl ||
-    original?.imagen ||
-    '';
-
-  return {
-    ...product,
-    categoria:
-      product.categoria ||
-      product.categoriaNombre ||
-      'Sin categoría',
-    categoriaNombre:
-      product.categoriaNombre ||
-      product.categoria ||
-      'Sin categoría',
-    imagen,
-    imagenUrl: imagen,
-  };
-};
+export const normalizeProduct = (product) => ({
+  ...product,
+  categoria: product.categoria || product.categoriaNombre || 'Sin categoría',
+  categoriaNombre: product.categoriaNombre || product.categoria || 'Sin categoría',
+  imagen: product.imagen || product.imagenUrl || '',
+  imagenUrl: product.imagenUrl || product.imagen || '',
+});
 
 export const productoService = {
   // Consulta los productos reales del backend.

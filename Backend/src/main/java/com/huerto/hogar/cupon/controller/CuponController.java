@@ -42,7 +42,7 @@ public class CuponController {
             CuponEntity c = CuponEntity.builder()
                 .codigo(dto.getCodigo())
                 .porcentaje(dto.getPorcentaje())
-                .fechaExpiracion(dto.getFechaExpiracion() != null
+                .fechaExpiracion(dto.getFechaExpiracion() != null && !dto.getFechaExpiracion().isBlank()
                     ? LocalDate.parse(dto.getFechaExpiracion()) : null)
                 .build();
             return ResponseEntity.status(201).body(service.save(c));

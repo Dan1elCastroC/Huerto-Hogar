@@ -36,10 +36,16 @@ describe('productoService', () => {
     );
   });
 
-  it('propagates the error when the backend request fails (no fake data)', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse({}, false)));
+  it('reports network failures instead of returning invented products', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Failed to fetch')));
 
-    await expect(productoService.getAll()).rejects.toThrow();
+    await expect(productoService.getAll()).rejects.toThrow('Failed to fetch');
+  });
+
+  it('reports backend errors instead of returning invented products', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse({ message: 'Error del servidor' }, false)));
+
+    await expect(productoService.getAll()).rejects.toThrow('Error del servidor');
   });
 
   it('sends a token when creating a product and normalizes the response', async () => {

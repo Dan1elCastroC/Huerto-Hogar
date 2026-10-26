@@ -5,7 +5,7 @@ Frontend de la tienda online Huerto Hogar construido con React, Vite y Bootstrap
 ## Ejecutar el proyecto
 
 1. Inicia MySQL y configura la base de datos según `Backend/src/main/resources/application.properties`.
-2. Ejecuta el backend Spring Boot en `http://localhost:8080`.
+2. Ejecuta el backend Spring Boot en `http://localhost:8087`.
 3. En esta carpeta instala las dependencias y levanta React:
 
 ```bash

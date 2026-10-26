@@ -14,6 +14,11 @@ import BlogPage from './pages/BlogPage';
 import ContactPage from './pages/ContactPage';
 import ProfilePage from './pages/ProfilePage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
+import AboutPage from './pages/AboutPage';
+import CategoriesPage from './pages/CategoriesPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import BlogDetailPage from './pages/BlogDetailPage';
+import OffersPage from './pages/OffersPage';
 import { carritoService } from './services/carritoService';
 import { categoriaService } from './services/categoriaService';
 import { pedidoService } from './services/pedidoService';
@@ -26,7 +31,12 @@ const CART_STORAGE_KEY = 'huerto-hogar-cart';
 export default function App() {
   const [vista, setVista] = useState('landing');
   const [productos, setProductos] = useState([]);
+  const [errorProductos, setErrorProductos] = useState('');
   const [categorias, setCategorias] = useState([]);
+  const [categoriaCatalogo, setCategoriaCatalogo] = useState('todas');
+  const [productoDetalle, setProductoDetalle] = useState(null);
+  const [origenProducto, setOrigenProducto] = useState('catalogo');
+  const [blogDetalle, setBlogDetalle] = useState(null);
   const [carrito, setCarrito] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || [];
@@ -35,7 +45,6 @@ export default function App() {
     }
   });
   const [loading, setLoading] = useState(true);
-  const [errorCarga, setErrorCarga] = useState('');
   const [sincronizandoCarrito, setSincronizandoCarrito] = useState(false);
   const [user, setUser] = useState(() => {
     try {
@@ -49,15 +58,8 @@ export default function App() {
   useEffect(() => {
     Promise.allSettled([productoService.getAll(), categoriaService.getAll()])
       .then(([productsResult, categoriesResult]) => {
-        if (productsResult.status === 'fulfilled') {
-          setProductos(productsResult.value);
-          setErrorCarga('');
-        } else {
-          console.error('No se pudieron cargar los productos:', productsResult.reason);
-          setErrorCarga(
-            'No se pudo conectar con el servidor. Verifica que MySQL y el backend (puerto 8087) estén encendidos.'
-          );
-        }
+        if (productsResult.status === 'fulfilled') setProductos(productsResult.value);
+        else setErrorProductos('No se pudieron cargar los productos desde el backend. Comprueba que esté disponible e inténtalo nuevamente.');
         if (categoriesResult.status === 'fulfilled') setCategorias(categoriesResult.value);
       })
       .finally(() => setLoading(false));
@@ -141,23 +143,39 @@ export default function App() {
   }, [carrito]);
 
   const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+  const esAdministracion = vista === 'main' && user?.rol === 'ADMINISTRADOR';
+  const navegar = (destino) => {
+    if (destino === 'catalogo') setCategoriaCatalogo('todas');
+    setVista(destino);
+  };
+  const verProducto = (producto) => {
+    if (vista !== 'catalogo') setCategoriaCatalogo('todas');
+    setProductoDetalle(producto);
+    setOrigenProducto(vista === 'ofertas' ? 'ofertas' : 'catalogo');
+    setVista('detalleproducto');
+  };
 
   return (
     <div className="min-vh-100 d-flex flex-column">
-      <Navbar 
+      {!esAdministracion && <Navbar
         vista={vista} 
-        cambiarVista={setVista} 
+        cambiarVista={navegar}
         carritoCount={totalItems} 
         user={user} 
         onLogout={cerrarSesion}
-      />
+      />}
 
       <div className="flex-grow-1">
-        {vista === 'landing' && <HomePage cambiarVista={setVista} productos={productos} agregarAlCarrito={agregarAlCarrito} />}
+        {vista === 'landing' && <HomePage cambiarVista={navegar} productos={productos} agregarAlCarrito={agregarAlCarrito} onVerDetalle={verProducto} />}
         {vista === 'login' && <LoginPage onLoginSuccess={iniciarSesion} cambiarVista={setVista} />}
         {vista === 'registro' && <RegisterPage cambiarVista={setVista} />}
-        {vista === 'catalogo' && <CatalogPage productos={productos} categorias={categorias} agregarAlCarrito={agregarAlCarrito} loading={loading} error={errorCarga} />}
-        {vista === 'blog' && <BlogPage />}
+        {vista === 'catalogo' && <CatalogPage key={categoriaCatalogo} categoriaInicial={categoriaCatalogo} productos={productos} categorias={categorias} agregarAlCarrito={agregarAlCarrito} loading={loading} errorProductos={errorProductos} onVerDetalle={verProducto} />}
+        {vista === 'nosotros' && <AboutPage cambiarVista={navegar} />}
+        {vista === 'categorias' && <CategoriesPage categorias={categorias} productos={productos} loading={loading} errorProductos={errorProductos} onSeleccionar={(nombre) => { setCategoriaCatalogo(nombre); setVista('catalogo'); }} />}
+        {vista === 'detalleproducto' && <ProductDetailPage producto={productoDetalle} agregarAlCarrito={agregarAlCarrito} volver={() => setVista(origenProducto)} />}
+        {vista === 'ofertas' && <OffersPage productos={productos} loading={loading} errorProductos={errorProductos} agregarAlCarrito={agregarAlCarrito} onVerDetalle={verProducto} />}
+        {vista === 'blog' && <BlogPage onVerDetalle={(blog) => { setBlogDetalle(blog); setVista('detalleblog'); }} />}
+        {vista === 'detalleblog' && <BlogDetailPage blog={blogDetalle} volver={() => setVista('blog')} />}
         {vista === 'contacto' && <ContactPage user={user} />}
         {vista === 'perfil' && user ? <ProfilePage user={user} onUserUpdated={actualizarUsuario} /> : null}
         {vista === 'pedidos' && user ? <OrderHistoryPage user={user} /> : null}
@@ -174,15 +192,16 @@ export default function App() {
           />
         )}
         {vista === 'main' && user?.rol === 'ADMINISTRADOR' && (
-          <AdminPage productos={productos} setProductos={setProductos} categorias={categorias} user={user} token={user.token} />
+          <AdminPage productos={productos} setProductos={setProductos} categorias={categorias} setCategorias={setCategorias} user={user} token={user.token} cambiarVista={navegar} onLogout={cerrarSesion} onUserUpdated={actualizarUsuario} />
         )}
       </div>
 
-      <footer className="footer">
+      {!esAdministracion && <footer className="footer">
         <div className="container">
           <p>&copy; 2026 HUERTO HOGAR. Todos los derechos reservados.</p>
+          <a href="/img/productos/creditos.txt" className="text-muted small">Créditos de imágenes</a>
         </div>
-      </footer>
+      </footer>}
     </div>
   );
 }

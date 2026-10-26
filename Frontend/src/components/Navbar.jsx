@@ -12,7 +12,7 @@ export default function Navbar({ vista, cambiarVista, carritoCount, user, onLogo
 
   return (
     <header className="header">
-      <nav className="navbar navbar-expand-lg">
+      <nav className="navbar navbar-expand-xxl" aria-label="Navegación de la tienda">
         <div className="container">
           <a className="navbar-brand" href="#inicio" onClick={(e) => ir(e, 'landing')}>
             <img src="/img/huerto-hogar.png" alt="Logo Huerto Hogar" />
@@ -22,6 +22,8 @@ export default function Navbar({ vista, cambiarVista, carritoCount, user, onLogo
             className="navbar-toggler"
             type="button"
             aria-label="Abrir menú"
+            aria-expanded={abierto}
+            aria-controls="navbarNav"
             onClick={() => setAbierto(!abierto)}
           >
             <span className="navbar-toggler-icon"></span>
@@ -38,6 +40,15 @@ export default function Navbar({ vista, cambiarVista, carritoCount, user, onLogo
                 <a className={`nav-link ${vista === 'catalogo' ? 'active' : ''}`} href="#productos" onClick={(e) => ir(e, 'catalogo')}>
                   Productos
                 </a>
+              </li>
+              <li className="nav-item">
+                <a className={`nav-link ${vista === 'categorias' ? 'active' : ''}`} href="#categorias" onClick={(e) => ir(e, 'categorias')}>Categorías</a>
+              </li>
+              <li className="nav-item">
+                <a className={`nav-link ${vista === 'ofertas' ? 'active' : ''}`} href="#ofertas" onClick={(e) => ir(e, 'ofertas')}>Ofertas</a>
+              </li>
+              <li className="nav-item">
+                <a className={`nav-link ${vista === 'nosotros' ? 'active' : ''}`} href="#nosotros" onClick={(e) => ir(e, 'nosotros')}>Nosotros</a>
               </li>
               <li className="nav-item">
                 <a className={`nav-link ${vista === 'blog' ? 'active' : ''}`} href="#blog" onClick={(e) => ir(e, 'blog')}>
@@ -62,6 +73,7 @@ export default function Navbar({ vista, cambiarVista, carritoCount, user, onLogo
               <div className="nav-auth-links">
                 {user ? (
                   <>
+                    <span className="nav-user-name me-3 small fw-semibold">{[user.nombre, user.apellidos].filter(Boolean).join(' ').trim() || user.correo}</span>
                     <a href="#perfil" onClick={(e) => ir(e, 'perfil')}>Mi perfil</a>
                     <a href="#pedidos" onClick={(e) => ir(e, 'pedidos')}>Mis pedidos</a>
                     <a href="#salir" onClick={(e) => { e.preventDefault(); setAbierto(false); onLogout(); }}>Cerrar sesión</a>

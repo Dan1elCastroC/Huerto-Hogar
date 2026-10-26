@@ -5,6 +5,7 @@ import com.huerto.hogar.carrito.entity.CarritoItemEntity;
 import com.huerto.hogar.carrito.repository.CarritoRepository;
 import com.huerto.hogar.carrito.service.CarritoService;
 import com.huerto.hogar.cupon.interfaces.ICuponService;
+import com.huerto.hogar.cupon.entity.CuponEntity;
 import com.huerto.hogar.exception.RecursoNoEncontradoException;
 import com.huerto.hogar.exception.ReglaDeNegocioException;
 import com.huerto.hogar.producto.entity.ProductoEntity;
@@ -75,5 +76,40 @@ class CarritoServiceTest {
         when(carritoRepo.findByUsuarioId(1L)).thenReturn(List.of());
         service.actualizar("juan@gmail.com", 2L, 0);
         verify(carritoRepo).delete(item);
+    }
+
+    @Test void carritoCalculaDescuentoConRedondeoMonetario() {
+        prepararCarritoConDecimales();
+        when(cuponService.findByCodigo("DESC12")).thenReturn(CuponEntity.builder()
+            .codigo("DESC12").porcentaje(new BigDecimal("12.5")).build());
+        var respuesta = service.getCarrito("juan@gmail.com", "DESC12");
+        assertEquals(new BigDecimal("299.97"), respuesta.getSubtotal());
+        assertEquals(new BigDecimal("37.50"), respuesta.getDescuento());
+        assertEquals(new BigDecimal("262.47"), respuesta.getTotal());
+        assertEquals("DESC12", respuesta.getCuponAplicado());
+    }
+
+    @Test void carritoRechazaCuponInvalidoEnLugarDeOcultarlo() {
+        prepararCarritoConDecimales();
+        when(cuponService.findByCodigo("VENCIDO"))
+            .thenThrow(new ReglaDeNegocioException("El cupón ha expirado"));
+        assertThrows(ReglaDeNegocioException.class, () -> service.getCarrito("juan@gmail.com", "VENCIDO"));
+    }
+
+    @Test void carritoSinCuponConservaTotalCompleto() {
+        prepararCarritoConDecimales();
+        var respuesta = service.getCarrito("juan@gmail.com", null);
+        assertEquals(new BigDecimal("299.97"), respuesta.getTotal());
+        assertEquals(BigDecimal.ZERO, respuesta.getDescuento());
+        assertNull(respuesta.getCuponAplicado());
+        verifyNoInteractions(cuponService);
+    }
+
+    private void prepararCarritoConDecimales() {
+        UsuarioEntity u = usuario();
+        CarritoItemEntity item = CarritoItemEntity.builder().id(1L).usuario(u).producto(producto())
+            .cantidad(3).precioUnitario(new BigDecimal("99.99")).build();
+        when(usuarioRepo.findByCorreo("juan@gmail.com")).thenReturn(Optional.of(u));
+        when(carritoRepo.findByUsuarioId(1L)).thenReturn(List.of(item));
     }
 }

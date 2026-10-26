@@ -10,6 +10,7 @@ import java.util.List;
 @Data @Builder
 public class PedidoResponse {
     private Long id;
+    private Long usuarioId;
     private String estado;
     private String direccionEntrega;
     private LocalDate fechaEntregaDeseada;

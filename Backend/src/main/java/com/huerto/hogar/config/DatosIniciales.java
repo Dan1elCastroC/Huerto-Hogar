@@ -37,16 +37,16 @@ public class DatosIniciales {
 
             crearProducto(productos, porNombre, "KIT-001", "Kit de Huerto Urbano",
                     "Kit inicial para cultivar verduras y hierbas en casa.", "15990.00", 12, 3,
-                    "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600", "Huerto");
+                    "/img/productos/kit-huerto.jpg", "Huerto");
             crearProducto(productos, porNombre, "COM-001", "Compostera Doméstica",
                     "Compostera para aprovechar residuos orgánicos.", "28990.00", 5, 2,
-                    "https://images.unsplash.com/photo-1592417817098-8f3d691a4bf5?w=600", "Hogar");
+                    "/img/productos/compostera.jpg", "Hogar");
             crearProducto(productos, porNombre, "HER-001", "Set de Herramientas de Jardín",
                     "Set básico para cuidar plantas y huertos.", "12490.00", 20, 4,
-                    "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600", "Herramientas");
+                    "/img/productos/herramientas.jpg", "Herramientas");
             crearProducto(productos, porNombre, "SUS-001", "Sustrato Premium 25L",
                     "Sustrato para maceteros y huertos urbanos.", "6990.00", 15, 4,
-                    "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600", "Hogar");
+                    "/img/productos/sustrato.jpg", "Hogar");
 
             if (blogs.count() == 0) {
                 blogs.save(BlogEntity.builder()

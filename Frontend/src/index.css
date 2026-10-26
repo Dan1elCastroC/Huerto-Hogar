@@ -299,6 +299,7 @@ body, .body {
 }
 .admin-content {
     flex-grow: 1;
+    min-width: 0;
     padding: 30px;
     background-color: #f8f9fa;
 }
@@ -335,4 +336,75 @@ body, .body {
 }
 .seccion-titulo p {
     color: #6c757d;
+}
+
+.nav-auth-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+    min-width: 0;
+}
+.nav-auth-links a { white-space: nowrap; }
+.nav-user-name {
+    flex-basis: 100%;
+    overflow-wrap: anywhere;
+    margin-right: 0 !important;
+}
+.navbar-collapse { min-width: 0; }
+.carrito-item { flex-wrap: wrap; }
+.carrito-item > img { flex: 0 0 72px; }
+.carrito-item-info {
+    flex: 1 1 160px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.carrito-item-cantidad { flex-shrink: 0; }
+.carrito-checkout p { gap: 0.5rem; }
+.carrito-checkout p span { overflow-wrap: anywhere; min-width: 0; }
+.carrito-checkout p strong { flex-shrink: 0; }
+.carrito-checkout input { min-width: 0; max-width: 100%; }
+.admin-content .table-responsive { max-width: 100%; }
+
+@media (max-width: 991.98px) {
+    .navbar { padding: 0.75rem 0; }
+    .navbar-collapse { padding-top: 1rem; }
+    .navbar-collapse > .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+        row-gap: 0.75rem;
+    }
+    .nav-auth-links { gap: 0.75rem 1rem; }
+    .nav-auth-links a { margin-right: 0; }
+    .nav-carrito.ms-3 { margin-left: 0 !important; }
+    .admin-content { padding: 1rem; }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .admin-sidebar { width: 190px; }
+    .admin-sidebar button { padding: 0.75rem 1rem; }
+    .admin-content .row > [class*="col-md-"] { width: 50%; }
+}
+
+@media (max-width: 767.98px) {
+    .admin-layout { flex-direction: column; }
+    .admin-sidebar {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 1rem 0;
+    }
+    .admin-sidebar .marca { grid-column: 1 / -1; padding: 0 1rem 1rem; }
+    .admin-sidebar button { padding: 0.75rem 1rem; }
+    .admin-content > .container { padding-left: 0; padding-right: 0; }
+    .admin-content .card.p-4 { padding: 1rem !important; }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-brand { font-size: 1.05rem; letter-spacing: 0; }
+    .navbar-brand img { height: 32px; margin-right: 0.375rem; }
+    .hero h1.display-4 { font-size: 2.5rem; }
+    .hero img { max-width: 100%; }
+    .carrito-item { gap: 0.75rem !important; }
+    .carrito-item-info { flex-basis: calc(100% - 84px); }
 }

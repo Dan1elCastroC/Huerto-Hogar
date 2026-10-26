@@ -24,6 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PedidoService implements IPedidoService {
 
     private final PedidoRepository pedidoRepo;
@@ -170,6 +171,7 @@ public class PedidoService implements IPedidoService {
 
         return PedidoResponse.builder()
             .id(p.getId())
+            .usuarioId(p.getUsuario().getId())
             .estado(p.getEstado().name())
             .direccionEntrega(p.getDireccionEntrega())
             .fechaEntregaDeseada(p.getFechaEntregaDeseada())

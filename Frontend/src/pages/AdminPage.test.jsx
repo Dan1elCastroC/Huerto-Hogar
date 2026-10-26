@@ -1,24 +1,21 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { beforeEach, expect, test, vi } from 'vitest';
 import AdminPage from './AdminPage';
+import { reporteService } from '../services/reporteService';
 
-vi.mock('../components/MainPage', () => ({ default: () => <div>Inventario de productos</div> }));
-vi.mock('../components/admin/BlogManager', () => ({ default: () => <div>Gestor de noticias</div> }));
-vi.mock('../components/admin/CategoryManager', () => ({ default: () => <div>Gestor de categorías</div> }));
-vi.mock('../components/admin/ContactManager', () => ({ default: () => <div>Gestor de contactos</div> }));
-vi.mock('../components/admin/CouponManager', () => ({ default: () => <div>Gestor de cupones</div> }));
-vi.mock('../components/admin/OrderManager', () => ({ default: () => <div>Gestor de pedidos</div> }));
-vi.mock('../components/admin/ReportManager', () => ({ default: () => <div>Gestor de reportes</div> }));
-vi.mock('../components/admin/UserManager', () => ({ default: () => <div>Gestor de usuarios</div> }));
+vi.mock('../services/reporteService', () => ({ reporteService: { resumen: vi.fn() } }));
+beforeEach(() => reporteService.resumen.mockResolvedValue({ totalPedidos: 17, totalProductos: 23, totalUsuarios: 9 }));
 
-describe('AdminPage', () => {
-  it('cambia entre las secciones administrativas', () => {
-    render(<AdminPage productos={[]} setProductos={() => {}} categorias={[]} user={null} token="token-demo" />);
-
-    expect(screen.getByText('Inventario de productos')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Categorías' }));
-    expect(screen.getByText('Gestor de categorías')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Reportes' }));
-    expect(screen.getByText('Gestor de reportes')).toBeInTheDocument();
-  });
+test('abre el dashboard con indicadores del backend y accesos a tienda y sesión', async () => {
+  const cambiarVista = vi.fn();
+  const onLogout = vi.fn();
+  render(<AdminPage productos={[]} categorias={[]} token="token" cambiarVista={cambiarVista} onLogout={onLogout} />);
+  expect(await screen.findByText('17')).toBeInTheDocument();
+  expect(screen.getByText('23')).toBeInTheDocument();
+  expect(screen.getByText('9')).toBeInTheDocument();
+  expect(reporteService.resumen).toHaveBeenCalledWith('token');
+  fireEvent.click(screen.getByRole('button', { name: 'Tienda' }));
+  expect(cambiarVista).toHaveBeenCalledWith('catalogo');
+  fireEvent.click(screen.getByRole('button', { name: 'Cerrar sesión' }));
+  expect(onLogout).toHaveBeenCalledOnce();
 });

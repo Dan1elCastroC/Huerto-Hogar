@@ -77,7 +77,7 @@ public class UsuarioController {
     @PutMapping("/api/admin/usuarios/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<?> actualizarDesdeAdmin(@PathVariable Long id,
-            @Valid @RequestBody RegistroRequest req) {
+            @Valid @RequestBody ActualizarUsuarioAdminRequest req) {
         try { return ResponseEntity.ok(service.actualizarDesdeAdmin(id, req)); }
         catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }
     }

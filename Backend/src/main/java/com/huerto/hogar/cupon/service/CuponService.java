@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -29,7 +30,7 @@ public class CuponService implements ICuponService {
 
     @Override
     public CuponEntity findByCodigo(String codigo) {
-        CuponEntity c = repo.findByCodigoAndActivoTrue(codigo.toUpperCase())
+        CuponEntity c = repo.findByCodigoAndActivoTrue(codigo.trim().toUpperCase(Locale.ROOT))
             .orElseThrow(() -> new ReglaDeNegocioException("Cupón inválido o expirado: " + codigo));
         // Verificar vencimiento
         if (c.getFechaExpiracion() != null && c.getFechaExpiracion().isBefore(LocalDate.now()))
@@ -39,9 +40,10 @@ public class CuponService implements ICuponService {
 
     @Override
     public CuponEntity save(CuponEntity c) {
-        if (repo.existsByCodigo(c.getCodigo().toUpperCase()))
+        String codigo = c.getCodigo().trim().toUpperCase(Locale.ROOT);
+        if (repo.existsByCodigo(codigo))
             throw new ReglaDeNegocioException("Ya existe un cupón con ese código");
-        c.setCodigo(c.getCodigo().toUpperCase());
+        c.setCodigo(codigo);
         return repo.save(c);
     }
 

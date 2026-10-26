@@ -72,7 +72,7 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public UsuarioResponse actualizarDesdeAdmin(Long id, RegistroRequest req) {
+    public UsuarioResponse actualizarDesdeAdmin(Long id, ActualizarUsuarioAdminRequest req) {
         UsuarioEntity u = getOrThrow(id);
         if (!u.getCorreo().equalsIgnoreCase(req.getCorreo())) {
             validarDominio(req.getCorreo());

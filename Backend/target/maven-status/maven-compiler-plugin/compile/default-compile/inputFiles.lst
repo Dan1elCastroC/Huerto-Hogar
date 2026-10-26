@@ -1,4 +1,5 @@
 D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\contacto\dto\ContactoDto.java
+D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\usuario\dto\ActualizarUsuarioAdminRequest.java
 D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\blog\service\BlogService.java
 D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\categoria\service\CategoriaService.java
 D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\usuario\controller\UsuarioController.java
@@ -20,6 +21,7 @@ D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backe
 D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\pedido\entity\PedidoEntity.java
 D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\auth\LoginResponse.java
 D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\producto\entity\ProductoEntity.java
+D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\config\DatosIniciales.java
 D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\blog\entity\BlogEntity.java
 D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\categoria\repository\CategoriaRepository.java
 D:\Respaldos\clases\U-Duoc\Semestre 4\FullStack2\huerto-hogar\huerto hogar\Backend\src\main\java\com\huerto\hogar\categoria\controller\CategoriaController.java

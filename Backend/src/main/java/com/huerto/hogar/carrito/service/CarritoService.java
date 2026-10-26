@@ -134,15 +134,11 @@ public class CarritoService implements ICarritoService {
         String cuponAplicado = null;
 
         if (codigoCupon != null && !codigoCupon.isBlank()) {
-            try {
-                CuponEntity cupon = cuponService.findByCodigo(codigoCupon);
-                descuento = subtotal
-                    .multiply(cupon.getPorcentaje())
-                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-                cuponAplicado = cupon.getCodigo();
-            } catch (Exception ignored) {
-                // cupón inválido: se ignora silenciosamente
-            }
+            CuponEntity cupon = cuponService.findByCodigo(codigoCupon);
+            descuento = subtotal
+                .multiply(cupon.getPorcentaje())
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+            cuponAplicado = cupon.getCodigo();
         }
 
         return CarritoResponse.builder()

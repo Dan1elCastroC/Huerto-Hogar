@@ -1,7 +1,7 @@
 // src/components/LandingPage.jsx
 import React from 'react';
 
-export default function LandingPage({ cambiarVista, productos = [], agregarAlCarrito }) {
+export default function LandingPage({ cambiarVista, productos = [], agregarAlCarrito, onVerDetalle }) {
   const destacados = productos.slice(0, 3);
 
   return (
@@ -59,8 +59,10 @@ export default function LandingPage({ cambiarVista, productos = [], agregarAlCar
                     <span className="badge-categoria align-self-start mb-2">{p.categoria}</span>
                     <h5 className="mb-1">{p.nombre}</h5>
                     <p className="fw-bold mb-3">${p.precio?.toLocaleString()}</p>
+                    {onVerDetalle && <button type="button" className="btn btn-outline-success mb-2" onClick={() => onVerDetalle(p)}>Ver detalle de {p.nombre}</button>}
                     <button
                       className="btn btn-success mt-auto"
+                      disabled={!(p.stock > 0)}
                       onClick={() => agregarAlCarrito && agregarAlCarrito(p)}
                     >
                       Añadir al carrito

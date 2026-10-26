@@ -1,0 +1,51 @@
+# Fuentes de imágenes de productos
+
+Archivos guardados localmente en Frontend/public/img/productos. Fotografías descargadas el 26 de octubre de 2026; sin modificaciones.
+
+## kit-huerto.jpg
+- Autor: Nico Siegl
+- Fuente: [https://www.pexels.com/photo/lettuce-growing-inside-a-raised-garden-bed-21614897/](https://www.pexels.com/photo/lettuce-growing-inside-a-raised-garden-bed-21614897/)
+- Licencia: [Pexels License](https://www.pexels.com/license/)
+- Verificación: HTTP 200, JPEG válido, 960 × 1440 px, 213,346 bytes.
+
+## compostera.jpg
+- Autor: Joe Hoover
+- Fuente: [https://commons.wikimedia.org/wiki/File:Compost_bin_made_of_wood.jpg](https://commons.wikimedia.org/wiki/File:Compost_bin_made_of_wood.jpg)
+- Licencia: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0)
+- Verificación: HTTP 200, JPEG válido, 960 × 720 px, 203,138 bytes.
+
+## herramientas.jpg
+- Autor: Anna Shvets
+- Fuente: [https://www.pexels.com/photo/crop-faceless-gardener-demonstrating-set-of-gardening-tools-5218008/](https://www.pexels.com/photo/crop-faceless-gardener-demonstrating-set-of-gardening-tools-5218008/)
+- Licencia: [Pexels License](https://www.pexels.com/license/)
+- Verificación: HTTP 200, JPEG válido, 960 × 1440 px, 135,237 bytes.
+
+## sustrato.jpg
+- Autor: Mikhail Nilov
+- Fuente: [https://www.pexels.com/photo/person-with-soil-on-hands-8543583/](https://www.pexels.com/photo/person-with-soil-on-hands-8543583/)
+- Licencia: [Pexels License](https://www.pexels.com/license/)
+- Verificación: HTTP 200, JPEG válido, 960 × 1436 px, 164,402 bytes.
+
+## manzanas.jpg
+- Autor: Matheus Cenali
+- Fuente: [https://www.pexels.com/photo/red-apples-2487443/](https://www.pexels.com/photo/red-apples-2487443/)
+- Licencia: [Pexels License](https://www.pexels.com/license/)
+- Verificación: HTTP 200, JPEG válido, 960 × 720 px, 134,290 bytes.
+
+## tomates.jpg
+- Autor: Tanya Budchenko
+- Fuente: [https://www.pexels.com/photo/fresh-cherry-tomatoes-26855947/](https://www.pexels.com/photo/fresh-cherry-tomatoes-26855947/)
+- Licencia: [Pexels License](https://www.pexels.com/license/)
+- Verificación: HTTP 200, JPEG válido, 960 × 640 px, 66,229 bytes.
+
+## albahaca.jpg
+- Autor: jonathan emili
+- Fuente: [https://www.pexels.com/photo/lush-basil-with-green-leaves-in-garden-6133135/](https://www.pexels.com/photo/lush-basil-with-green-leaves-in-garden-6133135/)
+- Licencia: [Pexels License](https://www.pexels.com/license/)
+- Verificación: HTTP 200, JPEG válido, 960 × 720 px, 85,548 bytes.
+
+## semillas-lechuga.jpg
+- Autor: Pascal Kings
+- Fuente: [https://commons.wikimedia.org/wiki/File:Lettuce_seeds_in_a_bag.jpg](https://commons.wikimedia.org/wiki/File:Lettuce_seeds_in_a_bag.jpg)
+- Licencia: [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en)
+- Verificación: HTTP 200, JPEG válido, 960 × 1101 px, 396,802 bytes.
