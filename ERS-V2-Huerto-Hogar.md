@@ -1,43 +1,47 @@
 # ERS V2 Huerto Hogar
 
-Versión 2 | 26 de octubre de 2026
+Actualizado el 29 de octubre de 2026.
 
-## Objetivo y alcance
+El **ERS principal** es [ERS-V2-Huerto-Hogar.docx](ERS-V2-Huerto-Hogar.docx), completado sobre la plantilla DSY1104 Parcial 1 Anexo 4. Conserva portada, índice, ficha, introducción, descripción, interfaces y requisitos. Este Markdown es su resumen de consulta.
 
-Huerto Hogar permite consultar productos, administrar un carrito y registrar pedidos. La interfaz React consume el backend real mediante HTTP y conserva los datos del negocio en MySQL de XAMPP. Este documento describe la implementación de la segunda entrega y la distribución pública y administrativa del proyecto.
+## Alcance y pauta
 
-El checkout registra pedidos del proyecto. No integra una pasarela de pagos externa ni acredita cobros bancarios.
+El Word especifica **14 requisitos funcionales y 6 no funcionales**, con actores, comportamiento, estado y evidencia. Se contrastó con la pauta de Parcial 2: React/persistencia/Bootstrap/interactividad (pp. 1–2), vistas públicas y administrativas (pp. 3–10), pruebas de renderizado/props/state/eventos (p. 11) y entregables/presentación (p. 12).
 
-## Usuarios y permisos
+Se declaran dos diferencias: **API real con MySQL en lugar de CRUD simulado en JavaScript**, y **Vitest/Testing Library en lugar de Jasmine/Karma**, según las decisiones del proyecto. No se presenta cumplimiento literal de esas herramientas del PDF.
 
-- Visitante: consulta la tienda, sus categorías, noticias, ofertas y detalles; puede preparar un carrito y registrarse.
-- Cliente: inicia sesión, utiliza sus datos en el checkout, confirma pedidos y consulta su perfil e historial.
-- Administrador: accede al panel, gestiona productos, categorías, usuarios, pedidos, noticias, contactos y cupones, y consulta reportes.
-- Vendedor: rol definido en el backend; sus operaciones dependen de las autorizaciones de la API. El panel administrativo de la interfaz se reserva al administrador.
+## Implementado y probado
 
-La API comprueba permisos y autenticación; ocultar controles en el navegador no sustituye esa validación.
+- Catálogo, búsqueda/filtro, categorías, detalle y regreso conservando filtro: componentes, App y consultas HTTP reales.
+- Cuenta, nombre, perfil, contraseña y logout persistente: casos ejecutados; validaciones y navegación completas con cobertura parcial.
+- Carrito, stock, dirección autocompletada, entrega y resultado de compra: casos unitarios/backend y compra UI previa con cupón. Entrega programada comprobada unitariamente, sin compra UI persistida acreditada en esa modalidad.
+- Cupones: normalización, duplicados, porcentajes, actividad/vencimiento, descuento y revalidación; rechazo sin alterar stock/pedidos. Ofertas depende de `BIENVENIDA10` vigente.
+- Noticias/detalle y contacto: lectura, navegación, envío y estados; formularios parcialmente acreditados.
+- Administración: indicadores, productos/stock, categorías, usuarios, edición sin cambiar contraseña, historial por usuario y boleta. Otros formularios, reportes y permisos completos requieren ampliar pruebas.
 
-## Requisitos funcionales
+La revisión acreditó **84 de 450 criterios** de la planilla. Los demás no se declaran completos por existir código. Es un backlog ampliado, no 450 exigencias literales del PDF ni porcentaje de cobertura del código.
 
-1. Presentar inicio, nosotros, catálogo, categorías, ofertas, noticias y contacto en la tienda pública.
-2. Buscar y filtrar productos por categoría. Permitir abrir el detalle, volver al catálogo y agregar unidades disponibles al carrito.
-3. Mostrar categorías reales y permitir acceder a sus productos. Mostrar listado y detalle de noticias obtenidas del backend.
-4. Mostrar ofertas únicamente después de validar el cupón público `BIENVENIDA10`. Los precios informativos con descuento no sustituyen la validación del total en el checkout; los cupones inactivos o vencidos se rechazan.
-5. Registrar usuarios, autenticar sesiones y mostrar el nombre de la cuenta. El cierre de sesión elimina la sesión almacenada y los controles de cuenta.
-6. Permitir modificar cantidades, eliminar productos y vaciar el carrito. Respetar el stock y sincronizar las operaciones del usuario autenticado con el backend.
-7. Solicitar los datos de entrega, completar la dirección disponible en el perfil y confirmar el pedido. Mostrar el resumen exitoso o el error real y conservar el carrito cuando falle la operación.
-8. Permitir consultar pedidos y su detalle o boleta. Registrar el pedido y descontar stock mediante el backend.
-9. Presentar un dashboard administrativo separado de la tienda, con indicadores reales y accesos a sus módulos.
-10. Administrar productos y categorías mediante sus operaciones de creación, consulta, edición y eliminación.
-11. Administrar usuarios y consultar su historial de compras. En la edición, la contraseña es opcional: dejarla vacía conserva la existente.
-12. Consultar pedidos, boletas, reportes y stock crítico. Permitir gestionar el perfil y regresar a la tienda o cerrar sesión desde el panel.
+## Resultados y cobertura
 
-## Restricciones y calidad
+El 29/10 se verificó `iniciar-demo.ps1`: Apache/MySQL, backend y frontend, con **65 pruebas backend, 60 unitarias frontend y 2 HTTP reales aprobadas**. Las 27 comprobaciones API de cupones y la revisión visual corresponden al 26/10.
 
-Se conserva la estructura del proyecto, Java 17 y las versiones existentes de sus dependencias. El backend atiende en `http://localhost:8087`; MySQL conserva las entidades y relaciones del negocio. Se mantienen React, Bootstrap, Vite y Vitest. Por instrucción del usuario, no se incorpora Jasmine ni Karma.
+Con backend apagado se verificaron 60 unitarias aprobadas y 2 HTTP fallidas por `ECONNREFUSED`. `Frontend/demo-fallo-integracion.ps1` reproduce dos fallos con URL temporal y la restaura. Un test negativo debe pasar cuando verifica un rechazo correcto.
 
-La interfaz debe adaptarse a móvil, tableta y escritorio. Verificación visual responsive pendiente de cierre.
+Responsive acreditado: catálogo, checkout y dashboard a 320–1440 px; productos administrativos a 320, 768 y 1440 px. No se extrapola a otras vistas/dispositivos.
 
-## Validación y entrega
+JaCoCo 0.8.15 está configurado; `mvn clean verify` genera el HTML/XML, pendiente de generar. Frontend no tiene proveedor/script de cobertura. No se informan porcentajes de líneas/ramas sin medición.
 
-Las pruebas funcionales y sus resultados se describen en [Cobertura de pruebas](Cobertura-Pruebas.md). La entrega incluye este ERS actualizado, ese documento, el proyecto frontend comprimido y el enlace GitHub solicitado por la pauta. Este documento no acredita publicación ni cambios remotos.
+## Pendiente o fuera de alcance
+
+- Ampliar validaciones por campo, orden/filtros, pruebas de reportes y formularios, persistencia local entre recargas y revisión visual restante.
+- Sin pasarela bancaria, recuperación por correo, wishlist, reseñas, comparador, devoluciones, proveedores ni notificaciones acreditadas.
+- Sin pruebas de carga/concurrencia ni auditoría integral de seguridad/accesibilidad.
+- El ZIP previo es una captura del 26/10 y requiere regeneración para incluir cambios posteriores. El enlace público GitHub y la entrega al docente quedan por confirmar.
+
+## Operación y evidencia
+
+- [Guía de presentación](README.md#guía-de-presentación-de-15-minutos) y [script de arranque y tests](iniciar-demo.ps1).
+- [Backend](Backend/README.md) y [frontend](Frontend/README.md): comandos y ubicación de módulos.
+- [Cobertura](Cobertura-Pruebas.md): casos, resultados, límites y medición de código.
+- [Tests por criterio](Criterios-y-tests.md): archivo, línea y nombre del caso.
+- [Planilla](Plantilla_Gestion_Requerimientos_Scrum_HuertoHogar.xlsx): rojo por criterio acreditado en I; evidencia en M.

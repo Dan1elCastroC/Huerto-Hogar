@@ -42,7 +42,7 @@ npm run build
 npm test
 ```
 
-`npm test` ejecuta 60 casos de interfaz, lógica y servicios con Vitest y Testing Library, usando mocks donde corresponde; pasan sin backend. Se mantiene Vitest, sin Jasmine ni Karma. La compilación genera `dist/`.
+`npm test` ejecuta 60 casos de interfaz, lógica y servicios con Vitest y Testing Library, usando mocks donde corresponde; pasan sin backend. Este comando excluye explícitamente `src/services/api.integration.test.js`. Ejecutar Vitest directamente, desde una extensión o con `npm run test:watch` puede incluir esas dos pruebas HTTP reales y fallar sin backend. Se mantiene Vitest, sin Jasmine ni Karma. La compilación genera `dist/`.
 
 Para comprobar HTTP real, inicia el backend y su base de datos con los datos iniciales y ejecuta:
 
@@ -50,7 +50,7 @@ Para comprobar HTTP real, inicia el backend y su base de datos con los datos ini
 npm run test:integration
 ```
 
-Son dos pruebas: productos y categorías. Fallan si la API no está disponible; la prueba de productos espera el código inicial `KIT-001`.
+Son dos pruebas: productos y categorías. Con la API apagada ambas fallan por conexión rechazada (`ECONNREFUSED`); la prueba de productos espera el código inicial `KIT-001`.
 
 Demostración opcional del fallo de conexión, sin apagar ni modificar el backend:
 
@@ -58,7 +58,7 @@ Demostración opcional del fallo de conexión, sin apagar ni modificar el backen
 .\demo-fallo-integracion.ps1
 ```
 
-El [script](./demo-fallo-integracion.ps1) usa temporalmente un puerto libre sin API, provoca dos fallos y restaura `VITE_API_URL` al terminar. Su código de salida distinto de cero es intencional.
+El [script](./demo-fallo-integracion.ps1) usa temporalmente un puerto libre sin API, provoca dos fallos y restaura `VITE_API_URL` al terminar. Su código de salida 1 es intencional.
 
 Las pruebas están agrupadas en:
 
@@ -68,7 +68,9 @@ Las pruebas están agrupadas en:
 - `src/services/api.test.js` y `cartUtils.test.js`: servicios aislados y reglas del carrito.
 - [api.integration.test.js](./src/services/api.integration.test.js): las dos consultas HTTP reales.
 
-La relación por historia y criterio, con archivos y líneas de evidencia, está en [Criterios y tests](../Criterios-y-tests.md). Las pruebas automatizadas no acreditan por sí solas todos los criterios ni la revisión responsive de cada pantalla.
+La relación por historia y criterio, con archivos y líneas de evidencia, está en [Criterios y tests](../Criterios-y-tests.md); los comportamientos comprobados se resumen en [Cobertura funcional](../Cobertura-Pruebas.md). Las pruebas automatizadas no acreditan por sí solas todos los criterios ni la revisión responsive de cada pantalla.
+
+No se ha medido un porcentaje de líneas o ramas del frontend. [package.json](./package.json) no incluye `test:coverage`, el lockfile no incorpora un proveedor de cobertura y [vite.config.js](./vite.config.js) no configura cobertura. Las 60 pruebas y los criterios de aceptación marcados en Excel son métricas distintas de la cobertura del código. El reporte JaCoCo del backend se genera por separado; su alcance se explica en la guía de cobertura.
 
 ## Cuentas de demostración
 
@@ -77,3 +79,18 @@ El inicializador crea estas cuentas cuando no existen:
 - Administrador: `admin@duoc.cl` / `admin123`.
 - Cliente: `cliente@gmail.com` / `cli123`.
 - Vendedor: `vendedor@duoc.cl` / `vend123`; no dispone del panel de administrador.
+
+## Qué mostrar y dónde está
+
+La [guía completa de presentación](../README.md#guía-de-presentación-de-15-minutos) organiza el recorrido y el arranque con `..\iniciar-demo.ps1`.
+
+- **Navegación y sesión:** `src/App.jsx` y `src/components/Navbar.jsx`; `App.test.jsx` comprueba navegación, nombre y logout persistente.
+- **Inicio, categorías y detalle:** `src/pages/HomePage.jsx`, `CategoriesPage.jsx`, `ProductDetailPage.jsx`; catálogo/búsqueda en `src/components/ProductList.jsx`, probado en `ProductList.test.jsx` y `App.test.jsx`.
+- **Registro e ingreso:** `src/components/Registro.jsx`, `Login.jsx` y sus `.test.jsx`; perfil/contraseña en `src/components/profile` e historial en `src/components/orders`.
+- **Compra y cupones:** `src/components/Carrito.jsx` y `Carrito.test.jsx`; reglas locales en `src/services/cartUtils.js` y sus tests, llamadas reales en `pedidoService.js`, `cuponService.js` y `carritoService.js`.
+- **Ofertas, noticias y contacto:** `src/pages/OffersPage.jsx`, `BlogDetailPage.jsx`, `src/components/blog` y `src/components/contact`; tests en App y esos subdirectorios.
+- **Administración:** `src/pages/AdminPage.jsx`, `src/components/MainPage.jsx` y `src/components/admin`; tests de dashboard, productos, categorías, usuarios y boleta en sus archivos `.test.jsx`.
+- **Adaptación visual:** `src/index.css` y clases Bootstrap. Cambiar ancho de pantalla durante el recorrido; los tests jsdom no comprueban la distribución CSS real.
+- **Comunicación:** `src/services/httpClient.js`; `api.test.js` simula fetch, `api.integration.test.js` consulta HTTP real. Mostrar esta diferencia al explicar resultados con el backend apagado.
+
+Recorrer primero tienda y compra como cliente, después panel como administrador. Los tests y límites de cada criterio están en [Criterios-y-tests.md](../Criterios-y-tests.md), sin atribuir cobertura completa a todas las pantallas.

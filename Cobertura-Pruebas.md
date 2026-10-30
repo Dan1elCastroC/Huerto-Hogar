@@ -1,47 +1,93 @@
-# Cobertura funcional de pruebas Huerto Hogar
+# Cobertura y pruebas de Huerto Hogar
 
-26 de octubre de 2026
+Actualización documental: **29 de octubre de 2026**.
 
-## Alcance y criterio
+La cobertura funcional describe comportamientos ejercitados. Una función implementada no se considera probada sin evidencia; aprobar casos tampoco determina la cobertura de líneas o ramas.
+Se conserva Vitest/Vite, conforme a la excepción del usuario a Jasmine/Karma de la pauta.
 
-Este registro relaciona los comportamientos comprobados con las pruebas ejecutadas. Describe cobertura funcional por casos; no informa un porcentaje de cobertura de líneas, ramas ni código.
+- [ERS principal en Word](ERS-V2-Huerto-Hogar.docx), conforme a la plantilla solicitada.
+- [Resumen de ERS V2](ERS-V2-Huerto-Hogar.md).
+- [Criterios, pruebas exactas y evidencias](Criterios-y-tests.md).
+- [Matriz de requisitos](Plantilla_Gestion_Requerimientos_Scrum_HuertoHogar.xlsx).
 
-Se mantiene Vitest con Vite conforme a la instrucción del usuario, sin agregar Jasmine ni Karma.
+## Resultados registrados
 
-## Resultados ejecutados
+- **Arranque integrado, 29/10/2026:** `iniciar-demo.ps1` inició XAMPP (Apache/MySQL), backend y frontend; aprobaron 65 pruebas backend, 60 unitarias frontend y 2 HTTP reales. Los registros están en `%TEMP%\HuertoHogar-demo\<ejecución>`.
+- **Backend:** 65 pruebas aprobadas tanto el 26/10 como en la verificación integrada del 29/10/2026.
+- **Frontend aislado, 29/10/2026:** 60 pruebas aprobadas en 17 suites con el backend apagado; utilizan mocks.
+- **Integración HTTP:** 2 pruebas aprobadas con backend activo el 26/10 y el 29/10/2026; las mismas 2 fallaron el 29/10 con `ECONNREFUSED` al estar apagado.
+- **API real de cupones, 26/10/2026:** 27 comprobaciones satisfactorias, incluidos vencimiento, permisos, normalización y rechazo de checkout sin alterar stock/pedidos.
+- **Demostración negativa, 29/10/2026:** 2 fallos intencionales usando una URL temporal sin backend; se verificó la restauración de `VITE_API_URL`.
+- **Aceptación:** 84 de 450 criterios acreditados individualmente. Solo esos textos de la columna I están en rojo; la columna M y [Criterios-y-tests](Criterios-y-tests.md) justifican cada decisión. Esta relación no mide cobertura de código.
 
-- Backend: 65 pruebas, cero fallos.
-- Frontend: 60 pruebas distribuidas en 17 suites, cero fallos.
-- Validaciones de la API real de cupones: 27 comprobaciones satisfactorias.
-- ESLint: aprobado.
-- Compilación de producción con Vite: aprobada.
-Revisión responsive realizada en Chrome con anchos CSS de 320, 360, 768, 1024 y 1440 px: catálogo, checkout y dashboard sin desbordamiento horizontal. También se verificó productos de administración a 320, 768 y 1440 px.
+Los resultados de integración correctos y los fallos esperados corresponden a condiciones y fechas diferentes; los fallos de conexión no representan pruebas funcionales aprobadas.
 
-## Casos cubiertos
+## Ejecución y ubicación
 
-### Cuenta y autorización
+Desde `Backend`, con Java 17 y Maven en `PATH`:
 
-Registro y validaciones de usuario, inicio de sesión, consulta y edición del perfil, cambio de contraseña y cierre de sesión. La regresión de cierre verifica que la cuenta desaparezca de la interfaz y continúe desconectada al volver a cargarla. El backend comprueba permisos para las operaciones protegidas.
+```powershell
+mvn test
+mvn clean verify
+```
 
-### Catálogo y navegación pública
+Las pruebas backend usan mocks y H2 en memoria con el [perfil test](Backend/src/test/resources/application-test.properties); no necesitan iniciar la API ni MySQL/XAMPP.
+Sus 13 archivos Java y 65 métodos `@Test` están en [Backend/src/test/java/com/huerto/hogar](Backend/src/test/java/com/huerto/hogar).
 
-Carga de productos desde la API, error de conexión sin catálogo ficticio, búsqueda y filtro por categoría, navegación a nosotros y categorías, apertura del detalle de producto, incorporación al carrito y regreso al listado filtrado. Se comprueba la apertura y el regreso desde el detalle de una noticia.
+Desde `Frontend`:
 
-### Carrito y checkout
+```powershell
+npm test
+npm run test:integration
+.\demo-fallo-integracion.ps1
+```
 
-Cantidades, eliminación, totales, sincronización y confirmación del pedido. Se verifica el envío de datos de entrega y el resultado real de la operación. Las pruebas del backend cubren las reglas de stock y el registro de pedidos.
+La integración real requiere la API en `http://localhost:8087` o `VITE_API_URL` y la conexión del servidor a MySQL.
+El [script de demostración](Frontend/demo-fallo-integracion.ps1) provoca el fallo de conexión y restaura la variable en `finally`; no inicia/detiene servidores ni modifica la base.
+Hay 18 archivos de pruebas frontend: 17 aislados y [1 archivo HTTP con 2 casos](Frontend/src/services/api.integration.test.js). Sumados a los 13 Java, son **31 archivos de pruebas**.
+Los nombres de cada caso y sus líneas se encuentran en [Criterios-y-tests.md](Criterios-y-tests.md).
 
-### Cupones y ofertas
+## Comportamientos comprobados
 
-Consulta de validación pública, descuento válido, rechazo de cupón vencido o inactivo y validaciones del porcentaje. La vista de ofertas requiere validación del backend. La estimación visual no sustituye el cálculo definitivo del pedido.
+- **Cuenta:** registro, confirmación de contraseña, acceso/rechazo de credenciales y cierre de sesión persistente; edición del formulario de perfil y entrega de sus datos al callback.
+- **Catálogo:** lectura real de productos/categorías, errores de conexión, búsqueda, filtro por categoría, detalle de producto y regreso al listado; apertura y regreso desde una noticia.
+- **Carrito y checkout:** agregar/modificar/eliminar, límites de stock, totales, dirección autocompletada, entrega programada y validación de fecha, confirmación y rechazo del pedido.
+- **Cupones:** validación pública, aplicación/retiro, porcentajes, redondeo monetario, códigos normalizados y vencidos/inactivos; el backend vuelve a validar al confirmar.
+- **Administración:** indicadores del dashboard, edición de productos, filtro de stock crítico, categorías, alta/edición de usuarios, conservación del hash al omitir contraseña, historial por usuario y detalle de boleta.
+- **Persistencia:** las pruebas H2 ejercitan inicialización idempotente, consultas de productos con categoría y compra con historial/detalles, descuento de stock y vaciado del carrito.
 
-### Administración y persistencia
+Estos casos no acreditan por sí solos todas las pantallas, reglas ni criterios de cada módulo.
 
-Servicios de productos, categorías, usuarios, pedidos, cupones, noticias, contactos y carrito; persistencia e integración del proyecto. Las pruebas de interfaz comprueban la navegación administrativa y las operaciones implementadas, incluidas las actualizaciones de categorías en los formularios dependientes.
+## Pauta PDF, página 11: React
 
-## Límites
+- **Renderizado:** [ProductList](Frontend/src/components/ProductList.jsx) genera productos y estados de carga/error; [sus pruebas](Frontend/src/components/ProductList.test.jsx) comprueban la información visible.
+- **Props:** `productos`, `categorias` y callbacks conectan el catálogo con sus acciones; [App.test.jsx](Frontend/src/App.test.jsx) ejercita navegación, detalle y adición al carrito.
+- **Estado:** [Carrito](Frontend/src/components/Carrito.jsx) usa `useState` para checkout, entrega y cupón; [Carrito.test.jsx](Frontend/src/components/Carrito.test.jsx) comprueba cambios de modalidad, fechas y descuento.
+- **Eventos:** `onChange`, `onClick` y `onSubmit` conectan controles y guardado; [MainPage.test.jsx](Frontend/src/components/MainPage.test.jsx) y [CategoryManager.test.jsx](Frontend/src/components/admin/CategoryManager.test.jsx) ejercitan edición y actualización.
 
-No se integra ni se prueba una pasarela bancaria externa. Los resultados de pruebas automatizadas no equivalen a la revisión visual de todos los tamaños de pantalla. Los casos y cifras anteriores no acreditan publicación en GitHub ni ejecución de pruebas de carga.
+Los ejemplos permiten localizar la aplicación de estos conceptos; no sustituyen las verificaciones de aceptación por criterio.
 
-Referencia: [ERS V2](ERS-V2-Huerto-Hogar.md).
+## Alcance visual registrado
+
+Revisión manual en Chrome: catálogo, checkout y dashboard a **320, 360, 768, 1024 y 1440 px**, sin desbordamiento horizontal en esas muestras.
+Productos de administración se revisó a **320, 768 y 1440 px**. Esto no acredita automáticamente otras vistas, todos los dispositivos ni accesibilidad completa.
+
+## Cobertura de código
+
+El [pom.xml](Backend/pom.xml) configura **JaCoCo 0.8.15**, con instrumentación y generación del informe en la fase `verify`.
+En la revisión documental no existe `Backend/target/site/jacoco`; no hay counters HTML/XML ni porcentaje medido que informar.
+Para generarlo: `mvn clean verify` desde `Backend`. Salidas esperadas: `target/site/jacoco/index.html` y `target/site/jacoco/jacoco.xml`.
+
+El [frontend](Frontend/package.json) no tiene proveedor ni script de cobertura configurados. No se agregaron dependencias para medirla ni se publica un porcentaje.
+La cantidad de casos aprobados y los 84 criterios acreditados no se convierten en porcentajes de líneas, ramas o instrucciones.
+
+## Límites de la evidencia
+
+- `ReportManager` y otras vistas administrativas carecen de pruebas específicas de interfaz; código existente no equivale a comportamiento probado.
+- La navegación a Nosotros comprueba su encabezado, no todo su contenido; no hay aserción dedicada del texto/color del badge de estado del pedido.
+- No hay comprobación dedicada completa de errores junto a cada campo ni de restauración del carrito desde `localStorage` tras recargar.
+- No existe una pasarela bancaria integrada y probada; checkout registra el pedido local del proyecto.
+- No se acreditan pruebas de carga, concurrencia, auditoría integral de seguridad, matriz completa de permisos ni publicación en GitHub.
+
+Las decisiones concretas sobre cada criterio, incluidos los pendientes, están en [Criterios-y-tests.md](Criterios-y-tests.md).
 

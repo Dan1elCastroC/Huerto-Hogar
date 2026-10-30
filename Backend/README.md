@@ -58,7 +58,7 @@ Para rutas protegidas envía `Authorization: Bearer <token>` con el token obteni
 Los contratos y campos completos se consultan con el servidor activo en
 [Swagger UI](http://localhost:8087/swagger-ui.html) y [OpenAPI JSON](http://localhost:8087/api-docs).
 
-## Pruebas y compilación
+## Pruebas, compilación y cobertura
 
 En la misma terminal con Java 17:
 
@@ -69,7 +69,28 @@ mvn clean verify
 ```
 
 `test` ejecuta las pruebas; `package` también genera `target/hogar-0.0.1-SNAPSHOT.jar`.
-`verify` añade la generación del informe JaCoCo en `target/site/jacoco/index.html`.
-Las pruebas de contexto e integración usan H2 mediante el
-[perfil test](src/test/resources/application-test.properties), sin requerir XAMPP.
-Estos comandos no sustituyen las comprobaciones manuales ni las pruebas del frontend.
+Hay 65 métodos `@Test` en 13 clases de [pruebas Java](src/test/java/com/huerto/hogar).
+Usan mocks y H2 mediante el [perfil test](src/test/resources/application-test.properties); no necesitan iniciar la API ni MySQL/XAMPP.
+El número de casos no es un porcentaje de cobertura.
+
+JaCoCo **0.8.15** está configurado en `pom.xml`; `mvn clean verify` genera el informe.
+Al revisar esta documentación no existe `target/site/jacoco`: la medición está pendiente de generar.
+HTML esperado: `target/site/jacoco/index.html`; XML: `target/site/jacoco/jacoco.xml`. Sin ese informe no se publica un porcentaje ni se supone cobertura total.
+
+Desde `Frontend`, `npm run test:integration` ejecuta dos consultas HTTP reales; requiere la API activa en el puerto 8087 y su conexión a MySQL.
+Con el backend apagado se espera un fallo de conexión; las pruebas aisladas del backend siguen siendo independientes.
+
+## Explicación para la presentación
+
+El [script raíz](../iniciar-demo.ps1) inicia XAMPP, API y frontend y ejecuta únicamente pruebas. El [README principal](../README.md#guía-de-presentación-de-15-minutos) contiene el recorrido completo.
+
+Desde `src/main/java/com/huerto/hogar`, seguir una operación a través de estas capas:
+
+1. **Autenticación:** `auth/AuthController.java` recibe login; `security` maneja JWT y `config/SecurityConfig.java` aplica accesos por rol. El registro y el perfil están en `usuario/controller/UsuarioController.java`.
+2. **Catálogo:** `producto/controller/ProductoController.java` recibe HTTP; `producto/service/ProductoService.java` aplica reglas y su repositorio persiste mediante JPA. Mostrar `ProductoServiceTest.java` y `PersistenciaIntegrationTest.java`.
+3. **Cupones:** `cupon/service/CuponService.java` comprueba código, actividad y vencimiento. Mostrar pruebas de fecha vencida/inactiva en `CuponServiceTest.java`.
+4. **Compra:** `pedido/service/PedidoService.java` vuelve a validar el cupón, verifica stock y registra pedido/detalles. `PedidoServiceTest.java` comprueba compra válida y rechazos que no alteran stock/pedidos.
+5. **Usuario y boleta:** `usuario/service/UsuarioService.java` conserva la contraseña si se omite al editar. `AdminUsuariosIntegrationTest.java` comprueba el hash y los obligatorios; `pedido/controller/PedidoController.java` expone historial/detalle.
+6. **Datos y reportes:** `config/DataInitializer.java` y `DatosIniciales.java` cargan registros faltantes. Los módulos `categoria`, `blog`, `contacto` y `reporte` atienden sus vistas administrativas. `application.properties` define conexión, puerto y CORS.
+
+Los tests fuente están en `src/test/java/com/huerto/hogar`; sus resultados no demuestran por sí solos que el proceso API esté activo. Para eso se ejecutan las dos consultas HTTP del frontend. Mostrar Swagger con el servidor encendido y explicar que JaCoCo es una medición aparte del número de tests aprobados.
