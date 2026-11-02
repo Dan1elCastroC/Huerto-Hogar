@@ -1,96 +1,172 @@
 # Huerto Hogar · Frontend
 
-Interfaz de la tienda con React, Vite y Bootstrap. Consulta la [guía general](../README.md) para iniciar la base de datos y el backend.
+Interfaz de usuario de la tienda **Huerto Hogar** construida con React, Vite y Bootstrap.
 
-## Ejecutar
+---
 
-Requiere Node.js `^22.22.2 || ^24.15.0 || >=26.0.0`, compatible con las versiones de Vitest y jsdom del [lockfile](./package-lock.json), y npm.
-Desde esta carpeta (`Frontend`):
+## Requisitos
 
-```powershell
-npm ci
+- **Node.js** v18 o superior (se recomienda la LTS actual)
+- **npm** incluido con Node.js
+- El backend corriendo en `http://localhost:8087` (Spring Boot)
+
+---
+
+## Instalación y ejecución
+
+Desde la carpeta `Frontend`:
+
+```bash
+npm install
 npm run dev
 ```
 
-Abre la URL que indique Vite en la terminal. La API se consulta en `http://localhost:8087` por defecto.
-Solo si cambias la dirección del backend, crea `Frontend/.env.local` con su origen, sin agregar `/api`:
+Abre la URL que indique Vite en la terminal (por defecto `http://localhost:5173`).
+
+### Cambiar la URL del backend
+
+Si el backend corre en otro puerto, crea el archivo `Frontend/.env.local`:
 
 ```dotenv
 VITE_API_URL=http://localhost:8087
 ```
 
-Reinicia Vite tras cambiar esa variable. Si la API está apagada, el catálogo muestra un error de conexión; no se generan productos ficticios.
+Reinicia Vite después de modificar esa variable. Si el backend está apagado, el catálogo muestra un aviso de error de conexión; no se generan datos ficticios.
 
-## Funcionalidades actuales
+---
 
-- Tienda: Home, Nosotros, categorías, catálogo con búsqueda/filtro, detalle de producto, noticias y contacto.
-- Cuenta: registro, inicio de sesión JWT, perfil, cambio de contraseña e historial de pedidos con detalle/estado.
-- Carrito: cantidades limitadas por stock, eliminación, vaciado y totales. La vista se guarda en `localStorage`; con sesión, los cambios se envían al backend. Al iniciar sesión con productos locales, estos se sincronizan con el carrito del servidor. No se recupera automáticamente un carrito remoto desde otro navegador.
-- Checkout: datos reales de la cuenta, dirección editable, próxima disponibilidad o entrega programada desde hoy, cupón opcional y confirmación del pedido.
-- Cupones: aplicación y retirada, descuento recalculado y rechazo de códigos inválidos/vencidos; el backend valida el total definitivo. Ofertas consulta la vigencia de `BIENVENIDA10`.
-- Administración: dashboard, productos, categorías, cupones, noticias, contactos, usuarios/roles, pedidos, reportes y perfil. El panel se muestra al rol administrador.
+## Funcionalidades
 
-Confirmar la compra requiere sesión y backend activo. Se registra el pedido; no existe una pasarela bancaria ni se cobra una tarjeta.
+### Tienda (pública)
+- **Home** — landing con productos destacados y accesos rápidos.
+- **Catálogo** — listado con búsqueda y filtro por categoría.
+- **Detalle de producto** — imagen, descripción, precio, stock y botón agregar al carrito.
+- **Categorías** — vista separada por categoría con acceso directo al catálogo filtrado.
+- **Ofertas** — productos con cupón `BIENVENIDA10` vigente.
+- **Nosotros** — página informativa del equipo.
+- **Noticias / Blog** — listado de entradas y vista de detalle.
+- **Contacto** — formulario de contacto.
 
-## Calidad y pruebas
+### Cuenta
+- Registro e inicio de sesión con JWT.
+- Perfil editable y cambio de contraseña.
+- Historial de pedidos con detalle de estado.
 
-Ejecuta desde `Frontend`:
+### Carrito y compra
+- Cantidades limitadas por stock disponible.
+- Eliminación de ítems y vaciado completo.
+- El carrito se guarda en `localStorage`; con sesión activa los cambios se sincronizan con el backend.
+- **Checkout** — formulario con datos del cliente, dirección de entrega y cupón de descuento opcional.
+- Vista de **compra exitosa** con resumen del pedido.
+- Vista de **pago con error** con opción de reintentar.
 
-```powershell
-npm run lint
-npm run build
-npm test
-```
+### Panel de administración
+Disponible solo para el rol `ADMINISTRADOR`. Incluye sidebar colapsable con:
 
-`npm test` ejecuta 60 casos de interfaz, lógica y servicios con Vitest y Testing Library, usando mocks donde corresponde; pasan sin backend. Este comando excluye explícitamente `src/services/api.integration.test.js`. Ejecutar Vitest directamente, desde una extensión o con `npm run test:watch` puede incluir esas dos pruebas HTTP reales y fallar sin backend. Se mantiene Vitest, sin Jasmine ni Karma. La compilación genera `dist/`.
+| Sección | Funciones |
+|---|---|
+| **Dashboard** | Métricas en tiempo real (compras, productos, usuarios) y accesos rápidos a cada módulo |
+| **Órdenes** | Listado de pedidos, cambio de estado y vista de boleta por pedido |
+| **Productos** | Crear, editar, listar y filtrar por stock crítico |
+| **Categorías** | Crear y editar categorías |
+| **Usuarios** | Crear, editar, activar/desactivar y ver historial de compras por usuario |
+| **Reportes** | Stock crítico y productos más vendidos |
+| **Noticias** | Gestión de entradas del blog |
+| **Cupones** | Gestión de cupones de descuento |
+| **Contactos** | Mensajes recibidos desde el formulario de contacto |
+| **Perfil** | Datos personales del administrador |
 
-Para comprobar HTTP real, inicia el backend y su base de datos con los datos iniciales y ejecuta:
-
-```powershell
-npm run test:integration
-```
-
-Son dos pruebas: productos y categorías. Con la API apagada ambas fallan por conexión rechazada (`ECONNREFUSED`); la prueba de productos espera el código inicial `KIT-001`.
-
-Demostración opcional del fallo de conexión, sin apagar ni modificar el backend:
-
-```powershell
-.\demo-fallo-integracion.ps1
-```
-
-El [script](./demo-fallo-integracion.ps1) usa temporalmente un puerto libre sin API, provoca dos fallos y restaura `VITE_API_URL` al terminar. Su código de salida 1 es intencional.
-
-Las pruebas están agrupadas en:
-
-- [App.test.jsx](./src/App.test.jsx): navegación, categorías, ofertas, errores y cierre de sesión.
-- `src/components/*.test.jsx` y subcarpetas `profile`, `orders`, `blog`, `contact`: cuenta, catálogo, carrito/checkout y contenido público.
-- `src/components/admin/*.test.jsx` y [AdminPage.test.jsx](./src/pages/AdminPage.test.jsx): gestión y dashboard.
-- `src/services/api.test.js` y `cartUtils.test.js`: servicios aislados y reglas del carrito.
-- [api.integration.test.js](./src/services/api.integration.test.js): las dos consultas HTTP reales.
-
-La relación por historia y criterio, con archivos y líneas de evidencia, está en [Criterios y tests](../Criterios-y-tests.md); los comportamientos comprobados se resumen en [Cobertura funcional](../Cobertura-Pruebas.md). Las pruebas automatizadas no acreditan por sí solas todos los criterios ni la revisión responsive de cada pantalla.
-
-No se ha medido un porcentaje de líneas o ramas del frontend. [package.json](./package.json) no incluye `test:coverage`, el lockfile no incorpora un proveedor de cobertura y [vite.config.js](./vite.config.js) no configura cobertura. Las 60 pruebas y los criterios de aceptación marcados en Excel son métricas distintas de la cobertura del código. El reporte JaCoCo del backend se genera por separado; su alcance se explica en la guía de cobertura.
+---
 
 ## Cuentas de demostración
 
-El inicializador crea estas cuentas cuando no existen:
+El backend crea estas cuentas al iniciar si no existen:
 
-- Administrador: `admin@duoc.cl` / `admin123`.
-- Cliente: `cliente@gmail.com` / `cli123`.
-- Vendedor: `vendedor@duoc.cl` / `vend123`; no dispone del panel de administrador.
+| Rol | Correo | Contraseña |
+|---|---|---|
+| Administrador | `admin@duoc.cl` | `admin123` |
+| Cliente | `cliente@gmail.com` | `cli123` |
+| Vendedor | `vendedor@duoc.cl` | `vend123` |
 
-## Qué mostrar y dónde está
+> El rol Vendedor no tiene acceso al panel de administración.
 
-La [guía completa de presentación](../README.md#guía-de-presentación-de-15-minutos) organiza el recorrido y el arranque con `..\iniciar-demo.ps1`.
+---
 
-- **Navegación y sesión:** `src/App.jsx` y `src/components/Navbar.jsx`; `App.test.jsx` comprueba navegación, nombre y logout persistente.
-- **Inicio, categorías y detalle:** `src/pages/HomePage.jsx`, `CategoriesPage.jsx`, `ProductDetailPage.jsx`; catálogo/búsqueda en `src/components/ProductList.jsx`, probado en `ProductList.test.jsx` y `App.test.jsx`.
-- **Registro e ingreso:** `src/components/Registro.jsx`, `Login.jsx` y sus `.test.jsx`; perfil/contraseña en `src/components/profile` e historial en `src/components/orders`.
-- **Compra y cupones:** `src/components/Carrito.jsx` y `Carrito.test.jsx`; reglas locales en `src/services/cartUtils.js` y sus tests, llamadas reales en `pedidoService.js`, `cuponService.js` y `carritoService.js`.
-- **Ofertas, noticias y contacto:** `src/pages/OffersPage.jsx`, `BlogDetailPage.jsx`, `src/components/blog` y `src/components/contact`; tests en App y esos subdirectorios.
-- **Administración:** `src/pages/AdminPage.jsx`, `src/components/MainPage.jsx` y `src/components/admin`; tests de dashboard, productos, categorías, usuarios y boleta en sus archivos `.test.jsx`.
-- **Adaptación visual:** `src/index.css` y clases Bootstrap. Cambiar ancho de pantalla durante el recorrido; los tests jsdom no comprueban la distribución CSS real.
-- **Comunicación:** `src/services/httpClient.js`; `api.test.js` simula fetch, `api.integration.test.js` consulta HTTP real. Mostrar esta diferencia al explicar resultados con el backend apagado.
+## Scripts disponibles
 
-Recorrer primero tienda y compra como cliente, después panel como administrador. Los tests y límites de cada criterio están en [Criterios-y-tests.md](../Criterios-y-tests.md), sin atribuir cobertura completa a todas las pantallas.
+```bash
+npm run dev       # Inicia el servidor de desarrollo
+npm run build     # Compila el proyecto en dist/
+npm run lint      # Revisa el código con ESLint
+npm test          # Ejecuta los 56 tests unitarios (sin backend)
+npm run test:integration  # Ejecuta 2 tests HTTP reales (requiere backend activo)
+```
+
+---
+
+## Tests
+
+El proyecto cuenta con **56 tests** ejecutados con Vitest y Testing Library. Todos pasan sin necesidad de backend activo gracias a mocks.
+
+### Distribución por archivo
+
+| Archivo | Tests | Qué cubre |
+|---|---|---|
+| `Carrito.test.jsx` | 12 | Checkout, cupones, cantidades, errores de pago |
+| `App.test.jsx` | 7 | Navegación, categorías, ofertas, logout |
+| `cartUtils.test.js` | 5 | Lógica local del carrito (agregar, actualizar, eliminar) |
+| `AdminPage.test.jsx` | 5 | Dashboard, indicadores, sidebar, navegación admin |
+| `api.test.js` | 4 | Servicios HTTP con fetch simulado |
+| `ProductList.test.jsx` | 4 | Renderizado de catálogo, búsqueda y filtros |
+| `UserManager.test.jsx` | 3 | Crear, editar y historial de compras de usuario |
+| `Registro.test.jsx` | 2 | Formulario de registro y validación |
+| `PasswordForm.test.jsx` | 2 | Cambio de contraseña |
+| `OrderList.test.jsx` | 2 | Historial de pedidos del cliente |
+| `MainPage.test.jsx` | 2 | Gestión de productos en admin |
+| `Login.test.jsx` | 2 | Inicio de sesión y manejo de errores |
+| `BlogList.test.jsx` | 2 | Listado de noticias |
+| `ProfileForm.test.jsx` | 1 | Edición de perfil |
+| `OrderManager.test.jsx` | 1 | Boleta en el panel admin |
+| `ContactoForm.test.jsx` | 1 | Formulario de contacto |
+| `CategoryManager.test.jsx` | 1 | Gestión de categorías en admin |
+
+### Tests de integración (requieren backend)
+
+```bash
+npm run test:integration
+```
+
+Ejecuta 2 pruebas HTTP reales contra el backend: listado de productos y categorías.
+Con el backend apagado ambas fallan con `ECONNREFUSED`.
+
+---
+
+## Estructura del proyecto
+
+```
+Frontend/
+├── src/
+│   ├── App.jsx                  # Raíz: estado global, rutas y lógica de sesión
+│   ├── components/
+│   │   ├── Navbar.jsx           # Barra de navegación
+│   │   ├── Carrito.jsx          # Carrito + checkout + resultado de pago
+│   │   ├── Login.jsx / Registro.jsx
+│   │   ├── ProductList.jsx      # Catálogo con búsqueda y filtros
+│   │   ├── admin/               # Managers del panel de administración
+│   │   ├── blog/                # Lista y tarjeta de noticias
+│   │   ├── contact/             # Formulario de contacto
+│   │   ├── orders/              # Historial de pedidos
+│   │   └── profile/             # Perfil y cambio de contraseña
+│   ├── pages/                   # Una página por vista principal
+│   ├── services/                # Comunicación con el backend (fetch + helpers)
+│   └── index.css                # Estilos globales y panel admin
+└── vite.config.js
+```
+
+---
+
+## Notas importantes
+
+- Confirmar una compra requiere **sesión activa y backend disponible**. No existe pasarela de pago real.
+- Las pruebas automatizadas no validan el diseño responsive visualmente; eso se verifica redimensionando el navegador.
+- No se ha configurado un reporte de cobertura de líneas. Los 56 tests y los criterios de aceptación son la métrica de calidad del frontend.
