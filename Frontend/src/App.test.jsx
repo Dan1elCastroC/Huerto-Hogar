@@ -114,22 +114,23 @@ describe('App', () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     render(<App />);
     fireEvent.click(screen.getByRole('link', { name: 'Panel principal' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Categorías' }));
+    const navegacionAdmin = within(screen.getByRole('navigation'));
+    fireEvent.click(navegacionAdmin.getByRole('button', { name: /Categorías/ }));
     await waitFor(() => expect(categoriaService.getAll).toHaveBeenCalledTimes(2));
     fireEvent.change(screen.getByLabelText('Nombre'), { target: { value: 'Semillas' } });
     fireEvent.change(screen.getByLabelText('Descripción'), { target: { value: 'Para cultivar' } });
     fireEvent.click(screen.getByRole('button', { name: 'Crear' }));
     await screen.findByText('Categoría creada correctamente.');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Productos' }));
+    fireEvent.click(navegacionAdmin.getByRole('button', { name: /Productos/ }));
 
     expect(within(screen.getByLabelText('Categoría')).getByRole('option', { name: 'Semillas' })).toBeInTheDocument();
     categoriaService.getAll.mockResolvedValue([{ id: 9, nombre: 'Semillas', descripcion: 'Para cultivar' }]);
-    fireEvent.click(screen.getByRole('button', { name: 'Categorías' }));
+    fireEvent.click(navegacionAdmin.getByRole('button', { name: /Categorías/ }));
     await screen.findByText('Semillas');
     fireEvent.click(screen.getByRole('button', { name: 'Eliminar' }));
     await waitFor(() => expect(screen.queryByText('Semillas')).not.toBeInTheDocument());
-    fireEvent.click(screen.getByRole('button', { name: 'Productos' }));
+    fireEvent.click(navegacionAdmin.getByRole('button', { name: /Productos/ }));
     expect(within(screen.getByLabelText('Categoría')).queryByRole('option', { name: 'Semillas' })).not.toBeInTheDocument();
   });
 });

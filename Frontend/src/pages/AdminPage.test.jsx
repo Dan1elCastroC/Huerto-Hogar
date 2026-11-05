@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { beforeEach, expect, test, vi } from 'vitest';
 import AdminPage from './AdminPage';
 import { reporteService } from '../services/reporteService';
@@ -18,8 +18,7 @@ test('botón Tienda llama a cambiarVista con "catalogo"', async () => {
   const cambiarVista = vi.fn();
   render(<AdminPage productos={[]} categorias={[]} token="token" cambiarVista={cambiarVista} onLogout={vi.fn()} />);
   await screen.findByText('17'); // esperar que cargue
-  // El botón tiene emoji + texto, usamos name con regex
-  fireEvent.click(screen.getByRole('button', { name: /Tienda/i }));
+  fireEvent.click(within(screen.getByRole('complementary')).getByRole('button', { name: /Tienda/i }));
   expect(cambiarVista).toHaveBeenCalledWith('catalogo');
 });
 
