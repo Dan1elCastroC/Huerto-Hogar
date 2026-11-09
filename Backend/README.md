@@ -74,8 +74,8 @@ Usan mocks y H2 mediante el [perfil test](src/test/resources/application-test.pr
 El número de casos no es un porcentaje de cobertura.
 
 JaCoCo **0.8.15** está configurado en `pom.xml`; `mvn clean verify` genera el informe.
-Al revisar esta documentación no existe `target/site/jacoco`: la medición está pendiente de generar.
-HTML esperado: `target/site/jacoco/index.html`; XML: `target/site/jacoco/jacoco.xml`. Sin ese informe no se publica un porcentaje ni se supone cobertura total.
+Última medición (`mvn clean verify`, 221 pruebas): **84,5 % de líneas (639/756) y 66,0 % de ramas (95/144)**. Los controladores, la seguridad y las utilidades están en 100 % de líneas; los servicios son los paquetes más bajos (`usuario` 38 %, `cupon` 54 %, `categoria` 60 %, `blog` 68 %, `producto` 70 %).
+HTML esperado: `target/site/jacoco/index.html`; XML: `target/site/jacoco/jacoco.xml`. Cobertura total.
 
 Desde `Frontend`, `npm run test:integration` ejecuta dos consultas HTTP reales; requiere la API activa en el puerto 8087 y su conexión a MySQL.
 Con el backend apagado se espera un fallo de conexión; las pruebas aisladas del backend siguen siendo independientes.

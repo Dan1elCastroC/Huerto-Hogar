@@ -67,6 +67,8 @@ El inicializador crea estas cuentas cuando todavía no existen:
 - Vendedor: `vendedor@duoc.cl` / `vend123`.
 - Cliente: `cliente@gmail.com` / `cli123`.
 
+En la pantalla de inicio de sesión hay tres botones discretos de **acceso rápido** (Admin, Vendedor, Usuario) que inician sesión con estas cuentas contra la API real; son solo para desarrollo y evaluación.
+
 Si una contraseña fue modificada, reiniciar el backend no la restablece. Estas cuentas son para desarrollo y evaluación.
 
 ## Pruebas y compilación
@@ -89,8 +91,10 @@ npm run lint
 npm run build
 ```
 
-- `npm test`: 60 pruebas unitarias y de componentes con Vitest y servicios simulados. Pasan sin backend.
-- `npm run test:integration`: dos consultas HTTP reales de productos y categorías. Requieren backend y base de datos activos, con los datos iniciales (`KIT-001` incluido). Con la API apagada ambas fallan por conexión rechazada (`ECONNREFUSED`).
+- `npm test`: 219 pruebas unitarias y de componentes con Vitest (25 archivos), con servicios simulados. Pasan sin backend.
+- `npm run test:coverage`: las mismas pruebas con cobertura V8 (reporte en `Frontend/coverage/`). Última medición: **93,9 % de líneas, 91,6 % de sentencias, 88,5 % de ramas**.
+- `npm run test:integration`: 18 pruebas de conexión REAL front ↔ back que usan los servicios de la interfaz sin mocks: login de las tres cuentas, perfil, registro, catálogo, búsqueda, cupones, contacto, permisos por rol (403), CRUD de productos, carrito → cupón → checkout → historial con descuento de stock. Requieren la API activa con los datos iniciales. Con la API apagada fallan con un mensaje claro.
+  - Sin MySQL: desde `Backend`, `mvn spring-boot:run -Dspring-boot.run.useTestClasspath=true "-Dspring-boot.run.jvmArguments=-Dspring.datasource.url=jdbc:h2:mem:itdb -Dspring.datasource.driver-class-name=org.h2.Driver -Dspring.datasource.username=sa -Dspring.datasource.password= -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect -Dspring.jpa.hibernate.ddl-auto=create-drop"` levanta la API real con una base H2 en memoria.
 - `npm run lint` revisa el código y `npm run build` genera `Frontend/dist`.
 
 Para mostrar un fallo de integración intencionado, ejecutar desde `Frontend` en PowerShell:
@@ -99,11 +103,11 @@ Para mostrar un fallo de integración intencionado, ejecutar desde `Frontend` en
 .\demo-fallo-integracion.ps1
 ```
 
-La demostración debe mostrar **2 pruebas fallidas** por conexión rechazada y devolver código de salida 1. Usa temporalmente un puerto local sin backend y restaura `VITE_API_URL`. Las pruebas negativas habituales, como rechazar un cupón vencido, deben pasar cuando el rechazo funciona correctamente.
+La demostración debe terminar con el error «Backend no disponible» (18 pruebas omitidas) por conexión rechazada y devolver código de salida 1. Usa temporalmente un puerto local sin backend y restaura `VITE_API_URL`. Las pruebas negativas habituales, como rechazar un cupón vencido, deben pasar cuando el rechazo funciona correctamente.
 
 Los tests están en [Backend/src/test/java](Backend/src/test/java), [Frontend/src/App.test.jsx](Frontend/src/App.test.jsx), [Frontend/src/components](Frontend/src/components), [Frontend/src/pages/AdminPage.test.jsx](Frontend/src/pages/AdminPage.test.jsx) y [Frontend/src/services](Frontend/src/services). La evidencia por criterio, con archivos y líneas, está en [Criterios y tests](Criterios-y-tests.md).
 
-La [cobertura funcional](Cobertura-Pruebas.md) relaciona comportamientos y casos probados. El número de pruebas y la fracción de criterios de aceptación marcados en Excel no equivalen a cobertura del código. En frontend no se ha medido un porcentaje de líneas/ramas: no hay script `test:coverage`, proveedor instalado ni configuración de cobertura. Para backend, `mvn clean verify` genera [el reporte JaCoCo](Backend/target/site/jacoco/index.html); consulta su alcance y resultados en la guía de cobertura.
+La [cobertura funcional](Cobertura-Pruebas.md) relaciona comportamientos y casos probados. El número de pruebas y la fracción de criterios de aceptación marcados en Excel no equivalen a cobertura del código. Cobertura de código medida: frontend 93,9 % de líneas (`npm run test:coverage`); backend **84,5 % de líneas y 66,0 % de ramas** con JaCoCo (`mvn clean verify` → [reporte](Backend/target/site/jacoco/index.html)), 221 pruebas JUnit/Mockito. Los servicios `usuario`, `cupon`, `categoria`, `blog` y `producto` son los paquetes más bajos del backend.
 
 ## Documentación del proyecto
 

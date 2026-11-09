@@ -8,7 +8,7 @@ if (Get-NetTCPConnection -LocalPort $Puerto -State Listen -ErrorAction SilentlyC
 $apiAnterior = [Environment]::GetEnvironmentVariable('VITE_API_URL', 'Process')
 try {
     $env:VITE_API_URL = "http://127.0.0.1:$Puerto"
-    Write-Host "DEMOSTRACIÓN: se esperan 2 pruebas fallidas porque $env:VITE_API_URL no tiene backend."
+    Write-Host "DEMOSTRACIÓN: se espera el error «Backend no disponible» porque $env:VITE_API_URL no tiene backend."
     Push-Location $PSScriptRoot
     try {
         & npm.cmd run test:integration

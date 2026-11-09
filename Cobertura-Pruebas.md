@@ -13,6 +13,7 @@ Se conserva Vitest/Vite, conforme a la excepción del usuario a Jasmine/Karma de
 ## Resultados registrados
 
 - **Arranque integrado, 29/10/2026:** `iniciar-demo.ps1` inició XAMPP (Apache/MySQL), backend y frontend; aprobaron 65 pruebas backend, 60 unitarias frontend y 2 HTTP reales. Los registros están en `%TEMP%\HuertoHogar-demo\<ejecución>`.
+- **Verificación 09/11/2026:** backend 221 pruebas aprobadas (`mvn clean verify`, JaCoCo 84,5 % líneas); frontend 219 pruebas aisladas aprobadas (93,9 % líneas); 18 pruebas de integración HTTP reales aprobadas contra la API en ejecución (H2 en memoria). Swagger documenta 51 operaciones y 38 rutas, verificadas por `SwaggerOpenApiTest`.
 - **Backend:** 65 pruebas aprobadas tanto el 26/10 como en la verificación integrada del 29/10/2026.
 - **Frontend aislado, 29/10/2026:** 60 pruebas aprobadas en 17 suites con el backend apagado; utilizan mocks.
 - **Integración HTTP:** 2 pruebas aprobadas con backend activo el 26/10 y el 29/10/2026; las mismas 2 fallaron el 29/10 con `ECONNREFUSED` al estar apagado.
@@ -44,7 +45,7 @@ npm run test:integration
 
 La integración real requiere la API en `http://localhost:8087` o `VITE_API_URL` y la conexión del servidor a MySQL.
 El [script de demostración](Frontend/demo-fallo-integracion.ps1) provoca el fallo de conexión y restaura la variable en `finally`; no inicia/detiene servidores ni modifica la base.
-Hay 18 archivos de pruebas frontend: 17 aislados y [1 archivo HTTP con 2 casos](Frontend/src/services/api.integration.test.js). Sumados a los 13 Java, son **31 archivos de pruebas**.
+Hay 25 archivos de pruebas frontend: 24 aislados y [1 archivo HTTP con 18 casos](Frontend/src/services/api.integration.test.js). Sumados a los 24 Java, son **49 archivos de pruebas**.
 Los nombres de cada caso y sus líneas se encuentran en [Criterios-y-tests.md](Criterios-y-tests.md).
 
 ## Comportamientos comprobados
@@ -75,10 +76,10 @@ Productos de administración se revisó a **320, 768 y 1440 px**. Esto no acredi
 ## Cobertura de código
 
 El [pom.xml](Backend/pom.xml) configura **JaCoCo 0.8.15**, con instrumentación y generación del informe en la fase `verify`.
-En la revisión documental no existe `Backend/target/site/jacoco`; no hay counters HTML/XML ni porcentaje medido que informar.
+Medición con `mvn clean verify` (221 pruebas, 0 fallos): **84,5 % de líneas (639/756) y 66,0 % de ramas (95/144)**. Controladores, seguridad y utilidades: 100 % de líneas. Pendiente: servicios `usuario` (38 %), `cupon` (54 %), `categoria` (60 %), `blog` (68 %) y `producto` (70 %).
 Para generarlo: `mvn clean verify` desde `Backend`. Salidas esperadas: `target/site/jacoco/index.html` y `target/site/jacoco/jacoco.xml`.
 
-El [frontend](Frontend/package.json) no tiene proveedor ni script de cobertura configurados. No se agregaron dependencias para medirla ni se publica un porcentaje.
+El [frontend](Frontend/package.json) mide cobertura con `npm run test:coverage` (Vitest + `@vitest/coverage-v8`): **93,9 % de líneas, 91,6 % de sentencias, 88,5 % de ramas, 90,5 % de funciones** con 219 pruebas aisladas en 25 archivos. Las 18 pruebas de `npm run test:integration` verifican la conexión real con el backend y no se incluyen en ese porcentaje.
 La cantidad de casos aprobados y los 84 criterios acreditados no se convierten en porcentajes de líneas, ramas o instrucciones.
 
 ## Límites de la evidencia

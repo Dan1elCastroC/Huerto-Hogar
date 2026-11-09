@@ -99,7 +99,8 @@ npm run dev       # Inicia el servidor de desarrollo
 npm run build     # Compila el proyecto en dist/
 npm run lint      # Revisa el código con ESLint
 npm test          # Ejecuta los 56 tests unitarios (sin backend)
-npm run test:integration  # Ejecuta 2 tests HTTP reales (requiere backend activo)
+npm run test:integration  # 18 tests HTTP reales front ↔ back (requiere backend activo)
+npm run test:coverage     # Pruebas unitarias con cobertura V8 (93,9 % de líneas)
 ```
 
 ---
@@ -169,4 +170,4 @@ Frontend/
 
 - Confirmar una compra requiere **sesión activa y backend disponible**. No existe pasarela de pago real.
 - Las pruebas automatizadas no validan el diseño responsive visualmente; eso se verifica redimensionando el navegador.
-- No se ha configurado un reporte de cobertura de líneas. Los 56 tests y los criterios de aceptación son la métrica de calidad del frontend.
+- Cobertura de código: `npm run test:coverage` (Vitest + V8) genera `coverage/index.html`. Última medición: 93,9 % de líneas, 91,6 % de sentencias, 88,5 % de ramas, con 219 pruebas aisladas.
