@@ -12,7 +12,7 @@ export default function Navbar({ vista, cambiarVista, carritoCount, user, onLogo
 
   return (
     <header className="header">
-      <nav className="navbar navbar-expand-xxl" aria-label="Navegación de la tienda">
+      <nav className="navbar navbar-dark navbar-expand-xxl" aria-label="Navegación de la tienda">
         <div className="container">
           <a className="navbar-brand" href="#inicio" onClick={(e) => ir(e, 'landing')}>
             <img src="/img/huerto-hogar.png" alt="Logo Huerto Hogar" />

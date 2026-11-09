@@ -55,10 +55,17 @@ export default function LandingPage({ cambiarVista, productos = [], agregarAlCar
             <div className="row">
               {destacados.map((p) => (
                 <div className="col-md-4 mb-4" key={p.id}>
-                  <div className="tarjeta-producto h-100 p-3 d-flex flex-column">
+                  <div className="tarjeta-producto h-100 d-flex flex-column">
+                    <img
+                      src={p.imagenUrl || p.imagen || '/img/huerto-hogar1.png'}
+                      alt={p.nombre}
+                      className="tarjeta-producto__img"
+                      loading="lazy"
+                    />
+                    <div className="p-3 d-flex flex-column flex-grow-1">
                     <span className="badge-categoria align-self-start mb-2">{p.categoria}</span>
                     <h5 className="mb-1">{p.nombre}</h5>
-                    <p className="fw-bold mb-3">${p.precio?.toLocaleString()}</p>
+                    <p className="fw-bold mb-3">${Number(p.precio).toLocaleString('es-CL')}</p>
                     {onVerDetalle && <button type="button" className="btn btn-outline-success mb-2" onClick={() => onVerDetalle(p)}>Ver detalle de {p.nombre}</button>}
                     <button
                       className="btn btn-success mt-auto"
@@ -67,6 +74,7 @@ export default function LandingPage({ cambiarVista, productos = [], agregarAlCar
                     >
                       Añadir al carrito
                     </button>
+                    </div>
                   </div>
                 </div>
               ))}

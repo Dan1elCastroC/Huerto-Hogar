@@ -1,6 +1,8 @@
 // src/components/Login.jsx
 import React, { useState } from 'react';
 import { authService } from '../services/authService';
+import { ConexionError } from '../services/httpClient';
+import { CUENTAS_RAPIDAS } from './cuentasRapidas';
 
 export default function Login({ onLoginSuccess, cambiarVista }) {
   const [correo, setCorreo] = useState('');
@@ -8,14 +10,13 @@ export default function Login({ onLoginSuccess, cambiarVista }) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const iniciarSesion = async (credenciales) => {
     setError(null);
     setLoading(true);
 
     try {
       // Conexión real con el backend
-      const data = await authService.login({ correo, contrasena });
+      const data = await authService.login(credenciales);
       let profile = {};
       try {
         profile = await authService.getPerfil(data.token);
@@ -23,11 +24,24 @@ export default function Login({ onLoginSuccess, cambiarVista }) {
         // El inicio de sesión sigue siendo válido aunque el perfil no esté disponible.
       }
       onLoginSuccess({ ...data, ...profile }); // Guarda token y datos de usuario
-    } catch {
-      setError("Usuario o contraseña incorrectos. Intente nuevamente.");
+    } catch (err) {
+      setError(err instanceof ConexionError
+        ? err.message
+        : "Usuario o contraseña incorrectos. Intente nuevamente.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    return iniciarSesion({ correo, contrasena });
+  };
+
+  const accesoRapido = (cuenta) => {
+    setCorreo(cuenta.correo);
+    setContrasena(cuenta.contrasena);
+    return iniciarSesion({ correo: cuenta.correo, contrasena: cuenta.contrasena });
   };
 
   return (
@@ -67,6 +81,21 @@ export default function Login({ onLoginSuccess, cambiarVista }) {
                 {loading ? "Conectando..." : "Ingresar"}
               </button>
             </form>
+            <div className="quick-login" role="group" aria-label="Accesos rápidos de demostración">
+              <span className="quick-login__label">Acceso rápido</span>
+              {CUENTAS_RAPIDAS.map((cuenta) => (
+                <button
+                  key={cuenta.rol}
+                  type="button"
+                  className="quick-login__btn"
+                  title={`Entrar como ${cuenta.rol.toLowerCase()} (${cuenta.correo})`}
+                  disabled={loading}
+                  onClick={() => accesoRapido(cuenta)}
+                >
+                  {cuenta.rol}
+                </button>
+              ))}
+            </div>
             <p className="text-center text-muted mt-3 mb-0">
               ¿Aún no tienes cuenta?{' '}
               <button type="button" className="btn btn-link p-0 align-baseline" onClick={() => cambiarVista('registro')}>
