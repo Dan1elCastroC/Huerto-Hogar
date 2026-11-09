@@ -1,5 +1,8 @@
 package com.huerto.hogar.region;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,11 +36,21 @@ public class RegionesController {
         DATOS.put("Magallanes",                  List.of("Punta Arenas","Natales","Torres del Paine","Porvenir"));
     }
 
+    @Operation(summary = "Listar regiones",
+            description = "Devuelve los nombres de las regiones de Chile. Endpoint público.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Listado de regiones")
+    })
     @GetMapping
     public ResponseEntity<List<String>> listarRegiones() {
         return ResponseEntity.ok(new ArrayList<>(DATOS.keySet()));
     }
 
+    @Operation(summary = "Listar comunas de una región",
+            description = "Devuelve las comunas de la región indicada (sin distinguir mayúsculas). Si la región no existe devuelve una lista vacía.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Listado de comunas (vacío si la región no existe)")
+    })
     @GetMapping("/{region}/comunas")
     public ResponseEntity<List<String>> comunas(@PathVariable String region) {
         List<String> comunas = DATOS.entrySet().stream()
@@ -46,6 +59,11 @@ public class RegionesController {
         return ResponseEntity.ok(comunas);
     }
 
+    @Operation(summary = "Listar regiones con sus comunas",
+            description = "Devuelve un mapa con todas las regiones y sus comunas. Endpoint público.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Mapa región a comunas")
+    })
     @GetMapping("/todas")
     public ResponseEntity<Map<String, List<String>>> todas() {
         return ResponseEntity.ok(DATOS);

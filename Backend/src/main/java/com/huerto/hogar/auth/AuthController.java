@@ -4,6 +4,11 @@ import com.huerto.hogar.exception.ReglaDeNegocioException;
 import com.huerto.hogar.security.jwt.JwtUtil;
 import com.huerto.hogar.usuario.entity.UsuarioEntity;
 import com.huerto.hogar.usuario.repository.UsuarioRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +29,13 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    @Operation(summary = "Iniciar sesión",
+            description = "Valida correo y contraseña y entrega un token JWT con el rol del usuario. Endpoint público.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Inicio de sesión correcto, devuelve token JWT",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = LoginResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos, credenciales incorrectas o cuenta desactivada")
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest req) {
         try {

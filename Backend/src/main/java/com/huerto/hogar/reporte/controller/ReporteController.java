@@ -7,6 +7,14 @@ import com.huerto.hogar.producto.dto.ProductoResponse;
 import com.huerto.hogar.producto.entity.ProductoEntity;
 import com.huerto.hogar.producto.repository.ProductoRepository;
 import com.huerto.hogar.usuario.repository.UsuarioRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import com.huerto.hogar.reporte.dto.ProductoVendidoDto;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +40,15 @@ public class ReporteController {
     private final PedidoRepository pedidoRepo;
     private final DetallePedidoRepository detalleRepo;
 
+    @Operation(summary = "Resumen general",
+            description = "Totales de usuarios, productos activos y pedidos, más cantidad de pedidos por estado. Solo administrador o vendedor.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Resumen general"),
+        @ApiResponse(responseCode = "400", description = "Error al generar el reporte"),
+        @ApiResponse(responseCode = "401", description = "No autenticado: falta el token JWT o es inválido"),
+        @ApiResponse(responseCode = "403", description = "Sin permisos: se requiere rol ADMINISTRADOR o VENDEDOR")
+    })
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/resumen")
     public ResponseEntity<?> resumen() {
         try {
@@ -44,6 +61,16 @@ public class ReporteController {
         } catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }
     }
 
+    @Operation(summary = "Reporte de stock crítico",
+            description = "Productos con stock en o bajo el nivel crítico. Solo administrador o vendedor.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Productos con stock crítico",
+            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ProductoResponse.class)))),
+        @ApiResponse(responseCode = "400", description = "Error al generar el reporte"),
+        @ApiResponse(responseCode = "401", description = "No autenticado: falta el token JWT o es inválido"),
+        @ApiResponse(responseCode = "403", description = "Sin permisos: se requiere rol ADMINISTRADOR o VENDEDOR")
+    })
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/stock-critico")
     public ResponseEntity<?> stockCritico() {
         try {
@@ -52,12 +79,31 @@ public class ReporteController {
         } catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }
     }
 
+    @Operation(summary = "Pedidos por estado",
+            description = "Cantidad de pedidos por cada estado (0 si no hay). Solo administrador o vendedor.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Conteo de pedidos por estado"),
+        @ApiResponse(responseCode = "400", description = "Error al generar el reporte"),
+        @ApiResponse(responseCode = "401", description = "No autenticado: falta el token JWT o es inválido"),
+        @ApiResponse(responseCode = "403", description = "Sin permisos: se requiere rol ADMINISTRADOR o VENDEDOR")
+    })
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/pedidos-por-estado")
     public ResponseEntity<?> pedidosPorEstado() {
         try { return ResponseEntity.ok(contarPorEstado()); }
         catch (Exception e) { return ResponseEntity.status(400).body(e.getMessage()); }
     }
 
+    @Operation(summary = "Productos más vendidos",
+            description = "Los 5 productos con más unidades vendidas, excluyendo pedidos cancelados. Solo administrador o vendedor.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Ranking de productos más vendidos",
+            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ProductoVendidoDto.class)))),
+        @ApiResponse(responseCode = "400", description = "Error al generar el reporte"),
+        @ApiResponse(responseCode = "401", description = "No autenticado: falta el token JWT o es inválido"),
+        @ApiResponse(responseCode = "403", description = "Sin permisos: se requiere rol ADMINISTRADOR o VENDEDOR")
+    })
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/productos-mas-vendidos")
     public ResponseEntity<?> productosMasVendidos() {
         try {
