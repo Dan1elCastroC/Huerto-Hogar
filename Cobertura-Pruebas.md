@@ -3,7 +3,7 @@
 Actualización documental: **29 de octubre de 2026**.
 
 La cobertura funcional describe comportamientos ejercitados. Una función implementada no se considera probada sin evidencia; aprobar casos tampoco determina la cobertura de líneas o ramas.
-Se conserva Vitest/Vite, conforme a la excepción del usuario a Jasmine/Karma de la pauta.
+Vitest/Vite es la herramienta de pruebas oficial del proyecto.
 
 - [ERS principal en Word](ERS-V2-Huerto-Hogar.docx), conforme a la plantilla solicitada.
 - [Resumen de ERS V2](ERS-V2-Huerto-Hogar.md).
@@ -13,7 +13,7 @@ Se conserva Vitest/Vite, conforme a la excepción del usuario a Jasmine/Karma de
 ## Resultados registrados
 
 - **Arranque integrado, 29/10/2026:** `iniciar-demo.ps1` inició XAMPP (Apache/MySQL), backend y frontend; aprobaron 65 pruebas backend, 60 unitarias frontend y 2 HTTP reales. Los registros están en `%TEMP%\HuertoHogar-demo\<ejecución>`.
-- **Verificación 09/11/2026:** backend 221 pruebas aprobadas (`mvn clean verify`, JaCoCo 84,5 % líneas); frontend 219 pruebas aisladas aprobadas (93,9 % líneas); 18 pruebas de integración HTTP reales aprobadas contra la API en ejecución (H2 en memoria). Swagger documenta 51 operaciones y 38 rutas, verificadas por `SwaggerOpenApiTest`.
+- **Verificación 09/11/2026:** backend 221 pruebas aprobadas (`mvn clean verify`, JaCoCo 84,5 % líneas); frontend 221 pruebas aisladas aprobadas (93,9 % líneas); 18 pruebas de integración HTTP reales aprobadas contra la API en ejecución (H2 en memoria). Swagger documenta 51 operaciones y 38 rutas, verificadas por `SwaggerOpenApiTest`.
 - **Backend:** 65 pruebas aprobadas tanto el 26/10 como en la verificación integrada del 29/10/2026.
 - **Frontend aislado, 29/10/2026:** 60 pruebas aprobadas en 17 suites con el backend apagado; utilizan mocks.
 - **Integración HTTP:** 2 pruebas aprobadas con backend activo el 26/10 y el 29/10/2026; las mismas 2 fallaron el 29/10 con `ECONNREFUSED` al estar apagado.
@@ -79,7 +79,7 @@ El [pom.xml](Backend/pom.xml) configura **JaCoCo 0.8.15**, con instrumentación 
 Medición con `mvn clean verify` (221 pruebas, 0 fallos): **84,5 % de líneas (639/756) y 66,0 % de ramas (95/144)**. Controladores, seguridad y utilidades: 100 % de líneas. Pendiente: servicios `usuario` (38 %), `cupon` (54 %), `categoria` (60 %), `blog` (68 %) y `producto` (70 %).
 Para generarlo: `mvn clean verify` desde `Backend`. Salidas esperadas: `target/site/jacoco/index.html` y `target/site/jacoco/jacoco.xml`.
 
-El [frontend](Frontend/package.json) mide cobertura con `npm run test:coverage` (Vitest + `@vitest/coverage-v8`): **93,9 % de líneas, 91,6 % de sentencias, 88,5 % de ramas, 90,5 % de funciones** con 219 pruebas aisladas en 25 archivos. Las 18 pruebas de `npm run test:integration` verifican la conexión real con el backend y no se incluyen en ese porcentaje.
+El [frontend](Frontend/package.json) mide cobertura con `npm run test:coverage` (Vitest + `@vitest/coverage-v8`): **93,9 % de líneas, 91,6 % de sentencias, 88,5 % de ramas, 90,5 % de funciones** con 221 pruebas aisladas en 25 archivos. Las 18 pruebas de `npm run test:integration` verifican la conexión real con el backend y no se incluyen en ese porcentaje.
 La cantidad de casos aprobados y los 84 criterios acreditados no se convierten en porcentajes de líneas, ramas o instrucciones.
 
 ## Límites de la evidencia

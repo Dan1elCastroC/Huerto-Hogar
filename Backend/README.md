@@ -69,7 +69,7 @@ mvn clean verify
 ```
 
 `test` ejecuta las pruebas; `package` también genera `target/hogar-0.0.1-SNAPSHOT.jar`.
-Hay 65 métodos `@Test` en 13 clases de [pruebas Java](src/test/java/com/huerto/hogar).
+Hay 221 pruebas en 24 clases de [pruebas Java](src/test/java/com/huerto/hogar).
 Usan mocks y H2 mediante el [perfil test](src/test/resources/application-test.properties); no necesitan iniciar la API ni MySQL/XAMPP.
 El número de casos no es un porcentaje de cobertura.
 
@@ -77,7 +77,7 @@ JaCoCo **0.8.15** está configurado en `pom.xml`; `mvn clean verify` genera el i
 Última medición (`mvn clean verify`, 221 pruebas): **84,5 % de líneas (639/756) y 66,0 % de ramas (95/144)**. Los controladores, la seguridad y las utilidades están en 100 % de líneas; los servicios son los paquetes más bajos (`usuario` 38 %, `cupon` 54 %, `categoria` 60 %, `blog` 68 %, `producto` 70 %).
 HTML esperado: `target/site/jacoco/index.html`; XML: `target/site/jacoco/jacoco.xml`. Cobertura total.
 
-Desde `Frontend`, `npm run test:integration` ejecuta dos consultas HTTP reales; requiere la API activa en el puerto 8087 y su conexión a MySQL.
+Desde `Frontend`, `npm run test:integration` ejecuta 18 pruebas HTTP reales; requiere la API activa en el puerto 8087 y su conexión a MySQL.
 Con el backend apagado se espera un fallo de conexión; las pruebas aisladas del backend siguen siendo independientes.
 
 ## Explicación para la presentación
@@ -93,4 +93,4 @@ Desde `src/main/java/com/huerto/hogar`, seguir una operación a través de estas
 5. **Usuario y boleta:** `usuario/service/UsuarioService.java` conserva la contraseña si se omite al editar. `AdminUsuariosIntegrationTest.java` comprueba el hash y los obligatorios; `pedido/controller/PedidoController.java` expone historial/detalle.
 6. **Datos y reportes:** `config/DataInitializer.java` y `DatosIniciales.java` cargan registros faltantes. Los módulos `categoria`, `blog`, `contacto` y `reporte` atienden sus vistas administrativas. `application.properties` define conexión, puerto y CORS.
 
-Los tests fuente están en `src/test/java/com/huerto/hogar`; sus resultados no demuestran por sí solos que el proceso API esté activo. Para eso se ejecutan las dos consultas HTTP del frontend. Mostrar Swagger con el servidor encendido y explicar que JaCoCo es una medición aparte del número de tests aprobados.
+Los tests fuente están en `src/test/java/com/huerto/hogar`; sus resultados no demuestran por sí solos que el proceso API esté activo. Para eso se ejecutan las 18 pruebas HTTP de integración del frontend. Mostrar Swagger con el servidor encendido y explicar que JaCoCo es una medición aparte del número de tests aprobados.

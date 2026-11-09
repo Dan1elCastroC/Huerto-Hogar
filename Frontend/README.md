@@ -98,7 +98,7 @@ El backend crea estas cuentas al iniciar si no existen:
 npm run dev       # Inicia el servidor de desarrollo
 npm run build     # Compila el proyecto en dist/
 npm run lint      # Revisa el código con ESLint
-npm test          # Ejecuta los 56 tests unitarios (sin backend)
+npm test          # Ejecuta los 221 tests unitarios (sin backend)
 npm run test:integration  # 18 tests HTTP reales front ↔ back (requiere backend activo)
 npm run test:coverage     # Pruebas unitarias con cobertura V8 (93,9 % de líneas)
 ```
@@ -107,29 +107,37 @@ npm run test:coverage     # Pruebas unitarias con cobertura V8 (93,9 % de línea
 
 ## Tests
 
-El proyecto cuenta con **56 tests** ejecutados con Vitest y Testing Library. Todos pasan sin necesidad de backend activo gracias a mocks.
+El proyecto cuenta con **221 tests** en 25 archivos ejecutados con Vitest y Testing Library. Todos pasan sin necesidad de backend activo gracias a mocks.
 
 ### Distribución por archivo
 
 | Archivo | Tests | Qué cubre |
 |---|---|---|
-| `Carrito.test.jsx` | 12 | Checkout, cupones, cantidades, errores de pago |
-| `App.test.jsx` | 7 | Navegación, categorías, ofertas, logout |
-| `cartUtils.test.js` | 5 | Lógica local del carrito (agregar, actualizar, eliminar) |
+| `servicios.test.js` | 61 | Cada método de los 11 servicios: URL, método, Bearer, cuerpo y ConexionError |
+| `paginas.test.jsx` | 33 | 14 páginas: About, Blog, Cart, Catalog, Home, Login, Register, Categories, Ofertas, Contacto, Pedidos, Perfil |
+| `App.test.jsx` | 22 | Navegación, carrito, persistencia, sincronización con la API, checkout, logout |
+| `Carrito.test.jsx` | 20 | Checkout, cupones, cantidades, errores de pago |
+| `Navbar.test.jsx` | 19 | Menú por rol, logout, badge del carrito, toggle móvil |
+| `CouponManager.test.jsx` | 7 | Cupones en admin |
+| `Login.test.jsx` | 7 | Login, accesos rápidos, errores y sin conexión |
+| `BlogManager.test.jsx` | 6 | Noticias en admin |
+| `LandingPage.test.jsx` | 5 | Inicio y productos destacados |
+| `cartUtils.test.js` | 5 | Lógica local del carrito |
 | `AdminPage.test.jsx` | 5 | Dashboard, indicadores, sidebar, navegación admin |
 | `api.test.js` | 4 | Servicios HTTP con fetch simulado |
-| `ProductList.test.jsx` | 4 | Renderizado de catálogo, búsqueda y filtros |
-| `UserManager.test.jsx` | 3 | Crear, editar y historial de compras de usuario |
-| `Registro.test.jsx` | 2 | Formulario de registro y validación |
+| `ProductList.test.jsx` | 4 | Catálogo, búsqueda y filtros |
+| `ContactManager.test.jsx` | 4 | Contactos en admin |
+| `UserManager.test.jsx` | 3 | Crear, editar y historial de usuarios |
+| `Registro.test.jsx` | 2 | Registro y validación |
 | `PasswordForm.test.jsx` | 2 | Cambio de contraseña |
-| `OrderList.test.jsx` | 2 | Historial de pedidos del cliente |
+| `OrderList.test.jsx` | 2 | Historial de pedidos |
 | `MainPage.test.jsx` | 2 | Gestión de productos en admin |
-| `Login.test.jsx` | 2 | Inicio de sesión y manejo de errores |
 | `BlogList.test.jsx` | 2 | Listado de noticias |
+| `ReportManager.test.jsx` | 2 | Reportes en admin |
 | `ProfileForm.test.jsx` | 1 | Edición de perfil |
-| `OrderManager.test.jsx` | 1 | Boleta en el panel admin |
+| `OrderManager.test.jsx` | 1 | Boleta en admin |
 | `ContactoForm.test.jsx` | 1 | Formulario de contacto |
-| `CategoryManager.test.jsx` | 1 | Gestión de categorías en admin |
+| `CategoryManager.test.jsx` | 1 | Categorías en admin |
 
 ### Tests de integración (requieren backend)
 
@@ -170,4 +178,4 @@ Frontend/
 
 - Confirmar una compra requiere **sesión activa y backend disponible**. No existe pasarela de pago real.
 - Las pruebas automatizadas no validan el diseño responsive visualmente; eso se verifica redimensionando el navegador.
-- Cobertura de código: `npm run test:coverage` (Vitest + V8) genera `coverage/index.html`. Última medición: 93,9 % de líneas, 91,6 % de sentencias, 88,5 % de ramas, con 219 pruebas aisladas.
+- Cobertura de código: `npm run test:coverage` (Vitest + V8) genera `coverage/index.html`. Última medición: 93,9 % de líneas, 91,6 % de sentencias, 88,5 % de ramas, con 221 pruebas aisladas.

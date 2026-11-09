@@ -91,7 +91,7 @@ npm run lint
 npm run build
 ```
 
-- `npm test`: 219 pruebas unitarias y de componentes con Vitest (25 archivos), con servicios simulados. Pasan sin backend.
+- `npm test`: 221 pruebas unitarias y de componentes con Vitest (25 archivos), con servicios simulados. Pasan sin backend.
 - `npm run test:coverage`: las mismas pruebas con cobertura V8 (reporte en `Frontend/coverage/`). Última medición: **93,9 % de líneas, 91,6 % de sentencias, 88,5 % de ramas**.
 - `npm run test:integration`: 18 pruebas de conexión REAL front ↔ back que usan los servicios de la interfaz sin mocks: login de las tres cuentas, perfil, registro, catálogo, búsqueda, cupones, contacto, permisos por rol (403), CRUD de productos, carrito → cupón → checkout → historial con descuento de stock. Requieren la API activa con los datos iniciales. Con la API apagada fallan con un mensaje claro.
   - Sin MySQL: desde `Backend`, `mvn spring-boot:run -Dspring-boot.run.useTestClasspath=true "-Dspring-boot.run.jvmArguments=-Dspring.datasource.url=jdbc:h2:mem:itdb -Dspring.datasource.driver-class-name=org.h2.Driver -Dspring.datasource.username=sa -Dspring.datasource.password= -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect -Dspring.jpa.hibernate.ddl-auto=create-drop"` levanta la API real con una base H2 en memoria.
@@ -146,7 +146,7 @@ La [cobertura funcional](Cobertura-Pruebas.md) relaciona comportamientos y casos
 
 ### Minutos 12 a 15 Pruebas ERS y cobertura
 
-13. Mostrar los logs de las tres ejecuciones. Explicar: los tests aislados usan mocks/H2 y no necesitan un backend HTTP; las dos consultas de integración sí lo necesitan. Como demostración separada ejecutar `Frontend/demo-fallo-integracion.ps1`: se esperan dos fallos por conexión y restauración de la URL.
+13. Mostrar los logs de las tres ejecuciones. Explicar: los tests aislados usan mocks/H2 y no necesitan un backend HTTP; las 18 pruebas de integración sí lo necesitan. Como demostración separada ejecutar `Frontend/demo-fallo-integracion.ps1`: se espera el error «Backend no disponible» y la restauración de la URL.
 14. Abrir los tests de catálogo, carrito/cupones y usuarios; mostrar el archivo/línea en `Criterios-y-tests.md`. Abrir la planilla: rojo significa criterio cumplido y probado, no todos los criterios de una historia.
 15. Mostrar el ERS Word y `Cobertura-Pruebas.md`. La cobertura funcional no es porcentaje de código. JaCoCo requiere `mvn clean verify`; el frontend todavía no tiene un proveedor de cobertura de líneas/ramas. Cerrar con los límites y entregables pendientes, y reservar otros 5 minutos para preguntas.
 
