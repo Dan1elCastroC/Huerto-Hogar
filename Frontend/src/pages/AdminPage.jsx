@@ -58,7 +58,7 @@ export default function AdminPage({ productos, setProductos, categorias, setCate
   const renderSection = () => {
     const props = { token };
     switch (section) {
-      case 'inicio':    return <Dashboard resumen={resumen} error={error} user={user} onNavigate={navigate} />;
+      case 'inicio':    return <Dashboard resumen={resumen} error={error} onNavigate={navigate} />;
       case 'categorias':return <CategoryManager {...props} categorias={categorias} setCategorias={setCategorias} />;
       case 'cupones':   return <CouponManager {...props} />;
       case 'blogs':     return <BlogManager {...props} />;
@@ -103,7 +103,7 @@ export default function AdminPage({ productos, setProductos, categorias, setCate
               onClick={() => navigate(id)}
               style={{
                 display: 'flex', alignItems: 'center', gap: 10,
-                width: '100%', border: 'none', background: 'none',
+                width: '100%', border: 'none',
                 color: section === id ? '#fff' : '#8b96a8',
                 padding: '10px 20px',
                 fontSize: 14,
@@ -167,7 +167,7 @@ export default function AdminPage({ productos, setProductos, categorias, setCate
 }
 
 /* ──────────────── DASHBOARD COMPONENT ──────────────── */
-function Dashboard({ resumen, error, user, onNavigate }) {
+function Dashboard({ resumen, error, onNavigate }) {
   const statCards = [
     { label: 'Compras',   value: resumen?.totalPedidos   ?? '—', sub: 'Probabilidad de aumento: 20%', color: '#4361ee', icon: '🛒' },
     { label: 'Productos', value: resumen?.totalProductos ?? '—', sub: 'Inventario actual: 500',        color: '#2ec4b6', icon: '📦' },
