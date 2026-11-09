@@ -2,6 +2,15 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8087';
 
 export const API_PATH = `${API_BASE_URL}/api`;
 
+export const MENSAJE_SIN_CONEXION = 'No se pudo conectar con el servidor. Comprueba que el backend esté activo e inténtalo de nuevo.';
+
+export class ConexionError extends Error {
+  constructor() {
+    super(MENSAJE_SIN_CONEXION);
+    this.name = 'ConexionError';
+  }
+}
+
 export const getHeaders = (token, extraHeaders = {}) => ({
   'Content-Type': 'application/json',
   ...extraHeaders,
@@ -36,9 +45,15 @@ export const parseResponse = async (response) => {
 
 export const request = async (path, options = {}) => {
   const { token, headers, ...fetchOptions } = options;
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...fetchOptions,
-    headers: getHeaders(token, headers),
-  });
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      ...fetchOptions,
+      headers: getHeaders(token, headers),
+    });
+  } catch {
+    // fetch solo rechaza cuando no hay conexión con el servidor (API apagada, red caída o CORS).
+    throw new ConexionError();
+  }
   return parseResponse(response);
 };

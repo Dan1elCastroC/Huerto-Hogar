@@ -39,7 +39,7 @@ describe('productoService', () => {
   it('reports network failures instead of returning invented products', async () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Failed to fetch')));
 
-    await expect(productoService.getAll()).rejects.toThrow('Failed to fetch');
+    await expect(productoService.getAll()).rejects.toThrow('No se pudo conectar con el servidor');
   });
 
   it('reports backend errors instead of returning invented products', async () => {
