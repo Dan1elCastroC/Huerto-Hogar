@@ -44,6 +44,48 @@ class CuponControllerTest {
         }
     }
 
+    @Test void findAllOk() {
+        when(service.findAll()).thenReturn(java.util.List.of(new CuponEntity()));
+        assertEquals(200, controller.findAll().getStatusCodeValue());
+    }
+
+    @Test void findAllConErrorRetorna400() {
+        when(service.findAll()).thenThrow(new RuntimeException("mal"));
+        assertEquals(400, controller.findAll().getStatusCodeValue());
+    }
+
+    @Test void validarCuponExistenteRetorna200() {
+        when(service.findByCodigo("DESC10")).thenReturn(new CuponEntity());
+        assertEquals(200, controller.validar("DESC10").getStatusCodeValue());
+    }
+
+    @Test void validarCuponInvalidoRetorna400ConMensaje() {
+        when(service.findByCodigo("X")).thenThrow(new RuntimeException("Cupón expirado"));
+        var r = controller.validar("X");
+        assertEquals(400, r.getStatusCodeValue());
+        assertEquals("Cupón expirado", r.getBody());
+    }
+
+    @Test void saveConFechaValidaLaParsea() {
+        CuponDto dto = dto(BigDecimal.TEN);
+        dto.setFechaExpiracion("2030-01-31");
+        when(service.save(any(CuponEntity.class))).thenAnswer(inv -> inv.getArgument(0));
+        var r = controller.save(dto);
+        assertEquals(java.time.LocalDate.of(2030, 1, 31), ((CuponEntity) r.getBody()).getFechaExpiracion());
+    }
+
+    @Test void saveConFechaMalFormadaRetorna400() {
+        CuponDto dto = dto(BigDecimal.TEN);
+        dto.setFechaExpiracion("31/01/2030");
+        assertEquals(400, controller.save(dto).getStatusCodeValue());
+    }
+
+    @Test void deleteOkYDeleteInexistente() {
+        assertEquals(200, controller.delete(1L).getStatusCodeValue());
+        org.mockito.Mockito.doThrow(new RuntimeException("no")).when(service).deleteById(2L);
+        assertEquals(404, controller.delete(2L).getStatusCodeValue());
+    }
+
     private CuponDto dto(BigDecimal porcentaje) {
         CuponDto dto = new CuponDto();
         dto.setCodigo("DESC10");
