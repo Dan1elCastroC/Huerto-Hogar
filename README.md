@@ -53,7 +53,7 @@ Para cambiar el destino de la API, configurar `VITE_API_URL` en `Frontend/.env.l
 ## Funcionalidades
 
 - Tienda pública: inicio, nosotros, catálogo, búsqueda, filtros por categoría, detalles de productos, noticias, ofertas y contacto.
-- Cuenta: registro, inicio de sesión, nombre de la cuenta, perfil, cambio de contraseña, cierre de sesión e historial de pedidos.
+- Cuenta: registro, inicio de sesión, nombre de la cuenta, perfil, cambio de contraseña, cierre de sesión, cierre automático al expirar el token (401 → vuelta al login con aviso) e historial de pedidos.
 - Carrito: cantidades, eliminación, persistencia local y sincronización de operaciones con la API para usuarios autenticados.
 - Checkout: dirección, entrega próxima o programada, validación de cupones, resumen y registro del pedido con descuento de stock. No se integra una pasarela bancaria.
 - Administración: dashboard, productos, stock crítico, categorías, usuarios, pedidos y boletas, cupones, noticias, contactos y reportes.
@@ -91,8 +91,8 @@ npm run lint
 npm run build
 ```
 
-- `npm test`: 221 pruebas unitarias y de componentes con Vitest (25 archivos), con servicios simulados. Pasan sin backend.
-- `npm run test:coverage`: las mismas pruebas con cobertura V8 (reporte en `Frontend/coverage/`). Última medición: **93,9 % de líneas, 91,6 % de sentencias, 88,5 % de ramas**.
+- `npm test`: 225 pruebas unitarias y de componentes con Vitest (25 archivos), con servicios simulados. Pasan sin backend.
+- `npm run test:coverage`: las mismas pruebas con cobertura V8 (reporte en `Frontend/coverage/`). Última medición: **94,0 % de líneas, 91,8 % de sentencias, 88,6 % de ramas**.
 - `npm run test:integration`: 18 pruebas de conexión REAL front ↔ back que usan los servicios de la interfaz sin mocks: login de las tres cuentas, perfil, registro, catálogo, búsqueda, cupones, contacto, permisos por rol (403), CRUD de productos, carrito → cupón → checkout → historial con descuento de stock. Requieren la API activa con los datos iniciales. Con la API apagada fallan con un mensaje claro.
   - Sin MySQL: desde `Backend`, `mvn spring-boot:run -Dspring-boot.run.useTestClasspath=true "-Dspring-boot.run.jvmArguments=-Dspring.datasource.url=jdbc:h2:mem:itdb -Dspring.datasource.driver-class-name=org.h2.Driver -Dspring.datasource.username=sa -Dspring.datasource.password= -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect -Dspring.jpa.hibernate.ddl-auto=create-drop"` levanta la API real con una base H2 en memoria.
 - `npm run lint` revisa el código y `npm run build` genera `Frontend/dist`.
@@ -107,7 +107,7 @@ La demostración debe terminar con el error «Backend no disponible» (18 prueba
 
 Los tests están en [Backend/src/test/java](Backend/src/test/java), [Frontend/src/App.test.jsx](Frontend/src/App.test.jsx), [Frontend/src/components](Frontend/src/components), [Frontend/src/pages/AdminPage.test.jsx](Frontend/src/pages/AdminPage.test.jsx) y [Frontend/src/services](Frontend/src/services). La evidencia por criterio, con archivos y líneas, está en [Criterios y tests](Criterios-y-tests.md).
 
-La [cobertura funcional](Cobertura-Pruebas.md) relaciona comportamientos y casos probados. El número de pruebas y la fracción de criterios de aceptación marcados en Excel no equivalen a cobertura del código. Cobertura de código medida: frontend 93,9 % de líneas (`npm run test:coverage`); backend **84,5 % de líneas y 66,0 % de ramas** con JaCoCo (`mvn clean verify` → [reporte](Backend/target/site/jacoco/index.html)), 221 pruebas JUnit/Mockito. Los servicios `usuario`, `cupon`, `categoria`, `blog` y `producto` son los paquetes más bajos del backend.
+La [cobertura funcional](Cobertura-Pruebas.md) relaciona comportamientos y casos probados. El número de pruebas y la fracción de criterios de aceptación marcados en Excel no equivalen a cobertura del código. Cobertura de código medida: frontend 94,0 % de líneas (`npm run test:coverage`); backend **88,8 % de líneas y 73,9 % de ramas** con JaCoCo (`mvn clean verify` → [reporte](Backend/target/site/jacoco/index.html)), 261 pruebas JUnit/Mockito. Los servicios `usuario`, `cupon`, `categoria`, `blog` y `producto` son los paquetes más bajos del backend.
 
 ## Documentación del proyecto
 
@@ -151,3 +151,13 @@ La [cobertura funcional](Cobertura-Pruebas.md) relaciona comportamientos y casos
 15. Mostrar el ERS Word y `Cobertura-Pruebas.md`. La cobertura funcional no es porcentaje de código. JaCoCo requiere `mvn clean verify`; el frontend todavía no tiene un proveedor de cobertura de líneas/ramas. Cerrar con los límites y entregables pendientes, y reservar otros 5 minutos para preguntas.
 
 Los servicios quedan activos al terminar el script. Para cerrar la demo, usar el panel XAMPP para Apache/MySQL y los PID de `servicios.json` para identificar backend/frontend en el Administrador de tareas. Si Windows no informa el PID, se registra vacío; comprobar el proceso por su ruta antes de cerrarlo.
+
+## Documentación de la API (Anexo 3)
+
+La carpeta [Documentacion](Documentacion) contiene la documentación de endpoints pedida en la Evaluación Parcial 3:
+
+- [Anexo3-Documentacion-APIs-Huerto-Hogar.xlsx](Documentacion/Anexo3-Documentacion-APIs-Huerto-Hogar.xlsx): una fila por endpoint (54 operaciones en 39 rutas) con método, ruta, descripción, datos de entrada, respuestas, si es pública o privada, si requiere autenticación, roles permitidos y observaciones.
+- [openapi.json](Documentacion/openapi.json): contrato OpenAPI 3 exportado de `http://localhost:8087/api-docs` con la API en ejecución (12/11/2026).
+
+Roles: los endpoints públicos son el catálogo (GET), el formulario de contacto, la validación de cupones y `/api/auth/**`; carrito, checkout, mis pedidos y perfil exigen sesión; reportes y consulta de pedidos, ADMINISTRADOR o VENDEDOR; los mantenedores y `/api/admin/**`, solo ADMINISTRADOR. Los rechazos devuelven 401 (sin sesión o token vencido) o 403 (rol insuficiente) en JSON.
+Para regenerar el JSON: iniciar el backend y descargar `/api-docs`. El Excel sale de ese JSON más las reglas de `SecurityConfig`.

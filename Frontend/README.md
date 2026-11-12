@@ -48,7 +48,7 @@ Reinicia Vite después de modificar esa variable. Si el backend está apagado, e
 - **Contacto** — formulario de contacto.
 
 ### Cuenta
-- Registro e inicio de sesión con JWT.
+- Registro e inicio de sesión con JWT. Si el backend responde 401 a una petición con token, `httpClient` emite el evento `sesion-expirada` y `App` cierra la sesión y vuelve al login con un aviso; un 403 (falta de rol) no cierra la sesión.
 - Perfil editable y cambio de contraseña.
 - Historial de pedidos con detalle de estado.
 
@@ -98,24 +98,24 @@ El backend crea estas cuentas al iniciar si no existen:
 npm run dev       # Inicia el servidor de desarrollo
 npm run build     # Compila el proyecto en dist/
 npm run lint      # Revisa el código con ESLint
-npm test          # Ejecuta los 221 tests unitarios (sin backend)
+npm test          # Ejecuta los 225 tests unitarios (sin backend)
 npm run test:integration  # 18 tests HTTP reales front ↔ back (requiere backend activo)
-npm run test:coverage     # Pruebas unitarias con cobertura V8 (93,9 % de líneas)
+npm run test:coverage     # Pruebas unitarias con cobertura V8 (94,0 % de líneas)
 ```
 
 ---
 
 ## Tests
 
-El proyecto cuenta con **221 tests** en 25 archivos ejecutados con Vitest y Testing Library. Todos pasan sin necesidad de backend activo gracias a mocks.
+El proyecto cuenta con **225 tests** en 25 archivos ejecutados con Vitest y Testing Library. Todos pasan sin necesidad de backend activo gracias a mocks.
 
 ### Distribución por archivo
 
 | Archivo | Tests | Qué cubre |
 |---|---|---|
-| `servicios.test.js` | 61 | Cada método de los 11 servicios: URL, método, Bearer, cuerpo y ConexionError |
+| `servicios.test.js` | 64 | Cada método de los 11 servicios: URL, método, Bearer, cuerpo, ConexionError y evento `sesion-expirada` ante 401 |
 | `paginas.test.jsx` | 33 | 14 páginas: About, Blog, Cart, Catalog, Home, Login, Register, Categories, Ofertas, Contacto, Pedidos, Perfil |
-| `App.test.jsx` | 22 | Navegación, carrito, persistencia, sincronización con la API, checkout, logout |
+| `App.test.jsx` | 23 | Navegación, carrito, persistencia, sincronización con la API, checkout, logout, sesión expirada |
 | `Carrito.test.jsx` | 20 | Checkout, cupones, cantidades, errores de pago |
 | `Navbar.test.jsx` | 19 | Menú por rol, logout, badge del carrito, toggle móvil |
 | `CouponManager.test.jsx` | 7 | Cupones en admin |
@@ -178,4 +178,4 @@ Frontend/
 
 - Confirmar una compra requiere **sesión activa y backend disponible**. No existe pasarela de pago real.
 - Las pruebas automatizadas no validan el diseño responsive visualmente; eso se verifica redimensionando el navegador.
-- Cobertura de código: `npm run test:coverage` (Vitest + V8) genera `coverage/index.html`. Última medición: 93,9 % de líneas, 91,6 % de sentencias, 88,5 % de ramas, con 221 pruebas aisladas.
+- Cobertura de código: `npm run test:coverage` (Vitest + V8) genera `coverage/index.html`. Última medición: 94,0 % de líneas, 91,8 % de sentencias, 88,6 % de ramas, con 225 pruebas aisladas.

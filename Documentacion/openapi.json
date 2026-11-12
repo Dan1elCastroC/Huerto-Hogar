@@ -1,0 +1,4118 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Huerto Hogar API",
+    "description": "API REST Huerto Hogar — Spring Boot 2.7 + JWT",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8087",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/v1/entities/productos/{id}": {
+      "get": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Obtener producto por ID",
+        "description": "Devuelve el detalle de un producto. Endpoint público.",
+        "operationId": "findById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Producto no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Producto encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductoResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Actualizar producto",
+        "description": "Modifica los datos de un producto. Solo administradores.",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Producto actualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos o producto inexistente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Eliminar producto",
+        "description": "Elimina (desactiva) un producto. Solo administradores.",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Producto eliminado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Producto no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/categorias/{id}": {
+      "get": {
+        "tags": [
+          "Categorías"
+        ],
+        "summary": "Obtener categoría por ID",
+        "description": "Devuelve una categoría. Endpoint público.",
+        "operationId": "findById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Categoría no encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Categoría encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoriaResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Categorías"
+        ],
+        "summary": "Actualizar categoría",
+        "description": "Modifica nombre y descripción de una categoría. Solo administradores.",
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoriaDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Categoría actualizada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoriaResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos o categoría inexistente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Categorías"
+        ],
+        "summary": "Eliminar categoría",
+        "description": "Elimina una categoría. Solo administradores.",
+        "operationId": "delete_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoría no encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Categoría eliminada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/carrito/actualizar/{productoId}": {
+      "put": {
+        "tags": [
+          "Carrito de Compras"
+        ],
+        "summary": "Actualizar cantidad de un producto",
+        "description": "Cambia la cantidad de un producto en el carrito; con cantidad 0 lo elimina.",
+        "operationId": "actualizar",
+        "parameters": [
+          {
+            "name": "productoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "cantidad",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Carrito actualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarritoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Cantidad inválida, producto no está en el carrito o sin stock",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/blogs/{id}": {
+      "get": {
+        "tags": [
+          "Blogs"
+        ],
+        "summary": "Obtener blog por ID",
+        "description": "Devuelve el detalle de un artículo del blog. Endpoint público.",
+        "operationId": "findById_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Solicitud inválida",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Blog no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Blog encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlogResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Blogs"
+        ],
+        "summary": "Actualizar blog",
+        "description": "Modifica un artículo del blog existente y permite activarlo o desactivarlo. Solo administradores.",
+        "operationId": "update_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlogDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Blog actualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlogResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Blog no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Blogs"
+        ],
+        "summary": "Desactivar blog",
+        "description": "Desactiva (borrado lógico) un artículo del blog. Solo administradores.",
+        "operationId": "delete_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Blog desactivado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Blog no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/usuarios/perfil": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Ver perfil propio",
+        "description": "Devuelve los datos del usuario autenticado.",
+        "operationId": "perfil",
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Perfil del usuario",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Actualizar perfil propio",
+        "description": "Modifica los datos personales del usuario autenticado.",
+        "operationId": "actualizarPerfil",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActualizarUsuarioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Perfil actualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/usuarios/perfil/contrasena": {
+      "put": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Cambiar contraseña",
+        "description": "Cambia la contraseña del usuario autenticado validando la actual.",
+        "operationId": "cambiarContrasena",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CambioContrasenaRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Contraseña actualizada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Contraseña actual incorrecta o nuevas contraseñas distintas",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/admin/usuarios/{id}": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtener usuario por ID",
+        "description": "Devuelve un usuario. Solo administradores.",
+        "operationId": "findById_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Usuario encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Actualizar usuario (admin)",
+        "description": "Modifica datos, rol y contraseña de un usuario. Solo administradores.",
+        "operationId": "actualizarDesdeAdmin",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActualizarUsuarioAdminRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Usuario actualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos o usuario inexistente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Eliminar usuario",
+        "description": "Elimina un usuario. Solo administradores.",
+        "operationId": "delete_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Usuario eliminado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/productos": {
+      "get": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Listar productos",
+        "description": "Devuelve el catálogo de productos activos. Endpoint público.",
+        "operationId": "findAll",
+        "responses": {
+          "200": {
+            "description": "Listado de productos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductoResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No se pudieron obtener los productos",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Crear producto",
+        "description": "Crea un producto del catálogo. Solo administradores.",
+        "operationId": "save",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Producto creado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, código duplicado o categoría inexistente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/pedidos/checkout": {
+      "post": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Confirmar compra",
+        "description": "Genera un pedido a partir del carrito del usuario autenticado, aplicando cupón opcional y descontando stock.",
+        "operationId": "checkout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Pedido creado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, carrito vacío o stock insuficiente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/cupones": {
+      "get": {
+        "tags": [
+          "Cupones"
+        ],
+        "summary": "Listar cupones",
+        "description": "Devuelve todos los cupones de descuento. Solo administradores.",
+        "operationId": "findAll_2",
+        "responses": {
+          "400": {
+            "description": "Error al obtener los cupones",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Listado de cupones",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CuponResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Cupones"
+        ],
+        "summary": "Crear cupón",
+        "description": "Crea un cupón de descuento (porcentaje entre 1 y 100). Solo administradores.",
+        "operationId": "save_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CuponDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, fecha mal formada o código duplicado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Cupón creado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CuponResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/contacto": {
+      "get": {
+        "tags": [
+          "Contacto"
+        ],
+        "summary": "Listar mensajes de contacto",
+        "description": "Devuelve todos los mensajes recibidos. Solo administradores.",
+        "operationId": "findAll_3",
+        "responses": {
+          "200": {
+            "description": "Listado de mensajes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContactoResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al obtener los mensajes",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Contacto"
+        ],
+        "summary": "Enviar mensaje de contacto",
+        "description": "Registra un mensaje desde el formulario de contacto. Endpoint público.",
+        "operationId": "save_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Datos inválidos",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Mensaje registrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/entities/categorias": {
+      "get": {
+        "tags": [
+          "Categorías"
+        ],
+        "summary": "Listar categorías",
+        "description": "Devuelve todas las categorías de productos. Endpoint público.",
+        "operationId": "findAll_4",
+        "responses": {
+          "200": {
+            "description": "Listado de categorías",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoriaResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No se pudieron obtener las categorías",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Categorías"
+        ],
+        "summary": "Crear categoría",
+        "description": "Crea una categoría de productos. Solo administradores.",
+        "operationId": "save_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoriaDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos o nombre duplicado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Categoría creada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoriaResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/carrito/agregar": {
+      "post": {
+        "tags": [
+          "Carrito de Compras"
+        ],
+        "summary": "Agregar producto al carrito",
+        "description": "Agrega un producto con la cantidad indicada al carrito del usuario autenticado.",
+        "operationId": "agregar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarritoItemDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Carrito actualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarritoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, producto inexistente o sin stock suficiente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/blogs": {
+      "get": {
+        "tags": [
+          "Blogs"
+        ],
+        "summary": "Listar blogs",
+        "description": "Devuelve todos los artículos del blog. Endpoint público.",
+        "operationId": "findAll_5",
+        "responses": {
+          "200": {
+            "description": "Listado de blogs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BlogResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al obtener los blogs",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Blogs"
+        ],
+        "summary": "Crear blog",
+        "description": "Crea un nuevo artículo del blog. Solo administradores.",
+        "operationId": "save_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlogDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Blog creado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlogResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/auth/registro": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Registrar usuario",
+        "description": "Crea una cuenta de cliente nueva. Endpoint público.",
+        "operationId": "registrar",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistroRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Datos inválidos, RUN o correo duplicado, o contraseñas distintas",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Usuario registrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Autenticación"
+        ],
+        "summary": "Iniciar sesión",
+        "description": "Valida correo y contraseña y entrega un token JWT con el rol del usuario. Endpoint público.",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Inicio de sesión correcto, devuelve token JWT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos, credenciales incorrectas o cuenta desactivada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/usuarios": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Listar usuarios",
+        "description": "Devuelve todos los usuarios. Solo administradores.",
+        "operationId": "findAll_6",
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Listado de usuarios",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UsuarioResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al obtener los usuarios",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Crear usuario (admin)",
+        "description": "Crea un usuario con el rol indicado. Solo administradores.",
+        "operationId": "crearDesdeAdmin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistroRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos o duplicados",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Usuario creado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/pedidos/{id}/estado": {
+      "patch": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Cambiar estado de un pedido",
+        "description": "Actualiza el estado de un pedido. Solo administradores.",
+        "operationId": "cambiarEstado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "estado",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Estado actualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Estado inválido, transición no permitida o pedido inexistente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/contacto/{id}/leido": {
+      "patch": {
+        "tags": [
+          "Contacto"
+        ],
+        "summary": "Marcar mensaje como leído",
+        "description": "Marca un mensaje de contacto como leído. Solo administradores.",
+        "operationId": "marcarLeido",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Solicitud inválida",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Mensaje no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Mensaje marcado como leído",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactoResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/admin/usuarios/{id}/toggle-activo": {
+      "patch": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Activar o desactivar usuario",
+        "description": "Invierte el estado activo de un usuario. Solo administradores.",
+        "operationId": "toggleActivo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Estado actualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsuarioResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/reportes/stock-critico": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "summary": "Reporte de stock crítico",
+        "description": "Productos con stock en o bajo el nivel crítico. Solo administrador o vendedor.",
+        "operationId": "stockCritico",
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Productos con stock crítico",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductoResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al generar el reporte",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR o VENDEDOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/reportes/resumen": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "summary": "Resumen general",
+        "description": "Totales de usuarios, productos activos y pedidos, más cantidad de pedidos por estado. Solo administrador o vendedor.",
+        "operationId": "resumen",
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al generar el reporte",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR o VENDEDOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Resumen general",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/reportes/productos-mas-vendidos": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "summary": "Productos más vendidos",
+        "description": "Los 5 productos con más unidades vendidas, excluyendo pedidos cancelados. Solo administrador o vendedor.",
+        "operationId": "productosMasVendidos",
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al generar el reporte",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR o VENDEDOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ranking de productos más vendidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductoVendidoDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/reportes/pedidos-por-estado": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "summary": "Pedidos por estado",
+        "description": "Cantidad de pedidos por cada estado (0 si no hay). Solo administrador o vendedor.",
+        "operationId": "pedidosPorEstado",
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al generar el reporte",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Conteo de pedidos por estado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR o VENDEDOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/productos/stock-critico": {
+      "get": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Productos con stock crítico",
+        "description": "Lista productos cuyo stock está en o bajo el nivel crítico. Solo administrador o vendedor.",
+        "operationId": "findStockCritico",
+        "responses": {
+          "400": {
+            "description": "Error al obtener los productos",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Productos con stock crítico",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductoResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR o VENDEDOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/productos/categoria/{categoriaId}": {
+      "get": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Listar productos por categoría",
+        "description": "Devuelve los productos de una categoría. Endpoint público.",
+        "operationId": "findByCategoria",
+        "parameters": [
+          {
+            "name": "categoriaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Productos de la categoría",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductoResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoría no encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/entities/productos/buscar": {
+      "get": {
+        "tags": [
+          "Productos"
+        ],
+        "summary": "Buscar productos",
+        "description": "Busca productos por texto en nombre o descripción. Endpoint público.",
+        "operationId": "buscar",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Búsqueda inválida",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Productos que coinciden con la búsqueda",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductoResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/entities/pedidos": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Listar todos los pedidos",
+        "description": "Devuelve todos los pedidos de la tienda. Solo administrador o vendedor.",
+        "operationId": "findAll_1",
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al obtener los pedidos",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR o VENDEDOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Listado de pedidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PedidoResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/pedidos/mis-pedidos": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Historial de pedidos propios",
+        "description": "Lista los pedidos del usuario autenticado.",
+        "operationId": "historial",
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al obtener el historial",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Listado de pedidos del usuario",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PedidoResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/pedidos/mis-pedidos/{id}": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Detalle de un pedido propio",
+        "description": "Devuelve el detalle de un pedido del usuario autenticado.",
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Pedido no encontrado o no pertenece al usuario",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Pedido encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PedidoResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/pedidos/estado/{estado}": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Filtrar pedidos por estado",
+        "description": "Lista los pedidos que están en el estado indicado. Solo administrador o vendedor.",
+        "operationId": "findByEstado",
+        "parameters": [
+          {
+            "name": "estado",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Pedidos del estado indicado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PedidoResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Estado inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR o VENDEDOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/cupones/validar/{codigo}": {
+      "get": {
+        "tags": [
+          "Cupones"
+        ],
+        "summary": "Validar cupón",
+        "description": "Consulta un cupón por su código para verificar que existe, está activo y no ha expirado. Endpoint público.",
+        "operationId": "validar",
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cupón válido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CuponResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Cupón inexistente, inactivo o expirado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/entities/carrito": {
+      "get": {
+        "tags": [
+          "Carrito de Compras"
+        ],
+        "summary": "Ver carrito",
+        "description": "Devuelve el carrito del usuario autenticado con subtotal, descuento y total; aplica un cupón si se envía su código.",
+        "operationId": "getCarrito",
+        "parameters": [
+          {
+            "name": "cupon",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Carrito del usuario",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarritoResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Cupón inválido o error al calcular el carrito",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/regiones": {
+      "get": {
+        "tags": [
+          "Regiones y Comunas"
+        ],
+        "summary": "Listar regiones",
+        "description": "Devuelve los nombres de las regiones de Chile. Endpoint público.",
+        "operationId": "listarRegiones",
+        "responses": {
+          "200": {
+            "description": "Listado de regiones",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/regiones/{region}/comunas": {
+      "get": {
+        "tags": [
+          "Regiones y Comunas"
+        ],
+        "summary": "Listar comunas de una región",
+        "description": "Devuelve las comunas de la región indicada (sin distinguir mayúsculas). Si la región no existe devuelve una lista vacía.",
+        "operationId": "comunas",
+        "parameters": [
+          {
+            "name": "region",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listado de comunas (vacío si la región no existe)",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/regiones/todas": {
+      "get": {
+        "tags": [
+          "Regiones y Comunas"
+        ],
+        "summary": "Listar regiones con sus comunas",
+        "description": "Devuelve un mapa con todas las regiones y sus comunas. Endpoint público.",
+        "operationId": "todas",
+        "responses": {
+          "200": {
+            "description": "Mapa región a comunas",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/entities/cupones/{id}": {
+      "delete": {
+        "tags": [
+          "Cupones"
+        ],
+        "summary": "Desactivar cupón",
+        "description": "Desactiva un cupón (borrado lógico). Solo administradores.",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Cupón desactivado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cupón no encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Sin permisos: se requiere rol ADMINISTRADOR",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/carrito/vaciar": {
+      "delete": {
+        "tags": [
+          "Carrito de Compras"
+        ],
+        "summary": "Vaciar carrito",
+        "description": "Elimina todos los productos del carrito del usuario autenticado.",
+        "operationId": "vaciar",
+        "responses": {
+          "200": {
+            "description": "Carrito vaciado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al vaciar el carrito",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/entities/carrito/eliminar/{productoId}": {
+      "delete": {
+        "tags": [
+          "Carrito de Compras"
+        ],
+        "summary": "Eliminar producto del carrito",
+        "description": "Quita un producto del carrito del usuario autenticado.",
+        "operationId": "eliminarItem",
+        "parameters": [
+          {
+            "name": "productoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "No autenticado: falta el token JWT o es inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Carrito actualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarritoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "El producto no está en el carrito",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProductoDto": {
+        "required": [
+          "categoriaId",
+          "codigo",
+          "nombre",
+          "precio",
+          "stock"
+        ],
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "maxLength": 2147483647,
+            "minLength": 3,
+            "type": "string",
+            "description": "Código único del producto (mínimo 3 caracteres)",
+            "example": "FR001"
+          },
+          "nombre": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Nombre del producto (máx. 100 caracteres)",
+            "example": "Manzana Fuji"
+          },
+          "descripcion": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "description": "Descripción del producto (máx. 500 caracteres)",
+            "example": "Manzana dulce y crujiente"
+          },
+          "precio": {
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number",
+            "description": "Precio unitario (mínimo 0)",
+            "example": 1200
+          },
+          "stock": {
+            "minimum": 0,
+            "type": "integer",
+            "description": "Unidades disponibles (mínimo 0)",
+            "format": "int32",
+            "example": 50
+          },
+          "stockCritico": {
+            "minimum": 0,
+            "type": "integer",
+            "description": "Umbral de alerta de stock bajo (mínimo 0)",
+            "format": "int32",
+            "example": 10
+          },
+          "imagenUrl": {
+            "type": "string",
+            "description": "URL de la imagen del producto",
+            "example": "https://huertohogar.cl/img/manzana.jpg"
+          },
+          "categoriaId": {
+            "type": "integer",
+            "description": "ID de la categoría a la que pertenece",
+            "format": "int64",
+            "example": 1
+          }
+        },
+        "description": "Datos para crear o actualizar un producto"
+      },
+      "ProductoResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador del producto",
+            "format": "int64",
+            "example": 1
+          },
+          "codigo": {
+            "type": "string",
+            "description": "Código único del producto",
+            "example": "FR001"
+          },
+          "nombre": {
+            "type": "string",
+            "description": "Nombre del producto",
+            "example": "Manzana Fuji"
+          },
+          "descripcion": {
+            "type": "string",
+            "description": "Descripción del producto",
+            "example": "Manzana dulce y crujiente"
+          },
+          "precio": {
+            "type": "number",
+            "description": "Precio unitario",
+            "example": 1200
+          },
+          "stock": {
+            "type": "integer",
+            "description": "Unidades disponibles",
+            "format": "int32",
+            "example": 50
+          },
+          "stockCritico": {
+            "type": "integer",
+            "description": "Umbral de alerta de stock bajo",
+            "format": "int32",
+            "example": 10
+          },
+          "stockCriticoAlerta": {
+            "type": "boolean",
+            "description": "true si el stock está en o bajo el umbral crítico",
+            "example": false
+          },
+          "imagenUrl": {
+            "type": "string",
+            "description": "URL de la imagen del producto",
+            "example": "https://huertohogar.cl/img/manzana.jpg"
+          },
+          "categoriaId": {
+            "type": "integer",
+            "description": "ID de la categoría",
+            "format": "int64",
+            "example": 1
+          },
+          "categoriaNombre": {
+            "type": "string",
+            "description": "Nombre de la categoría",
+            "example": "Frutas Frescas"
+          },
+          "activo": {
+            "type": "boolean",
+            "description": "Indica si el producto está activo",
+            "example": true
+          }
+        },
+        "description": "Producto del catálogo"
+      },
+      "CategoriaDto": {
+        "required": [
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "maxLength": 80,
+            "minLength": 0,
+            "type": "string",
+            "description": "Nombre de la categoría (máx. 80 caracteres)",
+            "example": "Frutas Frescas"
+          },
+          "descripcion": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string",
+            "description": "Descripción de la categoría (máx. 300 caracteres)",
+            "example": "Frutas de temporada cultivadas localmente"
+          }
+        },
+        "description": "Datos de una categoría de productos"
+      },
+      "CategoriaResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador de la categoría",
+            "format": "int64",
+            "example": 1
+          },
+          "nombre": {
+            "type": "string",
+            "description": "Nombre de la categoría",
+            "example": "Frutas Frescas"
+          },
+          "descripcion": {
+            "type": "string",
+            "description": "Descripción de la categoría",
+            "example": "Frutas de temporada cultivadas localmente"
+          },
+          "activo": {
+            "type": "boolean",
+            "description": "Indica si la categoría está activa",
+            "example": true
+          }
+        },
+        "description": "Categoría de productos"
+      },
+      "CarritoResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Productos del carrito",
+            "items": {
+              "$ref": "#/components/schemas/ItemResponse"
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Cantidad total de unidades",
+            "format": "int32",
+            "example": 3
+          },
+          "subtotal": {
+            "type": "number",
+            "description": "Suma de los productos antes de descuento",
+            "example": 15000
+          },
+          "descuento": {
+            "type": "number",
+            "description": "Monto descontado si se aplicó un cupón",
+            "example": 1500
+          },
+          "total": {
+            "type": "number",
+            "description": "Total a pagar",
+            "example": 13500
+          },
+          "cuponAplicado": {
+            "type": "string",
+            "description": "Código del cupón aplicado, si existe",
+            "example": "DESC10"
+          }
+        },
+        "description": "Carrito de compras con totales"
+      },
+      "ItemResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador del ítem de carrito",
+            "format": "int64",
+            "example": 10
+          },
+          "productoId": {
+            "type": "integer",
+            "description": "ID del producto",
+            "format": "int64",
+            "example": 1
+          },
+          "productoNombre": {
+            "type": "string",
+            "description": "Nombre del producto",
+            "example": "Manzana Fuji"
+          },
+          "productoImagenUrl": {
+            "type": "string",
+            "description": "URL de la imagen del producto",
+            "example": "https://huertohogar.cl/img/manzana.jpg"
+          },
+          "cantidad": {
+            "type": "integer",
+            "description": "Unidades del producto",
+            "format": "int32",
+            "example": 2
+          },
+          "precioUnitario": {
+            "type": "number",
+            "description": "Precio por unidad",
+            "example": 1200
+          },
+          "subtotal": {
+            "type": "number",
+            "description": "Suma de los productos antes de descuento",
+            "example": 15000
+          }
+        },
+        "description": "Productos del carrito"
+      },
+      "BlogDto": {
+        "required": [
+          "descripcion",
+          "titulo"
+        ],
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string",
+            "description": "Título del artículo (máx. 150 caracteres)",
+            "example": "Beneficios de los productos orgánicos"
+          },
+          "descripcion": {
+            "maxLength": 20000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Contenido del artículo (máx. 20000 caracteres)",
+            "example": "Los productos orgánicos se cultivan sin pesticidas sintéticos..."
+          },
+          "imagenUrl": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "URL de la imagen de portada (opcional)",
+            "example": "https://huertohogar.cl/img/blog1.jpg"
+          },
+          "activo": {
+            "type": "boolean",
+            "description": "Solo en PUT: indica si el blog está activo (por defecto true)",
+            "example": true
+          }
+        },
+        "description": "Datos de un artículo del blog"
+      },
+      "BlogResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador del artículo",
+            "format": "int64",
+            "example": 1
+          },
+          "titulo": {
+            "type": "string",
+            "description": "Título del artículo",
+            "example": "Beneficios de los productos orgánicos"
+          },
+          "descripcion": {
+            "type": "string",
+            "description": "Contenido del artículo",
+            "example": "Los productos orgánicos se cultivan sin pesticidas."
+          },
+          "imagenUrl": {
+            "type": "string",
+            "description": "URL de la imagen de portada",
+            "example": "https://huertohogar.cl/img/blog1.jpg"
+          },
+          "activo": {
+            "type": "boolean",
+            "description": "Indica si el artículo está publicado",
+            "example": true
+          },
+          "creadoEn": {
+            "type": "string",
+            "description": "Fecha y hora de creación",
+            "format": "date-time"
+          }
+        },
+        "description": "Artículo del blog"
+      },
+      "ActualizarUsuarioRequest": {
+        "required": [
+          "apellidos",
+          "comuna",
+          "direccion",
+          "nombre",
+          "region"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Nombres (máx. 50 caracteres)",
+            "example": "Juan"
+          },
+          "apellidos": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Apellidos (máx. 100 caracteres)",
+            "example": "Soto Rojas"
+          },
+          "telefono": {
+            "type": "string",
+            "description": "Teléfono de contacto (opcional)",
+            "example": "+56912345678"
+          },
+          "fechaNacimiento": {
+            "type": "string",
+            "description": "Fecha de nacimiento yyyy-MM-dd (opcional)",
+            "example": "1995-04-20"
+          },
+          "direccion": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string",
+            "description": "Dirección (máx. 300 caracteres)",
+            "example": "Av. Providencia 1234"
+          },
+          "region": {
+            "type": "string",
+            "description": "Región de residencia",
+            "example": "Metropolitana de Santiago"
+          },
+          "comuna": {
+            "type": "string",
+            "description": "Comuna de residencia",
+            "example": "Providencia"
+          }
+        },
+        "description": "Datos personales editables de un usuario"
+      },
+      "UsuarioResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador del usuario",
+            "format": "int64",
+            "example": 1
+          },
+          "run": {
+            "type": "string",
+            "description": "RUN del usuario",
+            "example": "123456785"
+          },
+          "nombre": {
+            "type": "string",
+            "description": "Nombres",
+            "example": "Juan"
+          },
+          "apellidos": {
+            "type": "string",
+            "description": "Apellidos",
+            "example": "Soto Rojas"
+          },
+          "correo": {
+            "type": "string",
+            "description": "Correo electrónico",
+            "example": "juan@correo.cl"
+          },
+          "telefono": {
+            "type": "string",
+            "description": "Teléfono de contacto",
+            "example": "+56912345678"
+          },
+          "fechaNacimiento": {
+            "type": "string",
+            "description": "Fecha de nacimiento",
+            "format": "date",
+            "example": "1995-04-20"
+          },
+          "direccion": {
+            "type": "string",
+            "description": "Dirección",
+            "example": "Av. Providencia 1234"
+          },
+          "region": {
+            "type": "string",
+            "description": "Región de residencia",
+            "example": "Metropolitana de Santiago"
+          },
+          "comuna": {
+            "type": "string",
+            "description": "Comuna de residencia",
+            "example": "Providencia"
+          },
+          "rol": {
+            "type": "string",
+            "description": "Rol del usuario",
+            "example": "CLIENTE"
+          },
+          "activo": {
+            "type": "boolean",
+            "description": "Indica si la cuenta está activa",
+            "example": true
+          },
+          "creadoEn": {
+            "type": "string",
+            "description": "Fecha y hora de creación de la cuenta",
+            "format": "date-time"
+          }
+        },
+        "description": "Datos públicos de un usuario"
+      },
+      "CambioContrasenaRequest": {
+        "required": [
+          "confirmarContrasena",
+          "contrasenaActual",
+          "nuevaContrasena"
+        ],
+        "type": "object",
+        "properties": {
+          "contrasenaActual": {
+            "type": "string",
+            "description": "Contraseña actual",
+            "example": "clave123"
+          },
+          "nuevaContrasena": {
+            "maxLength": 10,
+            "minLength": 4,
+            "type": "string",
+            "description": "Nueva contraseña (4 a 10 caracteres)",
+            "example": "nueva123"
+          },
+          "confirmarContrasena": {
+            "type": "string",
+            "description": "Repetición de la nueva contraseña",
+            "example": "nueva123"
+          }
+        },
+        "description": "Datos para cambiar la contraseña propia"
+      },
+      "ActualizarUsuarioAdminRequest": {
+        "required": [
+          "apellidos",
+          "comuna",
+          "correo",
+          "direccion",
+          "nombre",
+          "region"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Nombres (máx. 50 caracteres)",
+            "example": "Juan"
+          },
+          "apellidos": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Apellidos (máx. 100 caracteres)",
+            "example": "Soto Rojas"
+          },
+          "telefono": {
+            "type": "string",
+            "description": "Teléfono de contacto (opcional)",
+            "example": "+56912345678"
+          },
+          "fechaNacimiento": {
+            "type": "string",
+            "description": "Fecha de nacimiento yyyy-MM-dd (opcional)",
+            "example": "1995-04-20"
+          },
+          "direccion": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string",
+            "description": "Dirección (máx. 300 caracteres)",
+            "example": "Av. Providencia 1234"
+          },
+          "region": {
+            "type": "string",
+            "description": "Región de residencia",
+            "example": "Metropolitana de Santiago"
+          },
+          "comuna": {
+            "type": "string",
+            "description": "Comuna de residencia",
+            "example": "Providencia"
+          },
+          "correo": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Correo electrónico del usuario",
+            "example": "cliente@huertohogar.cl"
+          },
+          "rol": {
+            "type": "string",
+            "description": "Rol: ADMINISTRADOR, VENDEDOR o CLIENTE",
+            "example": "CLIENTE"
+          },
+          "contrasena": {
+            "maxLength": 10,
+            "minLength": 4,
+            "type": "string",
+            "description": "Nueva contraseña (opcional, 4 a 10 caracteres)",
+            "example": "nueva123"
+          },
+          "confirmarContrasena": {
+            "maxLength": 10,
+            "minLength": 4,
+            "type": "string",
+            "description": "Repetición de la nueva contraseña",
+            "example": "nueva123"
+          }
+        },
+        "description": "Datos para que un administrador actualice un usuario"
+      },
+      "CheckoutRequest": {
+        "required": [
+          "direccionEntrega"
+        ],
+        "type": "object",
+        "properties": {
+          "direccionEntrega": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string",
+            "description": "Dirección de entrega (máx. 300 caracteres)",
+            "example": "Av. Siempre Viva 742, Santiago"
+          },
+          "fechaEntregaDeseada": {
+            "type": "string",
+            "description": "Fecha de entrega deseada yyyy-MM-dd (opcional)",
+            "example": "2026-12-01"
+          },
+          "codigoCupon": {
+            "type": "string",
+            "description": "Código de cupón de descuento (opcional)",
+            "example": "DESC10"
+          }
+        },
+        "description": "Datos para confirmar la compra"
+      },
+      "DetalleResponse": {
+        "type": "object",
+        "properties": {
+          "productoId": {
+            "type": "integer",
+            "description": "ID del producto",
+            "format": "int64",
+            "example": 1
+          },
+          "productoNombre": {
+            "type": "string",
+            "description": "Nombre del producto",
+            "example": "Manzana Fuji"
+          },
+          "productoImagenUrl": {
+            "type": "string",
+            "description": "URL de la imagen del producto",
+            "example": "https://huertohogar.cl/img/manzana.jpg"
+          },
+          "cantidad": {
+            "type": "integer",
+            "description": "Unidades compradas",
+            "format": "int32",
+            "example": 2
+          },
+          "precioUnitario": {
+            "type": "number",
+            "description": "Precio por unidad al momento de la compra",
+            "example": 1200
+          },
+          "subtotal": {
+            "type": "number",
+            "description": "Subtotal del pedido",
+            "example": 15000
+          }
+        },
+        "description": "Productos del pedido"
+      },
+      "PedidoResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador del pedido",
+            "format": "int64",
+            "example": 1
+          },
+          "usuarioId": {
+            "type": "integer",
+            "description": "ID del usuario que hizo el pedido",
+            "format": "int64",
+            "example": 1
+          },
+          "estado": {
+            "type": "string",
+            "description": "Estado del pedido (PENDIENTE, EN_PREPARACION, ENVIADO, ENTREGADO, CANCELADO)",
+            "example": "PENDIENTE"
+          },
+          "direccionEntrega": {
+            "type": "string",
+            "description": "Dirección de entrega",
+            "example": "Av. Siempre Viva 742, Santiago"
+          },
+          "fechaEntregaDeseada": {
+            "type": "string",
+            "description": "Fecha de entrega deseada",
+            "format": "date",
+            "example": "2026-12-01"
+          },
+          "cuponAplicado": {
+            "type": "string",
+            "description": "Código del cupón aplicado, si existe",
+            "example": "DESC10"
+          },
+          "subtotal": {
+            "type": "number",
+            "description": "Subtotal del pedido",
+            "example": 15000
+          },
+          "descuento": {
+            "type": "number",
+            "description": "Monto descontado",
+            "example": 1500
+          },
+          "total": {
+            "type": "number",
+            "description": "Total del pedido",
+            "example": 13500
+          },
+          "creadoEn": {
+            "type": "string",
+            "description": "Fecha y hora de creación",
+            "format": "date-time"
+          },
+          "detalles": {
+            "type": "array",
+            "description": "Productos del pedido",
+            "items": {
+              "$ref": "#/components/schemas/DetalleResponse"
+            }
+          }
+        },
+        "description": "Pedido con sus detalles"
+      },
+      "CuponDto": {
+        "required": [
+          "codigo",
+          "porcentaje"
+        ],
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "Código del cupón (máx. 30 caracteres)",
+            "example": "DESC10"
+          },
+          "porcentaje": {
+            "maximum": 100,
+            "exclusiveMaximum": false,
+            "minimum": 1,
+            "exclusiveMinimum": false,
+            "type": "number",
+            "description": "Porcentaje de descuento entre 1 y 100",
+            "example": 10
+          },
+          "fechaExpiracion": {
+            "type": "string",
+            "description": "Fecha de expiración en formato yyyy-MM-dd (opcional)",
+            "example": "2026-12-31"
+          }
+        },
+        "description": "Datos para crear un cupón de descuento"
+      },
+      "CuponResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador del cupón",
+            "format": "int64",
+            "example": 1
+          },
+          "codigo": {
+            "type": "string",
+            "description": "Código del cupón",
+            "example": "DESC10"
+          },
+          "porcentaje": {
+            "type": "number",
+            "description": "Porcentaje de descuento entre 1 y 100",
+            "example": 10
+          },
+          "fechaExpiracion": {
+            "type": "string",
+            "description": "Fecha de expiración (sin valor si no vence)",
+            "format": "date",
+            "example": "2026-12-31"
+          },
+          "activo": {
+            "type": "boolean",
+            "description": "Indica si el cupón está activo",
+            "example": true
+          }
+        },
+        "description": "Cupón de descuento"
+      },
+      "ContactoDto": {
+        "required": [
+          "comentario",
+          "correo",
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Nombre de quien escribe",
+            "example": "María Pérez"
+          },
+          "correo": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Correo de contacto",
+            "example": "maria@correo.cl"
+          },
+          "comentario": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "description": "Mensaje o consulta (máx. 500 caracteres)",
+            "example": "Quisiera información sobre despachos a regiones."
+          }
+        },
+        "description": "Mensaje del formulario de contacto"
+      },
+      "ContactoResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Identificador del mensaje",
+            "format": "int64",
+            "example": 1
+          },
+          "nombre": {
+            "type": "string",
+            "description": "Nombre de quien escribe",
+            "example": "María Pérez"
+          },
+          "correo": {
+            "type": "string",
+            "description": "Correo de contacto",
+            "example": "maria@gmail.com"
+          },
+          "comentario": {
+            "type": "string",
+            "description": "Mensaje o consulta",
+            "example": "Quisiera información sobre despachos."
+          },
+          "leido": {
+            "type": "boolean",
+            "description": "Indica si un administrador ya lo marcó como leído",
+            "example": false
+          },
+          "creadoEn": {
+            "type": "string",
+            "description": "Fecha y hora de recepción",
+            "format": "date-time"
+          }
+        },
+        "description": "Mensaje de contacto recibido"
+      },
+      "CarritoItemDto": {
+        "required": [
+          "cantidad",
+          "productoId"
+        ],
+        "type": "object",
+        "properties": {
+          "productoId": {
+            "type": "integer",
+            "description": "ID del producto",
+            "format": "int64",
+            "example": 1
+          },
+          "cantidad": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "Cantidad de unidades (mínimo 1)",
+            "format": "int32",
+            "example": 2
+          }
+        },
+        "description": "Producto y cantidad a agregar al carrito"
+      },
+      "RegistroRequest": {
+        "required": [
+          "apellidos",
+          "comuna",
+          "confirmarContrasena",
+          "contrasena",
+          "correo",
+          "direccion",
+          "nombre",
+          "region",
+          "run"
+        ],
+        "type": "object",
+        "properties": {
+          "run": {
+            "maxLength": 9,
+            "minLength": 7,
+            "type": "string",
+            "description": "RUN sin puntos ni guion, con dígito verificador (7 a 9 caracteres)",
+            "example": "123456785"
+          },
+          "nombre": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Nombres (máx. 50 caracteres)",
+            "example": "Juan"
+          },
+          "apellidos": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Apellidos (máx. 100 caracteres)",
+            "example": "Soto Rojas"
+          },
+          "correo": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Correo electrónico (único)",
+            "example": "juan@correo.cl"
+          },
+          "contrasena": {
+            "maxLength": 10,
+            "minLength": 4,
+            "type": "string",
+            "description": "Contraseña (4 a 10 caracteres)",
+            "example": "clave123"
+          },
+          "confirmarContrasena": {
+            "type": "string",
+            "description": "Repetición de la contraseña",
+            "example": "clave123"
+          },
+          "telefono": {
+            "type": "string",
+            "description": "Teléfono de contacto (opcional)",
+            "example": "+56912345678"
+          },
+          "fechaNacimiento": {
+            "type": "string",
+            "description": "Fecha de nacimiento yyyy-MM-dd (opcional)",
+            "example": "1995-04-20"
+          },
+          "direccion": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string",
+            "description": "Dirección (máx. 300 caracteres)",
+            "example": "Av. Providencia 1234"
+          },
+          "region": {
+            "type": "string",
+            "description": "Región de residencia",
+            "example": "Metropolitana de Santiago"
+          },
+          "comuna": {
+            "type": "string",
+            "description": "Comuna de residencia",
+            "example": "Providencia"
+          },
+          "rol": {
+            "type": "string",
+            "description": "Rol (solo lo respeta el alta por administrador): ADMINISTRADOR, VENDEDOR o CLIENTE",
+            "example": "CLIENTE"
+          }
+        },
+        "description": "Datos para registrar un usuario"
+      },
+      "LoginRequest": {
+        "required": [
+          "contrasena",
+          "correo"
+        ],
+        "type": "object",
+        "properties": {
+          "correo": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Correo electrónico del usuario",
+            "example": "cliente@huertohogar.cl"
+          },
+          "contrasena": {
+            "maxLength": 10,
+            "minLength": 4,
+            "type": "string",
+            "description": "Contraseña del usuario (4 a 10 caracteres)",
+            "example": "clave123"
+          }
+        },
+        "description": "Credenciales de inicio de sesión"
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Token JWT para usar en el encabezado Authorization: Bearer",
+            "example": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRlQGh1ZXJ0b2hvZ2FyLmNsIn0.firma"
+          },
+          "correo": {
+            "type": "string",
+            "description": "Correo del usuario autenticado",
+            "example": "cliente@huertohogar.cl"
+          },
+          "rol": {
+            "type": "string",
+            "description": "Rol del usuario (ADMINISTRADOR, VENDEDOR o CLIENTE)",
+            "example": "CLIENTE"
+          },
+          "usuarioId": {
+            "type": "integer",
+            "description": "Identificador del usuario",
+            "format": "int64",
+            "example": 1
+          }
+        },
+        "description": "Respuesta de un inicio de sesión exitoso"
+      },
+      "ProductoVendidoDto": {
+        "type": "object",
+        "properties": {
+          "productoId": {
+            "type": "integer",
+            "description": "ID del producto",
+            "format": "int64",
+            "example": 1
+          },
+          "nombre": {
+            "type": "string",
+            "description": "Nombre del producto",
+            "example": "Manzana Fuji"
+          },
+          "unidadesVendidas": {
+            "type": "integer",
+            "description": "Total de unidades vendidas",
+            "format": "int64",
+            "example": 120
+          }
+        },
+        "description": "Producto con su total de unidades vendidas"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

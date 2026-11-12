@@ -55,8 +55,24 @@ Pedidos, detalles, carritos y contactos se generan al utilizar sus funcionalidad
 - Reportes y consulta general de pedidos: ADMINISTRADOR o VENDEDOR; cambiar estados de pedidos requiere ADMINISTRADOR.
 
 Para rutas protegidas envía `Authorization: Bearer <token>` con el token obtenido al iniciar sesión.
+Los rechazos de seguridad responden en JSON con el mismo formato `ApiError` del resto de la API (`ErroresSeguridadHandler` y `GlobalExceptionHandler`):
+- **401 No autenticado** (`"Debes iniciar sesión para acceder a este recurso"`): falta el token, es inválido o expiró. También aplica a un anónimo que llega a un método con `@PreAuthorize`.
+- **403 Forbidden** (`"Sin permiso"`): hay sesión válida pero el rol no alcanza.
+
+El frontend usa esa diferencia: ante un 401 con token cierra la sesión y vuelve al login; un 403 solo muestra el error.
 Los contratos y campos completos se consultan con el servidor activo en
 [Swagger UI](http://localhost:8087/swagger-ui.html) y [OpenAPI JSON](http://localhost:8087/api-docs).
+Una copia exportada del contrato y la tabla de endpoints (Anexo 3) están en [Documentacion](../Documentacion).
+
+## DTO y mappers
+
+Los controladores **solo reciben y devuelven DTOs**; las entidades JPA nunca salen del servicio.
+
+- **Entrada:** `XDto` (con las validaciones de `@Valid`) → el servicio lo convierte en entidad con `mapper.toEntity(dto)` y la guarda con el repositorio.
+- **Salida:** la entidad guardada o consultada se convierte con `mapper.toDto(entidad)` (o `toDtoList`) en un `XResponse`.
+- **Mappers:** en contacto, blog, cupón y categoría la conversión la genera **MapStruct 1.6.3** a partir de una interfaz `@Mapper(componentModel = "spring")` (`<modulo>/mapper`). Se declara en el `pom.xml` junto con `lombok-mapstruct-binding`, y debe ir después de Lombok en `annotationProcessorPaths`.
+- **Producto, usuario, pedido y carrito** convierten a mano en el servicio (`toResponse`), porque resuelven relaciones (por ejemplo, la categoría de un producto a partir de su `categoriaId`).
+- Cada mapper tiene su prueba unitaria (`ContactoMapperTest`, `BlogMapperTest`, `CuponMapperTest`, `CategoriaMapperTest`). En las pruebas de servicio se usa el mapper real y no un `@Spy`, para que el código generado cuente en JaCoCo.
 
 ## Pruebas, compilación y cobertura
 
@@ -69,12 +85,12 @@ mvn clean verify
 ```
 
 `test` ejecuta las pruebas; `package` también genera `target/hogar-0.0.1-SNAPSHOT.jar`.
-Hay 221 pruebas en 24 clases de [pruebas Java](src/test/java/com/huerto/hogar).
+Hay 261 pruebas en 29 clases de [pruebas Java](src/test/java/com/huerto/hogar).
 Usan mocks y H2 mediante el [perfil test](src/test/resources/application-test.properties); no necesitan iniciar la API ni MySQL/XAMPP.
 El número de casos no es un porcentaje de cobertura.
 
 JaCoCo **0.8.15** está configurado en `pom.xml`; `mvn clean verify` genera el informe.
-Última medición (`mvn clean verify`, 221 pruebas): **84,5 % de líneas (639/756) y 66,0 % de ramas (95/144)**. Los controladores, la seguridad y las utilidades están en 100 % de líneas; los servicios son los paquetes más bajos (`usuario` 38 %, `cupon` 54 %, `categoria` 60 %, `blog` 68 %, `producto` 70 %).
+Última medición (`mvn clean verify`, 261 pruebas): **88,8 % de líneas (758/854) y 73,9 % de ramas (133/180)**. Los controladores, la seguridad y las utilidades están en 100 % de líneas; los servicios son los paquetes más bajos (`usuario` 38 %, `cupon` 54 %, `categoria` 60 %, `blog` 68 %, `producto` 70 %).
 HTML esperado: `target/site/jacoco/index.html`; XML: `target/site/jacoco/jacoco.xml`. Cobertura total.
 
 Desde `Frontend`, `npm run test:integration` ejecuta 18 pruebas HTTP reales; requiere la API activa en el puerto 8087 y su conexión a MySQL.
