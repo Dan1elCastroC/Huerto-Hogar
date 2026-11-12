@@ -1,7 +1,8 @@
 package com.huerto.hogar;
 
 import com.huerto.hogar.categoria.controller.CategoriaController;
-import com.huerto.hogar.categoria.entity.CategoriaEntity;
+import com.huerto.hogar.categoria.dto.CategoriaDto;
+import com.huerto.hogar.categoria.dto.CategoriaResponse;
 import com.huerto.hogar.categoria.interfaces.ICategoriaService;
 import com.huerto.hogar.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +34,11 @@ class CategoriaControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(new GlobalExceptionHandler()).build();
     }
 
-    private CategoriaEntity cat() { return CategoriaEntity.builder().id(1L).nombre("Frutas").descripcion("Frescas").build(); }
+    private CategoriaResponse cat() {
+        CategoriaResponse r = new CategoriaResponse();
+        r.setId(1L); r.setNombre("Frutas"); r.setDescripcion("Frescas");
+        return r;
+    }
 
     @Test void findAllOk() throws Exception {
         when(service.findAll()).thenReturn(List.of(cat()));
@@ -56,7 +61,7 @@ class CategoriaControllerTest {
     }
 
     @Test void saveRetorna201() throws Exception {
-        when(service.save("Frutas", "Frescas")).thenReturn(cat());
+        when(service.save(org.mockito.ArgumentMatchers.any(CategoriaDto.class))).thenReturn(cat());
         mvc.perform(post(BASE).contentType(MediaType.APPLICATION_JSON).content(JSON_OK))
             .andExpect(status().isCreated());
     }
@@ -68,19 +73,19 @@ class CategoriaControllerTest {
     }
 
     @Test void saveDuplicadaRetorna400() throws Exception {
-        when(service.save("Frutas", "Frescas")).thenThrow(new RuntimeException("Ya existe"));
+        when(service.save(org.mockito.ArgumentMatchers.any(CategoriaDto.class))).thenThrow(new RuntimeException("Ya existe"));
         mvc.perform(post(BASE).contentType(MediaType.APPLICATION_JSON).content(JSON_OK))
             .andExpect(status().isBadRequest()).andExpect(content().string("Ya existe"));
     }
 
     @Test void updateOk() throws Exception {
-        when(service.update(1L, "Frutas", "Frescas")).thenReturn(cat());
+        when(service.update(org.mockito.ArgumentMatchers.eq(1L), org.mockito.ArgumentMatchers.any(CategoriaDto.class))).thenReturn(cat());
         mvc.perform(put(BASE + "/1").contentType(MediaType.APPLICATION_JSON).content(JSON_OK))
             .andExpect(status().isOk());
     }
 
     @Test void updateConErrorRetorna400() throws Exception {
-        when(service.update(1L, "Frutas", "Frescas")).thenThrow(new RuntimeException("mal"));
+        when(service.update(org.mockito.ArgumentMatchers.eq(1L), org.mockito.ArgumentMatchers.any(CategoriaDto.class))).thenThrow(new RuntimeException("mal"));
         mvc.perform(put(BASE + "/1").contentType(MediaType.APPLICATION_JSON).content(JSON_OK))
             .andExpect(status().isBadRequest());
     }

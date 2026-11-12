@@ -1,10 +1,12 @@
 package com.huerto.hogar.contacto.interfaces;
 
-import com.huerto.hogar.contacto.entity.ContactoEntity;
+import com.huerto.hogar.contacto.dto.ContactoDto;
+import com.huerto.hogar.contacto.dto.ContactoResponse;
+
 import java.util.List;
 
 public interface IContactoService {
-    ContactoEntity save(ContactoEntity contacto);
-    List<ContactoEntity> findAll();
-    ContactoEntity marcarLeido(Long id);
+    ContactoResponse save(ContactoDto dto);
+    List<ContactoResponse> findAll();
+    ContactoResponse marcarLeido(Long id);
 }

@@ -1,11 +1,15 @@
 package com.huerto.hogar.blog.service;
 
+import com.huerto.hogar.blog.dto.BlogDto;
+import com.huerto.hogar.blog.dto.BlogResponse;
 import com.huerto.hogar.blog.entity.BlogEntity;
 import com.huerto.hogar.blog.interfaces.IBlogService;
+import com.huerto.hogar.blog.mapper.BlogMapper;
 import com.huerto.hogar.blog.repository.BlogRepository;
 import com.huerto.hogar.exception.RecursoNoEncontradoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -13,35 +17,37 @@ import java.util.List;
 public class BlogService implements IBlogService {
 
     private final BlogRepository repo;
+    private final BlogMapper mapper;
 
     @Override
-    public List<BlogEntity> findAll() {
-        return repo.findByActivoTrueOrderByCreadoEnDesc();
+    public List<BlogResponse> findAll() {
+        return mapper.toDtoList(repo.findByActivoTrueOrderByCreadoEnDesc());
     }
 
     @Override
-    public BlogEntity findById(Long id) {
+    public BlogResponse findById(Long id) {
         BlogEntity b = getOrThrow(id);
         // Un blog desactivado no debe ser visible públicamente
         if (!b.isActivo())
             throw new RecursoNoEncontradoException("Blog no encontrado: " + id);
-        return b;
+        return mapper.toDto(b);
     }
 
     @Override
-    public BlogEntity save(BlogEntity b) {
+    public BlogResponse save(BlogDto dto) {
+        BlogEntity b = mapper.toEntity(dto);
         b.setActivo(true);
-        return repo.save(b);
+        return mapper.toDto(repo.save(b));
     }
 
     @Override
-    public BlogEntity update(Long id, BlogEntity datos) {
+    public BlogResponse update(Long id, BlogDto datos) {
         BlogEntity b = getOrThrow(id);
         b.setTitulo(datos.getTitulo());
         b.setDescripcion(datos.getDescripcion());
         b.setImagenUrl(datos.getImagenUrl());
-        b.setActivo(datos.isActivo());
-        return repo.save(b);
+        b.setActivo(datos.getActivo() == null || datos.getActivo());
+        return mapper.toDto(repo.save(b));
     }
 
     @Override

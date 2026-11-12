@@ -5,7 +5,7 @@ import com.huerto.hogar.carrito.dto.CarritoResponse;
 import com.huerto.hogar.carrito.entity.CarritoItemEntity;
 import com.huerto.hogar.carrito.interfaces.ICarritoService;
 import com.huerto.hogar.carrito.repository.CarritoRepository;
-import com.huerto.hogar.cupon.entity.CuponEntity;
+import com.huerto.hogar.cupon.dto.CuponResponse;
 import com.huerto.hogar.cupon.interfaces.ICuponService;
 import com.huerto.hogar.exception.*;
 import com.huerto.hogar.producto.entity.ProductoEntity;
@@ -134,7 +134,7 @@ public class CarritoService implements ICarritoService {
         String cuponAplicado = null;
 
         if (codigoCupon != null && !codigoCupon.isBlank()) {
-            CuponEntity cupon = cuponService.findByCodigo(codigoCupon);
+            CuponResponse cupon = cuponService.findByCodigo(codigoCupon);
             descuento = subtotal
                 .multiply(cupon.getPorcentaje())
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);

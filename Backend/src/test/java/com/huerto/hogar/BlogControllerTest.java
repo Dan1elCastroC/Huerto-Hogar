@@ -1,7 +1,8 @@
 package com.huerto.hogar;
 
 import com.huerto.hogar.blog.controller.BlogController;
-import com.huerto.hogar.blog.entity.BlogEntity;
+import com.huerto.hogar.blog.dto.BlogDto;
+import com.huerto.hogar.blog.dto.BlogResponse;
 import com.huerto.hogar.blog.interfaces.IBlogService;
 import com.huerto.hogar.exception.GlobalExceptionHandler;
 import com.huerto.hogar.exception.RecursoNoEncontradoException;
@@ -38,7 +39,11 @@ class BlogControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(new GlobalExceptionHandler()).build();
     }
 
-    private BlogEntity blog() { return BlogEntity.builder().id(1L).titulo("Huerta").descripcion("Texto").build(); }
+    private BlogResponse blog() {
+        BlogResponse r = new BlogResponse();
+        r.setId(1L); r.setTitulo("Huerta"); r.setDescripcion("Texto");
+        return r;
+    }
 
     @Test void findAllOk() throws Exception {
         when(service.findAll()).thenReturn(List.of(blog()));
@@ -65,11 +70,11 @@ class BlogControllerTest {
         mvc.perform(get(BASE + "/3")).andExpect(status().isBadRequest());
     }
 
-    @Test void saveConstruyeEntidadYRetorna201() throws Exception {
-        when(service.save(any(BlogEntity.class))).thenReturn(blog());
+    @Test void saveEntregaElDtoAlServicioYRetorna201() throws Exception {
+        when(service.save(any(BlogDto.class))).thenReturn(blog());
         mvc.perform(post(BASE).contentType(MediaType.APPLICATION_JSON).content(JSON_OK))
             .andExpect(status().isCreated());
-        ArgumentCaptor<BlogEntity> cap = ArgumentCaptor.forClass(BlogEntity.class);
+        ArgumentCaptor<BlogDto> cap = ArgumentCaptor.forClass(BlogDto.class);
         verify(service).save(cap.capture());
         assertEquals("Huerta", cap.getValue().getTitulo());
         assertEquals("http://i/x.jpg", cap.getValue().getImagenUrl());
@@ -82,38 +87,38 @@ class BlogControllerTest {
     }
 
     @Test void saveConErrorDelServicioRetorna400() throws Exception {
-        when(service.save(any(BlogEntity.class))).thenThrow(new RuntimeException("mal"));
+        when(service.save(any(BlogDto.class))).thenThrow(new RuntimeException("mal"));
         mvc.perform(post(BASE).contentType(MediaType.APPLICATION_JSON).content(JSON_OK))
             .andExpect(status().isBadRequest());
     }
 
     @Test void updateSinCampoActivoLoDejaActivo() throws Exception {
-        when(service.update(eq(1L), any(BlogEntity.class))).thenReturn(blog());
+        when(service.update(eq(1L), any(BlogDto.class))).thenReturn(blog());
         mvc.perform(put(BASE + "/1").contentType(MediaType.APPLICATION_JSON).content(JSON_OK))
             .andExpect(status().isOk());
-        ArgumentCaptor<BlogEntity> cap = ArgumentCaptor.forClass(BlogEntity.class);
+        ArgumentCaptor<BlogDto> cap = ArgumentCaptor.forClass(BlogDto.class);
         verify(service).update(eq(1L), cap.capture());
-        assertTrue(cap.getValue().isActivo());
+        assertNull(cap.getValue().getActivo()); // el servicio lo interpreta como activo
     }
 
     @Test void updateConActivoFalsoLoDesactiva() throws Exception {
-        when(service.update(eq(1L), any(BlogEntity.class))).thenReturn(blog());
+        when(service.update(eq(1L), any(BlogDto.class))).thenReturn(blog());
         mvc.perform(put(BASE + "/1").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"titulo\":\"H\",\"descripcion\":\"T\",\"activo\":false}"))
             .andExpect(status().isOk());
-        ArgumentCaptor<BlogEntity> cap = ArgumentCaptor.forClass(BlogEntity.class);
+        ArgumentCaptor<BlogDto> cap = ArgumentCaptor.forClass(BlogDto.class);
         verify(service).update(eq(1L), cap.capture());
-        assertFalse(cap.getValue().isActivo());
+        assertFalse(cap.getValue().getActivo());
     }
 
     @Test void updateInexistenteRetorna404() throws Exception {
-        when(service.update(eq(9L), any(BlogEntity.class))).thenThrow(new RecursoNoEncontradoException("Blog no encontrado"));
+        when(service.update(eq(9L), any(BlogDto.class))).thenThrow(new RecursoNoEncontradoException("Blog no encontrado"));
         mvc.perform(put(BASE + "/9").contentType(MediaType.APPLICATION_JSON).content(JSON_OK))
             .andExpect(status().isNotFound());
     }
 
     @Test void updateConErrorGenericoRetorna400() throws Exception {
-        when(service.update(eq(9L), any(BlogEntity.class))).thenThrow(new RuntimeException("mal"));
+        when(service.update(eq(9L), any(BlogDto.class))).thenThrow(new RuntimeException("mal"));
         mvc.perform(put(BASE + "/9").contentType(MediaType.APPLICATION_JSON).content(JSON_OK))
             .andExpect(status().isBadRequest());
     }

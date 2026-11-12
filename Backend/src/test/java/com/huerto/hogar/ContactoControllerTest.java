@@ -1,7 +1,8 @@
 package com.huerto.hogar;
 
 import com.huerto.hogar.contacto.controller.ContactoController;
-import com.huerto.hogar.contacto.entity.ContactoEntity;
+import com.huerto.hogar.contacto.dto.ContactoDto;
+import com.huerto.hogar.contacto.dto.ContactoResponse;
 import com.huerto.hogar.contacto.interfaces.IContactoService;
 import com.huerto.hogar.exception.GlobalExceptionHandler;
 import com.huerto.hogar.exception.RecursoNoEncontradoException;
@@ -37,15 +38,17 @@ class ContactoControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(new GlobalExceptionHandler()).build();
     }
 
-    private ContactoEntity contacto() {
-        return ContactoEntity.builder().id(1L).nombre("Ana").correo("ana@gmail.com").comentario("Hola").build();
+    private ContactoResponse contacto() {
+        ContactoResponse r = new ContactoResponse();
+        r.setId(1L); r.setNombre("Ana"); r.setCorreo("ana@gmail.com"); r.setComentario("Hola");
+        return r;
     }
 
     @Test void saveRegistraMensajeConStatus201() throws Exception {
-        when(service.save(any(ContactoEntity.class))).thenReturn(contacto());
+        when(service.save(any(ContactoDto.class))).thenReturn(contacto());
         mvc.perform(post(BASE).contentType(MediaType.APPLICATION_JSON).content(JSON_OK))
             .andExpect(status().isCreated()).andExpect(jsonPath("$.nombre").value("Ana"));
-        ArgumentCaptor<ContactoEntity> cap = ArgumentCaptor.forClass(ContactoEntity.class);
+        ArgumentCaptor<ContactoDto> cap = ArgumentCaptor.forClass(ContactoDto.class);
         verify(service).save(cap.capture());
         assertEquals("Hola", cap.getValue().getComentario());
     }
@@ -58,7 +61,7 @@ class ContactoControllerTest {
     }
 
     @Test void saveConDominioNoPermitidoRetorna400() throws Exception {
-        when(service.save(any(ContactoEntity.class))).thenThrow(new RuntimeException("Dominio no permitido"));
+        when(service.save(any(ContactoDto.class))).thenThrow(new RuntimeException("Dominio no permitido"));
         mvc.perform(post(BASE).contentType(MediaType.APPLICATION_JSON).content(JSON_OK))
             .andExpect(status().isBadRequest()).andExpect(content().string("Dominio no permitido"));
     }
@@ -74,7 +77,7 @@ class ContactoControllerTest {
     }
 
     @Test void marcarLeidoOk() throws Exception {
-        ContactoEntity c = contacto();
+        ContactoResponse c = contacto();
         c.setLeido(true);
         when(service.marcarLeido(1L)).thenReturn(c);
         mvc.perform(patch(BASE + "/1/leido")).andExpect(status().isOk()).andExpect(jsonPath("$.leido").value(true));

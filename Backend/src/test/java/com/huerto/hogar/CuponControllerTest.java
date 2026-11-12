@@ -2,7 +2,7 @@ package com.huerto.hogar;
 
 import com.huerto.hogar.cupon.controller.CuponController;
 import com.huerto.hogar.cupon.dto.CuponDto;
-import com.huerto.hogar.cupon.entity.CuponEntity;
+import com.huerto.hogar.cupon.dto.CuponResponse;
 import com.huerto.hogar.cupon.interfaces.ICuponService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,13 +23,13 @@ class CuponControllerTest {
     @Mock ICuponService service;
     @InjectMocks CuponController controller;
 
-    @Test void saveAceptaFechaVaciaComoSinVencimiento() {
+    @Test void saveEntregaElDtoAlServicioYRetorna201() {
         CuponDto dto = dto(BigDecimal.TEN);
-        dto.setFechaExpiracion("  ");
-        when(service.save(any(CuponEntity.class))).thenAnswer(inv -> inv.getArgument(0));
+        when(service.save(any(CuponDto.class))).thenReturn(new CuponResponse());
         var respuesta = controller.save(dto);
         assertEquals(201, respuesta.getStatusCodeValue());
-        assertNull(((CuponEntity) respuesta.getBody()).getFechaExpiracion());
+        assertTrue(respuesta.getBody() instanceof CuponResponse);
+        org.mockito.Mockito.verify(service).save(dto);
     }
 
     @Test void porcentajeSoloAceptaValoresEntreUnoYCien() {
@@ -45,7 +45,7 @@ class CuponControllerTest {
     }
 
     @Test void findAllOk() {
-        when(service.findAll()).thenReturn(java.util.List.of(new CuponEntity()));
+        when(service.findAll()).thenReturn(java.util.List.of(new CuponResponse()));
         assertEquals(200, controller.findAll().getStatusCodeValue());
     }
 
@@ -55,7 +55,7 @@ class CuponControllerTest {
     }
 
     @Test void validarCuponExistenteRetorna200() {
-        when(service.findByCodigo("DESC10")).thenReturn(new CuponEntity());
+        when(service.findByCodigo("DESC10")).thenReturn(new CuponResponse());
         assertEquals(200, controller.validar("DESC10").getStatusCodeValue());
     }
 
@@ -66,18 +66,11 @@ class CuponControllerTest {
         assertEquals("Cupón expirado", r.getBody());
     }
 
-    @Test void saveConFechaValidaLaParsea() {
-        CuponDto dto = dto(BigDecimal.TEN);
-        dto.setFechaExpiracion("2030-01-31");
-        when(service.save(any(CuponEntity.class))).thenAnswer(inv -> inv.getArgument(0));
-        var r = controller.save(dto);
-        assertEquals(java.time.LocalDate.of(2030, 1, 31), ((CuponEntity) r.getBody()).getFechaExpiracion());
-    }
-
-    @Test void saveConFechaMalFormadaRetorna400() {
-        CuponDto dto = dto(BigDecimal.TEN);
-        dto.setFechaExpiracion("31/01/2030");
-        assertEquals(400, controller.save(dto).getStatusCodeValue());
+    @Test void saveConErrorDelServicioRetorna400() {
+        when(service.save(any(CuponDto.class))).thenThrow(new RuntimeException("Fecha inválida"));
+        var r = controller.save(dto(BigDecimal.TEN));
+        assertEquals(400, r.getStatusCodeValue());
+        assertEquals("Fecha inválida", r.getBody());
     }
 
     @Test void deleteOkYDeleteInexistente() {

@@ -4,7 +4,7 @@ import com.huerto.hogar.carrito.entity.CarritoItemEntity;
 import com.huerto.hogar.carrito.interfaces.ICarritoService;
 import com.huerto.hogar.carrito.repository.CarritoRepository;
 import com.huerto.hogar.cupon.interfaces.ICuponService;
-import com.huerto.hogar.cupon.entity.CuponEntity;
+import com.huerto.hogar.cupon.dto.CuponResponse;
 import com.huerto.hogar.exception.RecursoNoEncontradoException;
 import com.huerto.hogar.exception.ReglaDeNegocioException;
 import com.huerto.hogar.pedido.dto.CheckoutRequest;
@@ -113,8 +113,7 @@ class PedidoServiceTest {
         prepararCarritoConDecimales();
         CheckoutRequest req = checkout();
         req.setCodigoCupon("DESC12");
-        when(cuponService.findByCodigo("DESC12")).thenReturn(CuponEntity.builder()
-            .codigo("DESC12").porcentaje(new BigDecimal("12.5")).build());
+        when(cuponService.findByCodigo("DESC12")).thenReturn(respuestaCupon("DESC12", new BigDecimal("12.5")));
         when(pedidoRepo.save(any(PedidoEntity.class))).thenAnswer(inv -> inv.getArgument(0));
         var respuesta = service.checkout("juan@gmail.com", req);
         assertEquals(new BigDecimal("299.97"), respuesta.getSubtotal());
@@ -127,8 +126,7 @@ class PedidoServiceTest {
         prepararCarritoConDecimales();
         CheckoutRequest req = checkout();
         req.setCodigoCupon("GRATIS");
-        when(cuponService.findByCodigo("GRATIS")).thenReturn(CuponEntity.builder()
-            .codigo("GRATIS").porcentaje(new BigDecimal("100")).build());
+        when(cuponService.findByCodigo("GRATIS")).thenReturn(respuestaCupon("GRATIS", new BigDecimal("100")));
         when(pedidoRepo.save(any(PedidoEntity.class))).thenAnswer(inv -> inv.getArgument(0));
         assertEquals(new BigDecimal("0.00"), service.checkout("juan@gmail.com", req).getTotal());
     }
@@ -149,5 +147,12 @@ class PedidoServiceTest {
         when(usuarioRepo.findByCorreo("juan@gmail.com")).thenReturn(Optional.of(u));
         when(carritoRepo.findByUsuarioId(1L)).thenReturn(List.of(item));
         return p;
+    }
+
+    private static CuponResponse respuestaCupon(String codigo, BigDecimal porcentaje) {
+        CuponResponse r = new CuponResponse();
+        r.setCodigo(codigo);
+        r.setPorcentaje(porcentaje);
+        return r;
     }
 }

@@ -5,7 +5,7 @@ import com.huerto.hogar.carrito.entity.CarritoItemEntity;
 import com.huerto.hogar.carrito.repository.CarritoRepository;
 import com.huerto.hogar.carrito.service.CarritoService;
 import com.huerto.hogar.cupon.interfaces.ICuponService;
-import com.huerto.hogar.cupon.entity.CuponEntity;
+import com.huerto.hogar.cupon.dto.CuponResponse;
 import com.huerto.hogar.exception.RecursoNoEncontradoException;
 import com.huerto.hogar.exception.ReglaDeNegocioException;
 import com.huerto.hogar.producto.entity.ProductoEntity;
@@ -80,8 +80,7 @@ class CarritoServiceTest {
 
     @Test void carritoCalculaDescuentoConRedondeoMonetario() {
         prepararCarritoConDecimales();
-        when(cuponService.findByCodigo("DESC12")).thenReturn(CuponEntity.builder()
-            .codigo("DESC12").porcentaje(new BigDecimal("12.5")).build());
+        when(cuponService.findByCodigo("DESC12")).thenReturn(respuestaCupon("DESC12", new BigDecimal("12.5")));
         var respuesta = service.getCarrito("juan@gmail.com", "DESC12");
         assertEquals(new BigDecimal("299.97"), respuesta.getSubtotal());
         assertEquals(new BigDecimal("37.50"), respuesta.getDescuento());
@@ -111,5 +110,12 @@ class CarritoServiceTest {
             .cantidad(3).precioUnitario(new BigDecimal("99.99")).build();
         when(usuarioRepo.findByCorreo("juan@gmail.com")).thenReturn(Optional.of(u));
         when(carritoRepo.findByUsuarioId(1L)).thenReturn(List.of(item));
+    }
+
+    private static CuponResponse respuestaCupon(String codigo, BigDecimal porcentaje) {
+        CuponResponse r = new CuponResponse();
+        r.setCodigo(codigo);
+        r.setPorcentaje(porcentaje);
+        return r;
     }
 }
