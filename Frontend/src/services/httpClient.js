@@ -4,6 +4,9 @@ export const API_PATH = `${API_BASE_URL}/api`;
 
 export const MENSAJE_SIN_CONEXION = 'No se pudo conectar con el servidor. Comprueba que el backend esté activo e inténtalo de nuevo.';
 
+// Evento global que App escucha para cerrar la sesión cuando el backend rechaza el token (401).
+export const EVENTO_SESION_EXPIRADA = 'sesion-expirada';
+
 export class ConexionError extends Error {
   constructor() {
     super(MENSAJE_SIN_CONEXION);
@@ -54,6 +57,11 @@ export const request = async (path, options = {}) => {
   } catch {
     // fetch solo rechaza cuando no hay conexión con el servidor (API apagada, red caída o CORS).
     throw new ConexionError();
+  }
+  // Un 401 con token significa que el JWT expiró o dejó de ser válido. Sin token (por ejemplo un
+  // login fallido) no hay sesión que cerrar. Un 403 es falta de rol y no cierra la sesión.
+  if (response.status === 401 && token) {
+    window.dispatchEvent(new Event(EVENTO_SESION_EXPIRADA));
   }
   return parseResponse(response);
 };

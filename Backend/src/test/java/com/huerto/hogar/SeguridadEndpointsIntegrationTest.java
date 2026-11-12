@@ -9,6 +9,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /** Verifica con la cadena de seguridad real (JWT) qué rol puede acceder a cada endpoint. */
@@ -29,14 +31,39 @@ class SeguridadEndpointsIntegrationTest {
     }
 
     @Test void endpointsProtegidosSinTokenSonRechazados() throws Exception {
-        mvc.perform(get("/api/admin/usuarios")).andExpect(status().isForbidden());
-        mvc.perform(get("/api/v1/entities/carrito")).andExpect(status().isForbidden());
-        mvc.perform(get("/api/v1/entities/reportes/resumen")).andExpect(status().isForbidden());
-        mvc.perform(get("/api/usuarios/perfil")).andExpect(status().isForbidden());
+        mvc.perform(get("/api/admin/usuarios")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/v1/entities/carrito")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/v1/entities/reportes/resumen")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/usuarios/perfil")).andExpect(status().isUnauthorized());
     }
 
     @Test void tokenInvalidoEsTratadoComoAnonimo() throws Exception {
         mvc.perform(get("/api/admin/usuarios").header("Authorization", "Bearer basura"))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test void sinTokenLaRespuestaEsJsonConFormatoApiError() throws Exception {
+        mvc.perform(get("/api/admin/usuarios"))
+            .andExpect(status().isUnauthorized())
+            .andExpect(content().contentTypeCompatibleWith("application/json"))
+            .andExpect(jsonPath("$.status").value(401))
+            .andExpect(jsonPath("$.mensaje").value("Debes iniciar sesión para acceder a este recurso"));
+    }
+
+    @Test void sinRolSuficienteLaRespuestaEs403ConFormatoApiError() throws Exception {
+        mvc.perform(get("/api/admin/usuarios").header("Authorization", bearer("CLIENTE")))
+            .andExpect(status().isForbidden())
+            .andExpect(content().contentTypeCompatibleWith("application/json"))
+            .andExpect(jsonPath("$.status").value(403))
+            .andExpect(jsonPath("$.mensaje").value("Sin permiso"));
+    }
+
+    @Test void anonimoEnEndpointConPreAuthorizeRecibe401() throws Exception {
+        mvc.perform(get("/api/v1/entities/productos/stock-critico")).andExpect(status().isUnauthorized());
+    }
+
+    @Test void clienteEnEndpointConPreAuthorizeRecibe403() throws Exception {
+        mvc.perform(get("/api/v1/entities/productos/stock-critico").header("Authorization", bearer("CLIENTE")))
             .andExpect(status().isForbidden());
     }
 

@@ -24,6 +24,7 @@ import { categoriaService } from './services/categoriaService';
 import { pedidoService } from './services/pedidoService';
 import { productoService } from './services/productoService';
 import { addItemToCart, removeCartItem, updateCartItem } from './services/cartUtils';
+import { EVENTO_SESION_EXPIRADA } from './services/httpClient';
 
 const USER_STORAGE_KEY = 'huerto-hogar-user';
 const CART_STORAGE_KEY = 'huerto-hogar-cart';
@@ -46,6 +47,7 @@ export default function App() {
   });
   const [loading, setLoading] = useState(true);
   const [sincronizandoCarrito, setSincronizandoCarrito] = useState(false);
+  const [avisoSesion, setAvisoSesion] = useState('');
   const [user, setUser] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem(USER_STORAGE_KEY)) || null;
@@ -102,6 +104,7 @@ export default function App() {
   };
 
   const iniciarSesion = (userData) => {
+    setAvisoSesion('');
     setUser(userData);
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData));
     setVista(userData.rol === 'ADMINISTRADOR' ? 'main' : 'catalogo');
@@ -120,6 +123,18 @@ export default function App() {
     localStorage.removeItem(USER_STORAGE_KEY);
     setVista('landing');
   };
+
+  // El backend respondió 401 a una petición con token: la sesión expiró. Se cierra y se vuelve al login.
+  useEffect(() => {
+    const alExpirar = () => {
+      setUser(null);
+      localStorage.removeItem(USER_STORAGE_KEY);
+      setAvisoSesion('Tu sesión expiró. Inicia sesión nuevamente.');
+      setVista('login');
+    };
+    window.addEventListener(EVENTO_SESION_EXPIRADA, alExpirar);
+    return () => window.removeEventListener(EVENTO_SESION_EXPIRADA, alExpirar);
+  }, []);
 
   const actualizarUsuario = (updatedUser) => {
     setUser(updatedUser);
@@ -167,6 +182,9 @@ export default function App() {
 
       <div className="flex-grow-1">
         {vista === 'landing' && <HomePage cambiarVista={navegar} productos={productos} agregarAlCarrito={agregarAlCarrito} onVerDetalle={verProducto} />}
+        {vista === 'login' && avisoSesion && (
+          <div className="container mt-3"><div className="alert alert-warning mb-0" role="alert">{avisoSesion}</div></div>
+        )}
         {vista === 'login' && <LoginPage onLoginSuccess={iniciarSesion} cambiarVista={setVista} />}
         {vista === 'registro' && <RegisterPage cambiarVista={setVista} />}
         {vista === 'catalogo' && <CatalogPage key={categoriaCatalogo} categoriaInicial={categoriaCatalogo} productos={productos} categorias={categorias} agregarAlCarrito={agregarAlCarrito} loading={loading} errorProductos={errorProductos} onVerDetalle={verProducto} />}

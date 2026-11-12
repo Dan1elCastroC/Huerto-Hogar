@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 import { authService } from './services/authService';
@@ -115,6 +115,19 @@ describe('App', () => {
     expect(screen.queryByRole('link', { name: 'Cerrar sesión' })).not.toBeInTheDocument();
     expect(screen.queryByText('Ana Pérez')).not.toBeInTheDocument();
     await waitFor(() => expect(productoService.getAll).toHaveBeenCalledTimes(2));
+  });
+
+  it('cierra la sesión y vuelve al login con un aviso cuando el backend informa sesión expirada', async () => {
+    localStorage.setItem('huerto-hogar-user', JSON.stringify({ token: 'token-vencido', rol: 'CLIENTE', nombre: 'Ana', apellidos: 'Pérez' }));
+    render(<App />);
+    expect(screen.getByRole('link', { name: 'Cerrar sesión' })).toBeInTheDocument();
+
+    act(() => { window.dispatchEvent(new Event('sesion-expirada')); });
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Tu sesión expiró. Inicia sesión nuevamente.');
+    expect(screen.getByRole('button', { name: 'Ingresar' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Cerrar sesión' })).not.toBeInTheDocument();
+    expect(localStorage.getItem('huerto-hogar-user')).toBeNull();
   });
 
   it('actualiza las categorías disponibles al crear y eliminar una categoría', async () => {

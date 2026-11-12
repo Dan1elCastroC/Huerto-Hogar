@@ -1,6 +1,8 @@
 package com.huerto.hogar.exception;
 import org.springframework.http.*;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,11 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> forbidden(AccessDeniedException ex) {
+        // Un anónimo que llega a un @PreAuthorize no está "sin permiso": le falta autenticarse (401).
+        if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
+            return ResponseEntity.status(401).body(ApiError.builder().status(401).error("No autenticado")
+                .mensaje("Debes iniciar sesión para acceder a este recurso").build());
+        }
         return ResponseEntity.status(403).body(ApiError.builder().status(403).error("Forbidden").mensaje("Sin permiso").build());
     }
     @ExceptionHandler(Exception.class)

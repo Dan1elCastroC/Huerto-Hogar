@@ -1,5 +1,6 @@
 package com.huerto.hogar.config;
 
+import com.huerto.hogar.security.ErroresSeguridadHandler;
 import com.huerto.hogar.security.filter.JwtAuthFilter;
 import io.swagger.v3.oas.models.*;
 import io.swagger.v3.oas.models.info.Info;
@@ -28,6 +29,7 @@ import java.util.*;
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final ErroresSeguridadHandler erroresSeguridad;
 
     @Value("${app.cors.allowed-origins}")
     private String allowedOrigins;
@@ -37,6 +39,9 @@ public class SecurityConfig {
         http.csrf().disable()
             .cors().configurationSource(corsSource()).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            .exceptionHandling()
+                .authenticationEntryPoint(erroresSeguridad)
+                .accessDeniedHandler(erroresSeguridad).and()
             .authorizeRequests()
                 // Docs
                 .antMatchers("/swagger-ui/**","/api-docs/**",

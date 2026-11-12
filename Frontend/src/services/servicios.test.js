@@ -12,7 +12,7 @@ import productoServiceDefault, {
 import { regionService } from './regionService';
 import { reporteService } from './reporteService';
 import { usuarioService } from './usuarioService';
-import { request, getHeaders, parseResponse } from './httpClient';
+import { request, getHeaders, parseResponse, EVENTO_SESION_EXPIRADA } from './httpClient';
 
 const BASE = 'http://localhost:8087';
 const T = 'tok123';
@@ -203,6 +203,39 @@ describe('httpClient', () => {
   it('request admite cabeceras extra', async () => {
     await request('/x', { headers: { 'X-Y': '2' }, token: T });
     expect(fetchMock.mock.calls[0][1].headers).toMatchObject({ 'X-Y': '2', Authorization: `Bearer ${T}` });
+  });
+});
+
+describe('httpClient con sesión expirada', () => {
+  const escuchar = () => {
+    const oyente = vi.fn();
+    window.addEventListener(EVENTO_SESION_EXPIRADA, oyente);
+    return { oyente, quitar: () => window.removeEventListener(EVENTO_SESION_EXPIRADA, oyente) };
+  };
+
+  it('un 401 con token emite el evento sesion-expirada y rechaza la petición', async () => {
+    const { oyente, quitar } = escuchar();
+    fetchMock.mockResolvedValue(jsonRes({ status: 401, mensaje: 'Debes iniciar sesión para acceder a este recurso' }, false, 401));
+    await expect(request('/api/usuarios/perfil', { token: T })).rejects.toThrow('Debes iniciar sesión');
+    expect(EVENTO_SESION_EXPIRADA).toBe('sesion-expirada');
+    expect(oyente).toHaveBeenCalledTimes(1);
+    quitar();
+  });
+
+  it('un 401 sin token (login fallido) no emite el evento', async () => {
+    const { oyente, quitar } = escuchar();
+    fetchMock.mockResolvedValue(jsonRes({ mensaje: 'Credenciales inválidas' }, false, 401));
+    await expect(request('/api/auth/login', { method: 'POST' })).rejects.toThrow('Credenciales inválidas');
+    expect(oyente).not.toHaveBeenCalled();
+    quitar();
+  });
+
+  it('un 403 con token (falta de rol) no cierra la sesión', async () => {
+    const { oyente, quitar } = escuchar();
+    fetchMock.mockResolvedValue(jsonRes({ status: 403, mensaje: 'Sin permiso' }, false, 403));
+    await expect(request('/api/admin/usuarios', { token: T })).rejects.toThrow('Sin permiso');
+    expect(oyente).not.toHaveBeenCalled();
+    quitar();
   });
 });
 
